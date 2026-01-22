@@ -43,7 +43,7 @@ export const mockCategories: MenuCategory[] = [
 export const mockMenus: Menu[] = [
     // 커피
     {
-        id: 'menu-1',
+        id: '1',
         korName: '아메리카노',
         engName: 'Americano',
         description: '깔끔하고 진한 에스프레소의 풍미를 물과 함께 즐기는 클래식한 커피',
@@ -85,7 +85,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-2',
+        id: '2',
         korName: '카페라떼',
         engName: 'Cafe Latte',
         description: '부드러운 우유와 풍부한 에스프레소가 조화롭게 어우러진 커피',
@@ -118,7 +118,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-3',
+        id: '3',
         korName: '바닐라 라떼',
         engName: 'Vanilla Latte',
         description: '달콤한 바닐라 시럽과 부드러운 우유, 진한 에스프레소의 완벽한 조합',
@@ -140,7 +140,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-4',
+        id: '4',
         korName: '카푸치노',
         engName: 'Cappuccino',
         description: '풍성한 우유 거품과 에스프레소가 만나 부드럽고 고소한 맛',
@@ -163,7 +163,7 @@ export const mockMenus: Menu[] = [
     },
     // 음료
     {
-        id: 'menu-5',
+        id: '5',
         korName: '딸기 스무디',
         engName: 'Strawberry Smoothie',
         description: '신선한 딸기와 요거트가 어우러진 상큼달콤한 스무디',
@@ -185,7 +185,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-6',
+        id: '6',
         korName: '레몬에이드',
         engName: 'Lemonade',
         description: '상큼한 레몬과 탄산이 만나 청량감 가득한 음료',
@@ -208,7 +208,7 @@ export const mockMenus: Menu[] = [
     },
     // 차
     {
-        id: 'menu-7',
+        id: '7',
         korName: '얼그레이',
         engName: 'Earl Grey',
         description: '베르가못 향이 은은하게 퍼지는 클래식 홍차',
@@ -230,7 +230,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-8',
+        id: '8',
         korName: '캐모마일',
         engName: 'Chamomile',
         description: '은은한 꽃향기와 함께 마음을 편안하게 해주는 허브티',
@@ -253,7 +253,7 @@ export const mockMenus: Menu[] = [
     },
     // 디저트
     {
-        id: 'menu-9',
+        id: '9',
         korName: '티라미수',
         engName: 'Tiramisu',
         description: '마스카포네 치즈와 에스프레소가 층층이 쌓인 이탈리안 디저트',
@@ -275,7 +275,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-10',
+        id: '10',
         korName: '치즈케이크',
         engName: 'Cheesecake',
         description: '부드럽고 진한 크림치즈의 맛이 일품인 뉴욕 스타일 치즈케이크',
@@ -298,7 +298,7 @@ export const mockMenus: Menu[] = [
     },
     // 베이커리
     {
-        id: 'menu-11',
+        id: '11',
         korName: '크로와상',
         engName: 'Croissant',
         description: '바삭하고 버터향 가득한 프렌치 스타일 크로와상',
@@ -320,7 +320,7 @@ export const mockMenus: Menu[] = [
         updatedAt: new Date('2024-01-15'),
     },
     {
-        id: 'menu-12',
+        id: '12',
         korName: '소금빵',
         engName: 'Salt Bread',
         description: '겉은 바삭하고 속은 촉촉한 버터 소금빵',

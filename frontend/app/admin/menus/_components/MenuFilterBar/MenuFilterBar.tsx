@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 import { MenuCategory } from '@/types/menu';
-import CategoryTabs from './CategoryTabs';
+import CategoryTabs from '../CategoryTabs/CategoryTabs';
 import styles from './MenuFilterBar.module.css';
 
 interface MenuFilterBarProps {

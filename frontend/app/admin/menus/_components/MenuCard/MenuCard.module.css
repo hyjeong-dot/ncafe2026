@@ -5,6 +5,7 @@
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     border: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
 .card:hover {

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Edit2, Trash2, ImageIcon } from 'lucide-react';
 import { Menu } from '@/types/menu';
 import styles from './MenuCard.module.css';
@@ -14,13 +15,21 @@ interface MenuCardProps {
 
 export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardProps) {
     const primaryImage = menu.images.find((img) => img.isPrimary) || menu.images[0];
+    const router = useRouter();
+
+    const handleCardClick = () => {
+        router.push(`/admin/menus/${menu.id}`);
+    };
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
     };
 
     return (
-        <div className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}>
+        <div
+            className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}
+            onClick={handleCardClick}
+        >
             {/* Image */}
             <div className={styles.imageWrapper}>
                 {primaryImage ? (
@@ -64,7 +73,10 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                         <span className={styles.toggleLabel}>품절</span>
                         <button
                             className={`${styles.toggle} ${menu.isSoldOut ? styles.active : ''}`}
-                            onClick={() => onToggleSoldOut(menu.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleSoldOut(menu.id);
+                            }}
                             title={menu.isSoldOut ? '품절 해제' : '품절 처리'}
                         >
                             <span className={styles.toggleKnob} />
@@ -76,12 +88,16 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                             href={`/admin/menus/${menu.id}`}
                             className={styles.actionButton}
                             title="상세 보기 / 수정"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <Edit2 size={18} />
                         </Link>
                         <button
                             className={`${styles.actionButton} ${styles.delete}`}
-                            onClick={() => onDelete(menu.id)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete(menu.id);
+                            }}
                             title="삭제"
                         >
                             <Trash2 size={18} />

@@ -1,6 +1,6 @@
 import { UtensilsCrossed } from 'lucide-react';
 import { Menu } from '@/types/menu';
-import MenuCard from './MenuCard';
+import MenuCard from '../MenuCard/MenuCard';
 import styles from './MenuGrid.module.css';
 
 interface MenuGridProps {
