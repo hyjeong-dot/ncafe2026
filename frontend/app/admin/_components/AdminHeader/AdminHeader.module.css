@@ -1,0 +1,110 @@
+.header {
+    height: var(--header-height);
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-6);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.pageTitle {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.breadcrumbItem {
+    color: var(--text-secondary);
+}
+
+.breadcrumbItem:hover {
+    color: var(--color-primary-600);
+}
+
+.breadcrumbSeparator {
+    color: var(--text-muted);
+}
+
+.breadcrumbCurrent {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.iconButton {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.iconButton:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.notificationDot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-error);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-primary);
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background-color: var(--bg-tertiary);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    min-width: 240px;
+}
+
+.searchInput {
+    border: none;
+    background: none;
+    outline: none;
+    flex: 1;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+}
+
+.searchInput::placeholder {
+    color: var(--text-muted);
+}
+
+.searchIcon {
+    color: var(--text-muted);
+}

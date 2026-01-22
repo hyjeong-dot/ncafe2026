@@ -1,0 +1,20 @@
+.layout {
+    min-height: 100vh;
+}
+
+.main {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    background-color: var(--bg-secondary);
+}
+
+.content {
+    padding: var(--space-6);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+    }
+}

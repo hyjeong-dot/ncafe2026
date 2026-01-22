@@ -1,0 +1,61 @@
+.statsBar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-6);
+    border: 1px solid var(--border-color);
+}
+
+.statItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.statIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-lg);
+}
+
+.statIcon.total {
+    background-color: var(--color-info-light);
+}
+
+.statIcon.available {
+    background-color: var(--color-success-light);
+}
+
+.statIcon.soldOut {
+    background-color: var(--color-error-light);
+}
+
+.statInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.statLabel {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.statValue {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .statsBar {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+}
