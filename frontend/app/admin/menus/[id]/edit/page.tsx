@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import {
     ArrowLeft,
     Upload,
@@ -346,6 +347,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
             isSoldOut: formData.isSoldOut,
             options: menuOptions,
         });
+        toast.success('메뉴 정보가 수정되었습니다.');
 
         // Navigate back to menu detail
         router.push(`/admin/menus/${id}`);

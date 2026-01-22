@@ -4,6 +4,52 @@
     gap: var(--space-6);
 }
 
+/* Sortable Card Wrapper */
+.sortableCard {
+    position: relative;
+}
+
+.dragHandle {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    cursor: grab;
+    opacity: 0;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.sortableCard:hover .dragHandle {
+    opacity: 1;
+}
+
+.dragHandle:hover {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+}
+
+.dragHandle:active {
+    cursor: grabbing;
+}
+
+/* Drag Overlay */
+.dragOverlay {
+    transform: rotate(3deg);
+    box-shadow: var(--shadow-xl);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+/* Empty State */
 .emptyState {
     grid-column: 1 / -1;
     display: flex;
@@ -45,5 +91,9 @@
 @media (max-width: 768px) {
     .menuGrid {
         grid-template-columns: 1fr;
+    }
+
+    .dragHandle {
+        opacity: 1;
     }
 }

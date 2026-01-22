@@ -11,6 +11,7 @@ interface MenuState {
     updateMenu: (menuId: string, updates: Partial<Menu>) => void;
     deleteMenu: (menuId: string) => void;
     toggleSoldOut: (menuId: string) => void;
+    reorderMenus: (activeId: string, overId: string) => void;
     getMenuById: (menuId: string) => Menu | undefined;
 
     // Reset (for testing purposes)
@@ -51,6 +52,28 @@ export const useMenuStore = create<MenuState>((set, get) => ({
                 menu.id === menuId ? { ...menu, isSoldOut: !menu.isSoldOut } : menu
             ),
         }));
+    },
+
+    // Reorder menus (drag and drop)
+    reorderMenus: (activeId: string, overId: string) => {
+        set((state) => {
+            const oldIndex = state.menus.findIndex((m) => m.id === activeId);
+            const newIndex = state.menus.findIndex((m) => m.id === overId);
+
+            if (oldIndex === -1 || newIndex === -1) return state;
+
+            const newMenus = [...state.menus];
+            const [movedItem] = newMenus.splice(oldIndex, 1);
+            newMenus.splice(newIndex, 0, movedItem);
+
+            // Update sortOrder for all items
+            return {
+                menus: newMenus.map((menu, index) => ({
+                    ...menu,
+                    sortOrder: index + 1,
+                })),
+            };
+        });
     },
 
     // Get a single menu by ID

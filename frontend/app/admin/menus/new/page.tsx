@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import {
     ArrowLeft,
     Upload,
@@ -297,6 +298,7 @@ export default function NewMenuPage() {
 
         // Add to store
         addMenu(newMenu);
+        toast.success('새 메뉴가 등록되었습니다.');
 
         // Navigate to menu list
         router.push('/admin/menus');

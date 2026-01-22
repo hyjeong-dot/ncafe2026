@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import toast from 'react-hot-toast';
 import { useMenuStore } from '@/stores/menuStore';
 
 interface UseMenuReturn {
@@ -78,6 +79,7 @@ export function useMenus(): UseMenuReturn {
     const deleteMenu = (menuId: string) => {
         if (window.confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
             storeDeleteMenu(menuId);
+            toast.success('메뉴가 삭제되었습니다.');
         }
     };
 

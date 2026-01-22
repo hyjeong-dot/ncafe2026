@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { notFound, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Edit2, Trash2, ImageIcon } from 'lucide-react';
@@ -42,6 +43,7 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
         if (confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
             setIsDeleting(true);
             deleteMenuFromStore(id);
+            toast.success('메뉴가 삭제되었습니다.');
             router.push('/admin/menus');
         }
     };
