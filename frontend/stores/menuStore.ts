@@ -8,6 +8,7 @@ interface MenuState {
 
     // Actions
     addMenu: (menu: Menu) => void;
+    updateMenu: (menuId: string, updates: Partial<Menu>) => void;
     deleteMenu: (menuId: string) => void;
     toggleSoldOut: (menuId: string) => void;
     getMenuById: (menuId: string) => Menu | undefined;
@@ -24,6 +25,15 @@ export const useMenuStore = create<MenuState>((set, get) => ({
     addMenu: (menu: Menu) => {
         set((state) => ({
             menus: [...state.menus, menu],
+        }));
+    },
+
+    // Update an existing menu
+    updateMenu: (menuId: string, updates: Partial<Menu>) => {
+        set((state) => ({
+            menus: state.menus.map((menu) =>
+                menu.id === menuId ? { ...menu, ...updates, updatedAt: new Date() } : menu
+            ),
         }));
     },
 
@@ -53,4 +63,3 @@ export const useMenuStore = create<MenuState>((set, get) => ({
         set({ menus: mockMenus });
     },
 }));
-
