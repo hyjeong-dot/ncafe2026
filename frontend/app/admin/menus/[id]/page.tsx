@@ -5,11 +5,25 @@ import { notFound, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Edit2, Trash2, ImageIcon } from 'lucide-react';
+import {
+    ArrowLeft,
+    Edit2,
+    Trash2,
+    ImageIcon,
+    Activity,
+    Zap,
+    Droplet,
+    Cpu,
+    TrendingUp,
+    Star,
+    QrCode,
+    Clock
+} from 'lucide-react';
 import { useMenuStore } from '@/stores/menuStore';
 import styles from './page.module.css';
 import { use } from 'react';
 import Modal from '@/components/common/Modal/Modal';
+import Button from '@/components/common/Button/Button';
 
 // Next.js 15+ compatible props type
 interface MenuDetailPageProps {
@@ -39,6 +53,20 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
     const primaryImage = menu.images.find((img) => img.isPrimary) || menu.images[0];
 
+    // Mock Data (Fixed values to prevent hydration mismatch)
+    const mockStats = {
+        todaySales: 32,
+        totalSales: 847,
+        rating: '4.7',
+    };
+
+    const mockNutrition = {
+        calories: 185,
+        sugars: 24,
+        protein: 5,
+        caffeine: 95,
+    };
+
     const handleDeleteClick = () => {
         setIsDeleteModalOpen(true);
     };
@@ -61,6 +89,16 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
                     <ArrowLeft size={20} />
                     <span>목록으로 돌아가기</span>
                 </Link>
+                <div className={styles.actions}>
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => toast('QR코드가 생성되었습니다 (Mock)', { icon: '📱' })}
+                    >
+                        <QrCode size={16} />
+                        키오스크 미리보기
+                    </Button>
+                </div>
             </div>
 
             <main className={styles.content}>
@@ -83,6 +121,38 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
                             </div>
                         )}
                     </div>
+
+                    {/* Nutrition Info (New) */}
+                    <div className={styles.nutritionGrid} style={{ marginTop: '1.5rem' }}>
+                        <div className={styles.nutritionItem}>
+                            <div className={styles.nutritionIcon}><Activity size={16} /></div>
+                            <div className={styles.nutritionInfo}>
+                                <span className={styles.nutritionLabel}>칼로리</span>
+                                <span className={styles.nutritionValue}>{mockNutrition.calories} kcal</span>
+                            </div>
+                        </div>
+                        <div className={styles.nutritionItem}>
+                            <div className={styles.nutritionIcon}><Zap size={16} /></div>
+                            <div className={styles.nutritionInfo}>
+                                <span className={styles.nutritionLabel}>카페인</span>
+                                <span className={styles.nutritionValue}>{mockNutrition.caffeine} mg</span>
+                            </div>
+                        </div>
+                        <div className={styles.nutritionItem}>
+                            <div className={styles.nutritionIcon}><Droplet size={16} /></div>
+                            <div className={styles.nutritionInfo}>
+                                <span className={styles.nutritionLabel}>당류</span>
+                                <span className={styles.nutritionValue}>{mockNutrition.sugars} g</span>
+                            </div>
+                        </div>
+                        <div className={styles.nutritionItem}>
+                            <div className={styles.nutritionIcon}><Cpu size={16} /></div>
+                            <div className={styles.nutritionInfo}>
+                                <span className={styles.nutritionLabel}>단백질</span>
+                                <span className={styles.nutritionValue}>{mockNutrition.protein} g</span>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 {/* Right Column: Info & Options */}
@@ -100,6 +170,30 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
                         </span>
                         <h1 className={styles.korName}>{menu.korName}</h1>
                         <p className={styles.engName}>{menu.engName}</p>
+                    </div>
+
+                    {/* Sales Dashboard (New) */}
+                    <div className={styles.dashboardGrid}>
+                        <div className={styles.statCard}>
+                            <span className={styles.statLabel}>오늘 판매량</span>
+                            <span className={styles.statValue}>{mockStats.todaySales}잔</span>
+                            <span className={`${styles.statTrend} ${styles.trendUp}`}>
+                                <TrendingUp size={12} /> +12%
+                            </span>
+                        </div>
+                        <div className={styles.statCard}>
+                            <span className={styles.statLabel}>예상 매출</span>
+                            <span className={styles.statValue}>
+                                {formatPrice(mockStats.todaySales * menu.price)}원
+                            </span>
+                        </div>
+                        <div className={styles.statCard}>
+                            <span className={styles.statLabel}>고객 평점</span>
+                            <span className={styles.statValue}>★ {mockStats.rating}</span>
+                            <span className={styles.statTrend} style={{ color: '#fbbf24' }}>
+                                <Star size={12} fill="#fbbf24" /> 4.8 (120)
+                            </span>
+                        </div>
                     </div>
 
                     <div className={styles.priceArea}>
@@ -145,21 +239,32 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
                     </div>
 
                     {/* Actions */}
-                    <div className={styles.actions}>
-                        <Link
-                            href={`/admin/menus/${menu.id}/edit`}
-                            className={`${styles.button} ${styles.editButton}`}
-                        >
-                            <Edit2 size={20} />
-                            메뉴 수정하기
+                    {/* Meta Info (New) */}
+                    <div className={styles.metaInfo}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Clock size={14} /> 최초 등록일: 2024.01.15
+                        </div>
+                        <div>최근 수정: 방금 전</div>
+                        <div>관리자: dev_admin</div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className={styles.actions} style={{ marginTop: '0', paddingTop: '0', border: 'none' }}>
+                        <Link href={`/admin/menus/${menu.id}/edit`} style={{ width: '100%' }}>
+                            <Button variant="primary" size="lg" className={styles.fullWidthButton} style={{ width: '100%' }}>
+                                <Edit2 size={20} />
+                                메뉴 수정하기
+                            </Button>
                         </Link>
-                        <button
-                            className={`${styles.button} ${styles.deleteButton}`}
+                        <Button
+                            variant="danger"
+                            size="lg"
                             onClick={handleDeleteClick}
+                            style={{ minWidth: '140px' }}
                         >
                             <Trash2 size={20} />
-                            메뉴 삭제하기
-                        </button>
+                            삭제
+                        </Button>
                     </div>
                 </section>
             </main>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
@@ -18,6 +19,8 @@ export default function SortableMenuCard({
     onToggleSoldOut,
     onDelete,
 }: SortableMenuCardProps) {
+    const [isMounted, setIsMounted] = useState(false);
+
     const {
         attributes,
         listeners,
@@ -27,6 +30,10 @@ export default function SortableMenuCard({
         isDragging,
     } = useSortable({ id: menu.id });
 
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
@@ -34,9 +41,13 @@ export default function SortableMenuCard({
         zIndex: isDragging ? 1000 : 'auto',
     };
 
+    // Only apply dnd attributes after client-side mount to prevent hydration mismatch
+    const dndAttributes = isMounted ? attributes : {};
+    const dndListeners = isMounted ? listeners : {};
+
     return (
         <div ref={setNodeRef} style={style} className={styles.sortableCard}>
-            <div className={styles.dragHandle} {...attributes} {...listeners}>
+            <div className={styles.dragHandle} {...dndAttributes} {...dndListeners}>
                 <GripVertical size={20} />
             </div>
             <MenuCard
@@ -47,3 +58,4 @@ export default function SortableMenuCard({
         </div>
     );
 }
+
