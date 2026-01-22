@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Menu } from '@/types/menu';
+import { useMenuStore } from '@/stores/menuStore';
 
 interface UseMenuReturn {
     // State
-    filteredMenus: Menu[];
+    filteredMenus: ReturnType<typeof useMenuStore.getState>['menus'];
     menuCounts: Record<string, number>;
     stats: {
         total: number;
@@ -22,8 +22,13 @@ interface UseMenuReturn {
     deleteMenu: (menuId: string) => void;
 }
 
-export function useMenus(initialMenus: Menu[]): UseMenuReturn {
-    const [menus, setMenus] = useState<Menu[]>(initialMenus);
+export function useMenus(): UseMenuReturn {
+    // Get menus from Zustand store
+    const menus = useMenuStore((state) => state.menus);
+    const storeToggleSoldOut = useMenuStore((state) => state.toggleSoldOut);
+    const storeDeleteMenu = useMenuStore((state) => state.deleteMenu);
+
+    // Local filter state
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -64,19 +69,15 @@ export function useMenus(initialMenus: Menu[]): UseMenuReturn {
         return { total, available, soldOut };
     }, [menus]);
 
-    // 품절 토글
+    // 품절 토글 (using store action)
     const toggleSoldOut = (menuId: string) => {
-        setMenus((prev) =>
-            prev.map((menu) =>
-                menu.id === menuId ? { ...menu, isSoldOut: !menu.isSoldOut } : menu
-            )
-        );
+        storeToggleSoldOut(menuId);
     };
 
-    // 삭제
+    // 삭제 (using store action)
     const deleteMenu = (menuId: string) => {
         if (window.confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
-            setMenus((prev) => prev.filter((menu) => menu.id !== menuId));
+            storeDeleteMenu(menuId);
         }
     };
 

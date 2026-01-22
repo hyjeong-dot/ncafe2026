@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Edit2, Trash2, ImageIcon } from 'lucide-react';
-import { mockMenus } from '@/mocks/menuData';
+import { useMenuStore } from '@/stores/menuStore';
 import styles from './page.module.css';
 import { use } from 'react';
 
@@ -20,7 +21,16 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
     const { id } = use(params);
 
     const router = useRouter();
-    const menu = mockMenus.find((m) => m.id === id);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Use Zustand store for menu data
+    const menu = useMenuStore((state) => state.getMenuById(id));
+    const deleteMenuFromStore = useMenuStore((state) => state.deleteMenu);
+
+    // If deleting, show nothing (will redirect soon)
+    if (isDeleting) {
+        return null;
+    }
 
     if (!menu) {
         notFound();
@@ -30,7 +40,8 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
     const handleDelete = () => {
         if (confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
-            alert('메뉴가 삭제되었습니다. (Mock)');
+            setIsDeleting(true);
+            deleteMenuFromStore(id);
             router.push('/admin/menus');
         }
     };

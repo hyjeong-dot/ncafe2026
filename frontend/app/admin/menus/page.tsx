@@ -1,6 +1,6 @@
 'use client';
 
-import { mockMenus, mockCategories } from '@/mocks/menuData';
+import { mockCategories } from '@/mocks/menuData';
 import PageHeader from './_components/PageHeader';
 import MenuStats from './_components/MenuStats';
 import MenuFilterBar from './_components/MenuFilterBar';
@@ -19,7 +19,7 @@ export default function MenusPage() {
         setSelectedCategory,
         toggleSoldOut,
         deleteMenu
-    } = useMenus(mockMenus);
+    } = useMenus();
 
     return (
         <main className={styles.container}>
