@@ -7,6 +7,7 @@ interface MenuState {
     menus: Menu[];
 
     // Actions
+    addMenu: (menu: Menu) => void;
     deleteMenu: (menuId: string) => void;
     toggleSoldOut: (menuId: string) => void;
     getMenuById: (menuId: string) => Menu | undefined;
@@ -18,6 +19,13 @@ interface MenuState {
 export const useMenuStore = create<MenuState>((set, get) => ({
     // Initialize with mock data
     menus: mockMenus,
+
+    // Add a new menu
+    addMenu: (menu: Menu) => {
+        set((state) => ({
+            menus: [...state.menus, menu],
+        }));
+    },
 
     // Delete a menu by ID
     deleteMenu: (menuId: string) => {
@@ -45,3 +53,4 @@ export const useMenuStore = create<MenuState>((set, get) => ({
         set({ menus: mockMenus });
     },
 }));
+
