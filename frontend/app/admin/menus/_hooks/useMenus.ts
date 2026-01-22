@@ -77,10 +77,7 @@ export function useMenus(): UseMenuReturn {
 
     // 삭제 (using store action)
     const deleteMenu = (menuId: string) => {
-        if (window.confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
-            storeDeleteMenu(menuId);
-            toast.success('메뉴가 삭제되었습니다.');
-        }
+        storeDeleteMenu(menuId);
     };
 
     return {

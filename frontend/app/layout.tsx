@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import ToastProvider from "@/components/common/Toast/ToastProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
-        <Toaster position="bottom-right" />
+        <ToastProvider />
       </body>
     </html>
   );

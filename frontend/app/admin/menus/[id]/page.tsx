@@ -9,6 +9,7 @@ import { ArrowLeft, Edit2, Trash2, ImageIcon } from 'lucide-react';
 import { useMenuStore } from '@/stores/menuStore';
 import styles from './page.module.css';
 import { use } from 'react';
+import Modal from '@/components/common/Modal/Modal';
 
 // Next.js 15+ compatible props type
 interface MenuDetailPageProps {
@@ -18,11 +19,10 @@ interface MenuDetailPageProps {
 }
 
 export default function MenuDetailPage({ params }: MenuDetailPageProps) {
-    // Unwrap params using React.use()
     const { id } = use(params);
-
     const router = useRouter();
     const [isDeleting, setIsDeleting] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     // Use Zustand store for menu data
     const menu = useMenuStore((state) => state.getMenuById(id));
@@ -39,13 +39,15 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
     const primaryImage = menu.images.find((img) => img.isPrimary) || menu.images[0];
 
-    const handleDelete = () => {
-        if (confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
-            setIsDeleting(true);
-            deleteMenuFromStore(id);
-            toast.success('메뉴가 삭제되었습니다.');
-            router.push('/admin/menus');
-        }
+    const handleDeleteClick = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        setIsDeleting(true);
+        deleteMenuFromStore(id);
+        toast.success('메뉴가 삭제되었습니다.');
+        router.push('/admin/menus');
     };
 
     const formatPrice = (price: number) => {
@@ -54,10 +56,12 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
     return (
         <div className={styles.container}>
-            <Link href="/admin/menus" className={styles.backButton}>
-                <ArrowLeft size={20} />
-                <span>목록으로 돌아가기</span>
-            </Link>
+            <div className={styles.header}>
+                <Link href="/admin/menus" className={styles.backButton}>
+                    <ArrowLeft size={20} />
+                    <span>목록으로 돌아가기</span>
+                </Link>
+            </div>
 
             <main className={styles.content}>
                 {/* Left Column: Image */}
@@ -142,23 +146,33 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
                     {/* Actions */}
                     <div className={styles.actions}>
-                        <button
-                            className={`${styles.button} ${styles.deleteButton}`}
-                            onClick={handleDelete}
-                        >
-                            <Trash2 size={20} />
-                            삭제하기
-                        </button>
                         <Link
                             href={`/admin/menus/${menu.id}/edit`}
                             className={`${styles.button} ${styles.editButton}`}
                         >
                             <Edit2 size={20} />
-                            수정하기
+                            메뉴 수정하기
                         </Link>
+                        <button
+                            className={`${styles.button} ${styles.deleteButton}`}
+                            onClick={handleDeleteClick}
+                        >
+                            <Trash2 size={20} />
+                            메뉴 삭제하기
+                        </button>
                     </div>
                 </section>
             </main>
+
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="메뉴 삭제"
+                description="정말로 이 메뉴를 삭제하시겠습니까? 삭제된 메뉴는 복구할 수 없습니다."
+                confirmText="삭제"
+                variant="danger"
+                onConfirm={handleConfirmDelete}
+            />
         </div>
     );
 }
