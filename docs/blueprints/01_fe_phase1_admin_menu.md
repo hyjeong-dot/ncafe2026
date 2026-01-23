@@ -62,7 +62,7 @@ ncafe/
     │   └── admin/              # 🎯 사장님용 (먼저 개발)
     │       ├── layout.tsx
     │       ├── _components/        # 📍 admin 레이아웃 전용 컴포넌트
-    │       │   ├── AdminSidebar/
+    │       │   ├── AdminSidebar/   
     │       │   └── AdminHeader/
     │       ├── page.tsx            # 대시보드
     │       ├── menus/
@@ -224,7 +224,7 @@ ncafe/
 #### 4.2 메뉴 상세 페이지 (`/admin/menus/[id]`)
 - [x] 메뉴 정보 표시 (이름, 가격, 설명, 이미지)
 - [x] 옵션 정보 표시
-- [x] 판매 상태 표시
+- [x] 판매 상태 표시    
 - [x] 수정 페이지로 이동 버튼
 - [x] 삭제 버튼
 
