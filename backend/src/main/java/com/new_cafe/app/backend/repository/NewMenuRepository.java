@@ -1,44 +1,52 @@
 package com.new_cafe.app.backend.repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.new_cafe.app.backend.entity.Menu;
 
-@Component
+// @Component
 public class NewMenuRepository implements MenuRepository {
     @Override
-    public List<Menu> findAll() {
+    public List<Menu> findAll() throws SQLException, ClassNotFoundException {
+        // DB 데이터
         List<Menu> menus = new ArrayList<>();
-        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(
-                getClass().getResourceAsStream("/menus.csv"), java.nio.charset.StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // 첫 줄(헤더)이거나 데이터가 "id"로 시작하면 건너뜁니다.
-                if (line.startsWith("id"))
-                    continue;
-                String[] attributes = line.split(",");
-                if (attributes.length < 6)
-                    continue;
-                Long id = Long.parseLong(attributes[0].trim());
-                String korName = attributes[1].trim();
-                String engName = attributes[2].trim();
-                String description = attributes[3].trim();
-                String price = attributes[4].trim();
-                String image = attributes[5].trim();
 
-                Menu menu = new Menu(id, korName, engName, description, price, image);
+        String sql = "SELECT * FROM menus";
+
+        // API에게 이거 sql 문장 실행해줘 재생버튼을 코드로 어떻게 하지??
+
+        // 0. 드라이버 로드
+        Class.forName("org.postgresql.Driver");
+
+        try (
+                // 1. 연결
+                Connection conn = DriverManager.getConnection(
+                        "jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres",
+                        "postgres.cxtknpbuezwgsfyjqqtl", "ibmhyjeong96");
+                // 2. 실행
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+            // 3. 결과
+            while (rs.next()) {
+                Menu menu = new Menu();
+                menu.setId(rs.getLong("id"));
+                menu.setKorName(rs.getString("kor_name"));
+                menu.setEngName(rs.getString("eng_name"));
+                menu.setPrice(rs.getInt("price"));
+                menu.setCategory(rs.getInt("category_id"));
                 menus.add(menu);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 에러 발생 시 리스트에 가짜 데이터를 하나 넣어 브라우저에 표시되게 함
-            menus.add(new Menu(0L, "에러 발생!", e.toString(), "CSV 파일 읽기 실패", "0", "error.jpg"));
 
-            System.out.println("메뉴를 불러오는데 실패했습니다.");
+                System.out.println(menu);
+            }
         }
+
         return menus;
+
     }
 }

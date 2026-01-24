@@ -5,19 +5,21 @@ public class Menu {
     private String korName;
     private String engName;
     private String description;
-    private String price;
+    private int price;
     private String image;
+    private int category;
 
     public Menu() {
     }
 
-    public Menu(Long id, String korName, String engName, String description, String price, String image) {
+    public Menu(Long id, String korName, String engName, String description, int price, String image, int category) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
         this.description = description;
         this.price = price;
         this.image = image;
+        this.category = category;
     }
 
     public Long getId() {
@@ -52,11 +54,11 @@ public class Menu {
         this.description = description;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -66,6 +68,14 @@ public class Menu {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
     }
 
     @Override

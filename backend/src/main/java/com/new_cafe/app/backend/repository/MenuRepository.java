@@ -5,5 +5,6 @@ import java.util.List;
 import com.new_cafe.app.backend.entity.Menu;
 
 public interface MenuRepository {
-    List<Menu> findAll();
+
+    List<Menu> findAll() throws java.sql.SQLException, ClassNotFoundException;
 }
