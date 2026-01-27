@@ -71,4 +71,33 @@ public class NewMenuRepository implements MenuRepository {
         }
         return menus;
     }
+
+    @Override
+    public List<Menu> findAllByCategoryId(Integer categoryId) {
+        List<Menu> menus = new ArrayList<>();
+        String sql = "SELECT * FROM menus";
+        if (categoryId != null) {
+            sql += " WHERE category_id = " + categoryId;
+        }
+
+        try (
+                Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                Menu menu = new Menu();
+                menu.setId(rs.getLong("id"));
+                menu.setKorName(rs.getString("kor_name"));
+                menu.setEngName(rs.getString("eng_name"));
+                menu.setPrice(rs.getInt("price"));
+                menu.setDescription(rs.getString("description"));
+                menu.setCategory(rs.getInt("category_id"));
+                menus.add(menu);
+            }
+        } catch (SQLException e) {
+            System.err.println("Menu findAllByCategoryId error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return menus;
+    }
 }

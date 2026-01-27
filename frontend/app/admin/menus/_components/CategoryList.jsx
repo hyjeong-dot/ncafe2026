@@ -14,21 +14,15 @@ export default function CategoryList({ onCategoryChange }) {
         fetchCategories();
     }, []);
 
-    const handleClick = (e, category) => {
-        e.preventDefault();
-        if (onCategoryChange)
-            onCategoryChange(category);
-    };
-
     return (
         <section>
             <h1>카테고리 블록</h1>
             <div>
-                <button onClick={(e) => handleClick(e, null)}>전체</button>
+                <button onClick={() => onCategoryChange(null)}>전체</button>
                 {categories.map((category) => (
                     <button
                         key={category.id}
-                        onClick={(e) => handleClick(e, category.id)}
+                        onClick={() => onCategoryChange(category)}
                     >
                         {category.name}
                     </button>

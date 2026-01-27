@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.new_cafe.app.backend.entity.Menu;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.new_cafe.app.backend.service.MenuService;
 
@@ -21,9 +22,10 @@ public class MenuController {
 
     // 목록 조회 데이터 반환
     @GetMapping("/admin/menus")
-    public List<Menu> menu() {
+    public List<Menu> menu(@RequestParam(name = "cid", required = false) Integer categoryId) {
+        System.out.println("category :" + categoryId);
         // menuService = new NewMenuService();
-        return menuService.getAll();
+        return menuService.getAll(categoryId);
     }
 
     // 상세 조회 데이터 반환

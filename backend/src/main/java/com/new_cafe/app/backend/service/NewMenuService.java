@@ -24,4 +24,9 @@ public class NewMenuService implements MenuService {
         }
     }
 
+    @Override
+    public List<Menu> getAll(Integer categoryId) {
+        return menuRepository.findAllByCategoryId(categoryId);
+    }
+
 }

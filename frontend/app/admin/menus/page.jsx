@@ -1,53 +1,56 @@
-'use client';
 
-import { Menu } from '@/types/menu';
+"use client";
 import { useEffect, useState } from "react";
-import CategoryList from './_components/CategoryList';
-
-
+import CategoryList from "./_components/CategoryList";
 export default function MenusPage() {
+    // fetch menus
     const [menus, setMenus] = useState([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
+    const [category, setCategory] = useState(null);
+    console.log("MenusPage");
     useEffect(() => {
-        // 메뉴 API 호출
+        // http://localhost:8080/admin/menus
         const fetchMenus = async () => {
-            const response = await fetch('http://localhost:8080/admin/menus');
+            const url = new URL("http://localhost:8080/admin/menus");
+            const params = url.searchParams;
+            if (category) {
+                params.set("cid", category.id);
+            }
+            const response = await fetch(url);
             const data = await response.json();
+            // menus = data;
             setMenus(data);
-        }
-        fetchMenus();
-    }, []);
+        };
+        fetchMenus(); // 여기서 fatch 하는 것이 올바른 곳일까요?
+        console.log("MenusPage useEffect");
+        return () => {
+            console.log("MenusPage useEffect cleanup");
+        };
+    }, [category]);
 
-    const handleCategoryChange = (categoryId) => {
-        console.log('선택된 카테고리:', categoryId);
-        setSelectedCategoryId(categoryId);
+    const categoryChangeHandler = (category) => {
+        console.log(category);
+        setCategory(category);
     };
-
-    const filteredMenus = menus.filter(menu =>
-        selectedCategoryId === null || menu.category === selectedCategoryId
-    );
-
     return (
         <main>
-            <h1>Menus</h1>
-
-            {/* 카테고리 목록 */}
-            <CategoryList onCategoryChange={handleCategoryChange} />
-
-            {/* 메뉴 목록 */}
+            {/*
+                카테고리 블록
+                메뉴 목록 
+            */}
+            <CategoryList onCategoryChange={categoryChangeHandler} />
             <section>
-                <h2>Menu List</h2>
-                {filteredMenus.map(menu => (
-                    <div key={menu.id}>
-                        <div>{menu.korName}</div>
-                        <div>{menu.engName}</div>
-                        <div>{menu.description}</div>
-                        <div>{menu.price}</div>
-                    </div>
-                ))}
+                <h1>메뉴 목록</h1>
+                <div>
+                    {menus.map((menu) => (
+                        <div key={menu.id}>
+                            <h2>{menu.korName}</h2>
+                            <p>{menu.engName}</p>
+                            <p>{menu.description}</p>
+                            <p>{menu.price}</p>
+                        </div>
+                    ))}
+                </div>
             </section>
-
         </main>
     );
 }
