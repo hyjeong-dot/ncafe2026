@@ -22,28 +22,7 @@ public class NewMenuRepository implements MenuRepository {
 
     @Override
     public List<Menu> findAll() {
-        List<Menu> menus = new ArrayList<>();
-        String sql = "SELECT * FROM menus";
-
-        try (
-                Connection conn = dataSource.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Menu menu = new Menu();
-                menu.setId(rs.getLong("id"));
-                menu.setKorName(rs.getString("kor_name"));
-                menu.setEngName(rs.getString("eng_name"));
-                menu.setPrice(rs.getInt("price"));
-                menu.setDescription(rs.getString("description"));
-                menu.setCategory(rs.getInt("category_id"));
-                menus.add(menu);
-            }
-        } catch (SQLException e) {
-            System.err.println("Menu findAll error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return menus;
+        return findAllByCategoryId(null);
     }
 
     @Override
