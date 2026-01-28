@@ -2,7 +2,6 @@ package com.new_cafe.app.backend.controller.admin;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import com.new_cafe.app.backend.service.MenuService;
 @RestController
 public class MenuController {
 
-    @Autowired
     private MenuService menuService;
+
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     // 목록 조회 데이터 반환
     @GetMapping("/admin/menus")

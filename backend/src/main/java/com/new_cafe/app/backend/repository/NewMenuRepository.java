@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.new_cafe.app.backend.entity.Menu;
@@ -17,8 +16,11 @@ import com.new_cafe.app.backend.entity.Menu;
 @Repository
 public class NewMenuRepository implements MenuRepository {
 
-    @Autowired
     private DataSource dataSource;
+
+    public NewMenuRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public List<Menu> findAll() {
