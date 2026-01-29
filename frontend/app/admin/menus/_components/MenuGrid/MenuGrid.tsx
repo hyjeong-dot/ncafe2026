@@ -1,6 +1,5 @@
-'use client';
-
-import { UtensilsCrossed } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import {
     DndContext,
     closestCenter,
@@ -17,10 +16,9 @@ import {
     sortableKeyboardCoordinates,
     rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { Menu } from '@/types/menu';
+import { Menu, MenuCategory } from '@/types/menu';
 import { useMenuStore } from '@/stores/menuStore';
+import { Loader2, UtensilsCrossed, ChevronLeft, ChevronRight } from 'lucide-react';
 import Modal from '@/components/common/Modal/Modal';
 import SortableMenuCard from './SortableMenuCard';
 import MenuCard from '../MenuCard/MenuCard';
@@ -28,15 +26,90 @@ import styles from './MenuGrid.module.css';
 
 interface MenuGridProps {
     menus: Menu[];
+    categories: MenuCategory[];
     isSearching: boolean;
     onToggleSoldOut: (id: string) => void;
     onDelete: (id: string) => void;
 }
 
-export default function MenuGrid({ menus, isSearching, onToggleSoldOut, onDelete }: MenuGridProps) {
+const ITEMS_PER_PAGE = 12;
+
+export default function MenuGrid({ menus, categories, isSearching, onToggleSoldOut, onDelete }: MenuGridProps) {
+    const setMenus = useMenuStore((state) => state.setMenus);
     const reorderMenus = useMenuStore((state) => state.reorderMenus);
     const [activeMenu, setActiveMenu] = useState<Menu | null>(null);
     const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Reset pagination when filter changes (menus length changes)
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [menus.length, isSearching]);
+
+    // Calculate pagination
+    const totalPages = Math.ceil(menus.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentMenus = menus.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        const fetchMenus = async () => {
+            // ... existing fetch logic ...
+            try {
+                const response = await fetch('http://localhost:8080/admin/menus');
+                if (!response.ok) {
+                    throw new Error('데이터를 불러오는데 실패했습니다.');
+                }
+                const data = await response.json();
+
+                // 백엔드 데이터를 프론트엔드 Menu 타입에 맞게 매핑
+                const mappedData = data.map((item: any) => {
+                    // 카테고리 매핑
+                    const categoryId = String(item.category || 'unknown');
+                    const matchedCategory = categories.find(c => c.id === categoryId) || {
+                        id: categoryId,
+                        korName: '미분류',
+                        engName: 'Uncategorized',
+                        sortOrder: 99
+                    };
+
+                    return {
+                        ...item,
+                        id: String(item.id),
+                        category: matchedCategory,
+                        images: item.images || (item.image ? [{
+                            id: 'img-' + item.id,
+                            url: item.image,
+                            isPrimary: true,
+                            sortOrder: 1
+                        }] : []),
+                        isSoldOut: item.isSoldOut || false,
+                        isAvailable: item.isAvailable ?? true,
+                        options: item.options || [],
+                        sortOrder: item.sortOrder || 0,
+                        createdAt: item.createdAt ? new Date(item.createdAt) : new Date(),
+                        updatedAt: item.updatedAt ? new Date(item.updatedAt) : new Date()
+                    };
+                });
+
+                setMenus(mappedData);
+            } catch (error) {
+                console.error('Fetch error:', error);
+                toast.error('메뉴 목록을 가져오는 중 오류가 발생했습니다.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchMenus();
+    }, [setMenus, categories]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -77,6 +150,15 @@ export default function MenuGrid({ menus, isSearching, onToggleSoldOut, onDelete
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className={styles.loadingState}>
+                <Loader2 className={styles.loadingIcon} size={40} />
+                <p>메뉴 정보를 불러오는 중...</p>
+            </div>
+        );
+    }
+
     if (menus.length === 0) {
         return (
             <div className={styles.emptyState}>
@@ -102,9 +184,9 @@ export default function MenuGrid({ menus, isSearching, onToggleSoldOut, onDelete
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <SortableContext items={menus.map((m) => m.id)} strategy={rectSortingStrategy}>
+            <SortableContext items={currentMenus.map((m) => m.id)} strategy={rectSortingStrategy}>
                 <section className={styles.menuGrid} aria-label="Menu list">
-                    {menus.map((menu) => (
+                    {currentMenus.map((menu) => (
                         <SortableMenuCard
                             key={menu.id}
                             menu={menu}
@@ -114,6 +196,38 @@ export default function MenuGrid({ menus, isSearching, onToggleSoldOut, onDelete
                     ))}
                 </section>
             </SortableContext>
+
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.pageButton}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label="Previous page"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            className={`${styles.pageButton} ${currentPage === page ? styles.active : ''}`}
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className={styles.pageButton}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label="Next page"
+                    >
+                        <ChevronRight size={16} />
+                    </button>
+                </div>
+            )}
 
             <DragOverlay adjustScale={false}>
                 {activeMenu ? (
@@ -139,4 +253,5 @@ export default function MenuGrid({ menus, isSearching, onToggleSoldOut, onDelete
         </DndContext>
     );
 }
+
 

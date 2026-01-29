@@ -30,7 +30,8 @@ public class NewMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAllByName(String name) {
         List<Menu> menus = new ArrayList<>();
-        String sql = "SELECT * FROM menus WHERE kor_name LIKE '%" + name + "%'";
+        String sql = "SELECT m.*, (SELECT src_url FROM menu_images mi WHERE mi.menu_id = m.id ORDER BY mi.sort_order ASC LIMIT 1) as image_url FROM menus m WHERE m.kor_name LIKE '%"
+                + name + "%'";
 
         try (
                 Connection conn = dataSource.getConnection();
@@ -43,7 +44,10 @@ public class NewMenuRepository implements MenuRepository {
                 menu.setEngName(rs.getString("eng_name"));
                 menu.setPrice(rs.getInt("price"));
                 menu.setDescription(rs.getString("description"));
-                menu.setCategory(rs.getInt("category_id"));
+                menu.setImage(rs.getString("image_url"));
+                menu.setCategoryId(rs.getInt("category_id"));
+                menu.setCreatedAt(rs.getTimestamp("created_at"));
+                menu.setUpdatedAt(rs.getTimestamp("updated_at"));
                 menus.add(menu);
             }
         } catch (SQLException e) {
@@ -56,9 +60,9 @@ public class NewMenuRepository implements MenuRepository {
     @Override
     public List<Menu> findAllByCategoryId(Integer categoryId) {
         List<Menu> menus = new ArrayList<>();
-        String sql = "SELECT * FROM menus";
+        String sql = "SELECT m.*, (SELECT src_url FROM menu_images mi WHERE mi.menu_id = m.id ORDER BY mi.sort_order ASC LIMIT 1) as image_url FROM menus m";
         if (categoryId != null) {
-            sql += " WHERE category_id = " + categoryId;
+            sql += " WHERE m.category_id = " + categoryId;
         }
 
         try (
@@ -72,7 +76,10 @@ public class NewMenuRepository implements MenuRepository {
                 menu.setEngName(rs.getString("eng_name"));
                 menu.setPrice(rs.getInt("price"));
                 menu.setDescription(rs.getString("description"));
-                menu.setCategory(rs.getInt("category_id"));
+                menu.setImage(rs.getString("image_url"));
+                menu.setCategoryId(rs.getInt("category_id"));
+                menu.setCreatedAt(rs.getTimestamp("created_at"));
+                menu.setUpdatedAt(rs.getTimestamp("updated_at"));
                 menus.add(menu);
             }
         } catch (SQLException e) {

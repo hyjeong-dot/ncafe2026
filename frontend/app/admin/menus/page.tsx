@@ -1,6 +1,5 @@
 'use client';
 
-import { mockCategories } from '@/mocks/menuData';
 import PageHeader from './_components/PageHeader';
 import MenuStats from './_components/MenuStats';
 import MenuFilterBar from './_components/MenuFilterBar';
@@ -13,6 +12,7 @@ export default function MenusPage() {
         filteredMenus,
         menuCounts,
         stats,
+        categories,
         searchQuery,
         setSearchQuery,
         selectedCategory,
@@ -35,7 +35,7 @@ export default function MenusPage() {
             <MenuFilterBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                categories={mockCategories}
+                categories={categories}
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
                 menuCounts={menuCounts}
@@ -43,6 +43,7 @@ export default function MenusPage() {
 
             <MenuGrid
                 menus={filteredMenus}
+                categories={categories}
                 isSearching={!!searchQuery}
                 onToggleSoldOut={toggleSoldOut}
                 onDelete={deleteMenu}

@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { Menu } from '@/types/menu';
-import { mockMenus } from '@/mocks/menuData';
 
 interface MenuState {
     // Data
     menus: Menu[];
 
     // Actions
+    setMenus: (menus: Menu[]) => void;
     addMenu: (menu: Menu) => void;
     updateMenu: (menuId: string, updates: Partial<Menu>) => void;
     deleteMenu: (menuId: string) => void;
@@ -19,8 +19,11 @@ interface MenuState {
 }
 
 export const useMenuStore = create<MenuState>((set, get) => ({
-    // Initialize with mock data
-    menus: mockMenus,
+    // Initialize with empty array
+    menus: [],
+
+    // Set all menus
+    setMenus: (menus: Menu[]) => set({ menus }),
 
     // Add a new menu
     addMenu: (menu: Menu) => {
@@ -81,8 +84,8 @@ export const useMenuStore = create<MenuState>((set, get) => ({
         return get().menus.find((menu) => menu.id === menuId);
     },
 
-    // Reset to initial mock data
+    // Reset menus
     resetMenus: () => {
-        set({ menus: mockMenus });
+        set({ menus: [] });
     },
 }));

@@ -16,9 +16,9 @@ public class App {
         System.out.println("검색어를 입력하세요 : ");
         name = sc.nextLine();
 
-        MenuRepository menuRepository = new NewMenuRepository();
-        List<Menu> menus = menuRepository.findAllByName(name);
+        // MenuRepository menuRepository = new NewMenuRepository();
+        // List<Menu> menus = menuRepository.findAllByName(name);
 
-        System.out.println("menus : " + menus);
+        // System.out.println("menus : " + menus);
     }
 }

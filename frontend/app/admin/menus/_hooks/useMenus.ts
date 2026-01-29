@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import toast from 'react-hot-toast';
+import { useState, useMemo, useEffect } from 'react';
+import { MenuCategory } from '@/types/menu';
 import { useMenuStore } from '@/stores/menuStore';
 
 interface UseMenuReturn {
@@ -11,6 +11,8 @@ interface UseMenuReturn {
         available: number;
         soldOut: number;
     };
+    categories: MenuCategory[];
+    isCategoriesLoading: boolean;
 
     // Filters state
     searchQuery: string;
@@ -32,6 +34,40 @@ export function useMenus(): UseMenuReturn {
     // Local filter state
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Categories state
+    const [categories, setCategories] = useState<MenuCategory[]>([]);
+    const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+
+    // 카테고리 데이터 fetch
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/admin/categories');
+                if (!response.ok) {
+                    throw new Error('카테고리 데이터를 불러오는데 실패했습니다.');
+                }
+                const data = await response.json();
+
+                // 백엔드 데이터를 프론트엔드 타입에 맞게 매핑
+                const mappedCategories: MenuCategory[] = data.map((cat: any) => ({
+                    id: String(cat.id),
+                    korName: cat.name || cat.korName || '카테고리',
+                    engName: cat.engName || cat.name || 'Category',
+                    icon: cat.icon || '📦',
+                    sortOrder: cat.sortOrder || 0
+                }));
+
+                setCategories(mappedCategories);
+            } catch (error) {
+                console.error('Categories fetch error:', error);
+            } finally {
+                setIsCategoriesLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     // 카테고리별 메뉴 개수 계산
     const menuCounts = useMemo(() => {
@@ -84,6 +120,8 @@ export function useMenus(): UseMenuReturn {
         filteredMenus,
         menuCounts,
         stats,
+        categories,
+        isCategoriesLoading,
         searchQuery,
         setSearchQuery,
         selectedCategory,

@@ -7,19 +7,27 @@ public class Menu {
     private String description;
     private int price;
     private String image;
-    private int category;
+    private int categoryId;
+    private java.sql.Timestamp createdAt;
+    private java.sql.Timestamp updatedAt;
+
+    private Category category;
+    // private List<MenuImage> images;
 
     public Menu() {
     }
 
-    public Menu(Long id, String korName, String engName, String description, int price, String image, int category) {
+    public Menu(Long id, String korName, String engName, String description, int price, String image, int categoryId,
+            java.sql.Timestamp createdAt, java.sql.Timestamp updatedAt) {
         this.id = id;
         this.korName = korName;
         this.engName = engName;
         this.description = description;
         this.price = price;
         this.image = image;
-        this.category = category;
+        this.categoryId = categoryId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -70,17 +78,34 @@ public class Menu {
         this.image = image;
     }
 
-    public int getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public java.sql.Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(java.sql.Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public java.sql.Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(java.sql.Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
         return "Menu [id=" + id + ", korName=" + korName + ", engName=" + engName + ", description=" + description
-                + ", price=" + price + ", image=" + image + "]";
+                + ", price=" + price + ", image=" + image + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+                + "]";
     }
 }
