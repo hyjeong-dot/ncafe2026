@@ -56,7 +56,7 @@ export function useMenus(): UseMenuReturn {
                     engName: cat.engName || cat.name || 'Category',
                     icon: cat.icon || '📦',
                     sortOrder: cat.sortOrder || 0
-                }));
+                })).sort((a: MenuCategory, b: MenuCategory) => a.sortOrder - b.sortOrder);
 
                 setCategories(mappedCategories);
             } catch (error) {

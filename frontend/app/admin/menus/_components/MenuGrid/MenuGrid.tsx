@@ -72,7 +72,7 @@ export default function MenuGrid({ menus, categories, isSearching, onToggleSoldO
                 // 백엔드 데이터를 프론트엔드 Menu 타입에 맞게 매핑
                 const mappedData = data.map((item: any) => {
                     // 카테고리 매핑
-                    const categoryId = String(item.category || 'unknown');
+                    const categoryId = String(item.categoryId || item.category || 'unknown');
                     const matchedCategory = categories.find(c => c.id === categoryId) || {
                         id: categoryId,
                         korName: '미분류',

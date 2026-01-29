@@ -23,7 +23,7 @@ public class NewCategoryRepository implements CategoryRepository {
     @Override
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM categories";
+        String sql = "SELECT * FROM categories ORDER BY sort_order ASC";
 
         try (
                 Connection conn = dataSource.getConnection();
@@ -33,6 +33,8 @@ public class NewCategoryRepository implements CategoryRepository {
                 Category category = new Category();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
+                category.setIcon(rs.getString("icon"));
+                category.setSortOrder(rs.getInt("sort_order"));
                 categories.add(category);
             }
         } catch (SQLException e) {
@@ -55,6 +57,8 @@ public class NewCategoryRepository implements CategoryRepository {
                 Category category = new Category();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
+                category.setIcon(rs.getString("icon"));
+                category.setSortOrder(rs.getInt("sort_order"));
                 return category;
             }
         } catch (SQLException e) {
