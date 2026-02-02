@@ -14,12 +14,21 @@ interface MenuGridProps {
 const ITEMS_PER_PAGE = 12;
 
 export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: MenuGridProps) {
-    const {
-        filteredMenus,
-        isLoading,
-        toggleSoldOut,
-        deleteMenu
-    } = useMenus({ selectedCategory, searchQuery });
+    // const {
+    //     filteredMenus,
+    //     isLoading,
+    //     toggleSoldOut,
+    //     deleteMenu
+    // } = useMenus({ selectedCategory, searchQuery });
+
+    const menuListRequest = {
+        categoryId: selectedCategory || undefined,
+        searchQuery: searchQuery || undefined,
+        page: 0,
+        size: ITEMS_PER_PAGE
+    };
+
+    const { menus } = useMenus(menuListRequest);
 
     const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,12 +36,12 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
     // Reset pagination when filter changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [filteredMenus.length]);
+    }, [selectedCategory, searchQuery]);
 
     // Calculate pagination
-    const totalPages = Math.ceil(filteredMenus.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(menus.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentMenus = filteredMenus.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const currentMenus = menus.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -43,50 +52,32 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
         setMenuToDelete(menuId);
     };
 
-    const confirmDelete = () => {
-        if (menuToDelete) {
-            deleteMenu(menuToDelete);
-            setMenuToDelete(null);
-        }
-    };
+    // const confirmDelete = () => {
+    //     if (menuToDelete) {
+    //         deleteMenu(menuToDelete);
+    //         setMenuToDelete(null);
+    //     }
+    // };
 
-    if (isLoading) {
-        return (
-            <div className={styles.loadingState}>
-                <Loader2 className={styles.loadingIcon} size={40} />
-                <p>메뉴 정보를 불러오는 중...</p>
-            </div>
-        );
-    }
-
-    if (filteredMenus.length === 0) {
-        return (
-            <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>
-                    <UtensilsCrossed size={32} />
-                </div>
-                <h3 className={styles.emptyTitle}>
-                    {searchQuery ? '검색 결과가 없습니다' : '등록된 메뉴가 없습니다'}
-                </h3>
-                <p className={styles.emptyDescription}>
-                    {searchQuery
-                        ? '다른 검색어로 시도해보세요'
-                        : '새 메뉴를 추가하여 시작하세요'}
-                </p>
-            </div>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //         <div className={styles.loadingState}>
+    //             <Loader2 className={styles.loadingIcon} size={40} />
+    //             <p>메뉴 정보를 불러오는 중...</p>
+    //         </div>
+    //     );
+    // }
 
     return (
         <>
             <section className={styles.menuGrid} aria-label="Menu list">
                 {currentMenus.map((menu) => (
-                    <MenuCard
-                        key={menu.id}
-                        menu={menu}
-                        onToggleSoldOut={toggleSoldOut}
-                        onDelete={handleDeleteClick}
-                    />
+                    // <MenuCard
+                    //     key={menu.id}
+                    //     menu={menu}
+                    //     onDelete={handleDeleteClick}
+                    // />
+                    <div key={menu.id}>{menu.korName}</div>
                 ))}
             </section>
 
@@ -122,7 +113,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
                 </div>
             )}
 
-            <Modal
+            {/* <Modal
                 isOpen={!!menuToDelete}
                 onClose={() => setMenuToDelete(null)}
                 title="메뉴 삭제"
@@ -130,7 +121,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
                 confirmText="삭제"
                 variant="danger"
                 onConfirm={confirmDelete}
-            />
+            /> */}
         </>
     );
 }

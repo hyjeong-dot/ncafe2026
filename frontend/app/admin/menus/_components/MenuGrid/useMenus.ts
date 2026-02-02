@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { Menu, MenuCategory } from '@/types/menu';
+import { Menu } from '@/types/menu';
 
 export interface MenuResponseDto {
     id: number;
@@ -33,12 +33,23 @@ export function useMenus(options: UseMenusOptions = {}) {
     // Fetch menus
     useEffect(() => {
         const fetchMenus = async () => {
+
+            const url = new URL('http://localhost:8080/admin/menus');
+
+            const params = url.searchParams;
+            if (selectedCategory) {
+                params.set('categoryId', selectedCategory.toString());
+            }
+            if (searchQuery) {
+                params.set('searchQuery', searchQuery);
+            }
+
             try {
-                const response = await fetch('http://localhost:8080/admin/menus');
+                const response = await fetch(url.toString());
                 if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
                 const data = await response.json();
 
-                const mappedMenus: Menu[] = data.map((item: any) => ({
+                const mappedMenus: Menu[] = data.menus.map((item: any) => ({
                     ...item,
                     id: String(item.id),
                     category: {
@@ -71,7 +82,7 @@ export function useMenus(options: UseMenusOptions = {}) {
         };
 
         fetchMenus();
-    }, []);
+    }, [selectedCategory, searchQuery]);
 
     // Filtered menus based on options
     const filteredMenus = useMemo(() => {

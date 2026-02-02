@@ -2,6 +2,7 @@
 
 import styles from './CategoryTabs.module.css';
 import { useCategories } from './useCategories';
+import { useMenus } from '../MenuGrid/useMenus';
 
 interface CategoryTabsProps {
     onCategoryChange: (id: number | null) => void;
@@ -9,8 +10,8 @@ interface CategoryTabsProps {
 }
 
 export default function CategoryTabs({ onCategoryChange, selectedCategory }: CategoryTabsProps) {
-    const { categories, categoryCount } = useCategories();
-
+    const { categories } = useCategories();
+    const { menuCounts } = useMenus();
 
 
     return (
@@ -21,7 +22,7 @@ export default function CategoryTabs({ onCategoryChange, selectedCategory }: Cat
             >
                 <span className={styles.tabIcon}>📋</span>
                 전체
-                <span className={styles.tabCount}>{categoryCount}</span>
+                <span className={styles.tabCount}>{menuCounts['null']}</span>
             </button>
 
             {categories.map((category) => (
@@ -32,7 +33,7 @@ export default function CategoryTabs({ onCategoryChange, selectedCategory }: Cat
                 >
                     <span className={styles.tabIcon}>{category.icon}</span>
                     {category.name}
-                    <span className={styles.tabCount}>{0}</span>
+                    <span className={styles.tabCount}>{menuCounts[category.id]}</span>
                 </button>
             ))}
         </section>

@@ -30,11 +30,17 @@ public class NewCategoryRepository implements CategoryRepository {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Category category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setIcon(rs.getString("icon"));
-                category.setSortOrder(rs.getInt("sort_order"));
+                // Category category = new Category();
+                // category.setId(rs.getInt("id"));
+                // category.setName(rs.getString("name"));
+                // category.setIcon(rs.getString("icon"));
+                // category.setSortOrder(rs.getInt("sort_order"));
+                Category category = Category.builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .icon(rs.getString("icon"))
+                        .sortOrder(rs.getInt("sort_order"))
+                        .build();
                 categories.add(category);
             }
         } catch (SQLException e) {
@@ -54,11 +60,17 @@ public class NewCategoryRepository implements CategoryRepository {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
-                Category category = new Category();
-                category.setId(rs.getInt("id"));
-                category.setName(rs.getString("name"));
-                category.setIcon(rs.getString("icon"));
-                category.setSortOrder(rs.getInt("sort_order"));
+                // Category category = new Category();
+                // category.setId(rs.getInt("id"));
+                // category.setName(rs.getString("name"));
+                // category.setIcon(rs.getString("icon"));
+                // category.setSortOrder(rs.getInt("sort_order"));
+                Category category = Category.builder()
+                        .id(rs.getInt("id"))
+                        .name(rs.getString("name"))
+                        .icon(rs.getString("icon"))
+                        .sortOrder(rs.getInt("sort_order"))
+                        .build();
                 return category;
             }
         } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.entity;
+package com.new_cafe.app.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,19 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
-    private Long id;
+public class MenuUpdateRequest {
+    private String id;
     private String korName;
     private String engName;
     private String description;
-    private int price;
-    private String image;
-    private int categoryId;
+    private Integer price;
+    private Integer categoryId;
+    private String imageSrc;
     private Boolean isAvailable;
     private Boolean isSoldOut;
     private Integer sortOrder;
-    private java.sql.Timestamp createdAt;
-    private java.sql.Timestamp updatedAt;
-
-    private Category category;
 }

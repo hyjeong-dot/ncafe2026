@@ -12,6 +12,7 @@ export interface CategoryListResponseDto {
     categoryCount: number;
 }
 
+
 export function useCategories() {
     const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
 
@@ -22,8 +23,8 @@ export function useCategories() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
                 }
-                const data: CategoryListResponseDto = await response.json();
-                setCategories(data.categories);
+                const data: CategoryResponseDto[] = await response.json();
+                setCategories(data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -32,9 +33,5 @@ export function useCategories() {
         fetchCategories();
     }, []);
 
-    // 카테고리별 메뉴 개수는 CategoryTabs에서 필요시 별도 계산
-    const categoryCount = categories.length;
-
-
-    return { categories, categoryCount };
+    return { categories };
 }

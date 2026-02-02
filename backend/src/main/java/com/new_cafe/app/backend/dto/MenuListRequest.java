@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.entity;
+package com.new_cafe.app.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
-    private Integer id;
-    private String name;
-    private String icon;
-    private int sortOrder;
+public class MenuListRequest {
+    private Integer categoryId;
+    private String searchQuery;
 }

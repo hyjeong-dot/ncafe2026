@@ -10,12 +10,16 @@ import styles from './page.module.css';
 
 export default function MenusPage() {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const { stats } = useMenus({ selectedCategory });
+    const { stats } = useMenus({ selectedCategory, searchQuery });
 
     return (
         <main className={styles.container}>
-            <PageHeader />
+            <PageHeader
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+            />
             <MenuStats stats={stats} />
 
             <CategoryTabs
@@ -25,6 +29,7 @@ export default function MenusPage() {
 
             <MenuGrid
                 selectedCategory={selectedCategory}
+                searchQuery={searchQuery}
             />
         </main>
     );

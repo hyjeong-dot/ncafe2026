@@ -1,4 +1,6 @@
-package com.new_cafe.app.backend.entity;
+package com.new_cafe.app.backend.dto;
+
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,19 +11,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class MenuResponse {
     private Long id;
     private String korName;
     private String engName;
     private String description;
-    private int price;
-    private String image;
-    private int categoryId;
+    private Integer price;
+    private String categoryName;
+    private String imageSrc;
     private Boolean isAvailable;
     private Boolean isSoldOut;
     private Integer sortOrder;
-    private java.sql.Timestamp createdAt;
-    private java.sql.Timestamp updatedAt;
-
-    private Category category;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
