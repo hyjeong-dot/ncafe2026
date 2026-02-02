@@ -1,52 +1,30 @@
 'use client';
 
+import { useState } from 'react';
 import PageHeader from './_components/PageHeader';
 import MenuStats from './_components/MenuStats';
-import MenuFilterBar from './_components/MenuFilterBar';
+import CategoryTabs from './_components/CategoryTabs';
 import MenuGrid from './_components/MenuGrid';
-import { useMenus } from './_hooks/useMenus';
+import { useMenus } from './_components/MenuGrid/useMenus';
 import styles from './page.module.css';
 
 export default function MenusPage() {
-    const {
-        filteredMenus,
-        menuCounts,
-        stats,
-        categories,
-        searchQuery,
-        setSearchQuery,
-        selectedCategory,
-        setSelectedCategory,
-        toggleSoldOut,
-        deleteMenu
-    } = useMenus();
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+
+    const { stats } = useMenus({ selectedCategory });
 
     return (
         <main className={styles.container}>
-            <PageHeader
-                title="메뉴 관리"
-                subtitle="카페 메뉴를 추가하고 관리하세요"
-                actionHref="/admin/menus/new"
-                actionLabel="새 메뉴 추가"
-            />
-
+            <PageHeader />
             <MenuStats stats={stats} />
 
-            <MenuFilterBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                categories={categories}
+            <CategoryTabs
+                onCategoryChange={setSelectedCategory}
                 selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-                menuCounts={menuCounts}
             />
 
             <MenuGrid
-                menus={filteredMenus}
-                categories={categories}
-                isSearching={!!searchQuery}
-                onToggleSoldOut={toggleSoldOut}
-                onDelete={deleteMenu}
+                selectedCategory={selectedCategory}
             />
         </main>
     );

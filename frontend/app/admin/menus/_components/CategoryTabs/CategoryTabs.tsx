@@ -1,45 +1,40 @@
 'use client';
 
-import { MenuCategory } from '@/types/menu';
 import styles from './CategoryTabs.module.css';
+import { useCategories } from './useCategories';
 
 interface CategoryTabsProps {
-    categories: MenuCategory[];
-    selectedCategory: string | null;
-    onSelectCategory: (categoryId: string | null) => void;
-    menuCounts: Record<string, number>;
+    onCategoryChange: (id: number | null) => void;
+    selectedCategory: number | null;
 }
 
-export default function CategoryTabs({
-    categories,
-    selectedCategory,
-    onSelectCategory,
-    menuCounts,
-}: CategoryTabsProps) {
-    const totalCount = Object.values(menuCounts).reduce((sum, count) => sum + count, 0);
+export default function CategoryTabs({ onCategoryChange, selectedCategory }: CategoryTabsProps) {
+    const { categories, categoryCount } = useCategories();
+
+
 
     return (
-        <div className={styles.tabs}>
+        <section className={styles.tabs} aria-label="Filter menus">
             <button
                 className={`${styles.tab} ${selectedCategory === null ? styles.active : ''}`}
-                onClick={() => onSelectCategory(null)}
+                onClick={() => onCategoryChange(null)}
             >
                 <span className={styles.tabIcon}>📋</span>
-                <span>전체</span>
-                <span className={styles.tabCount}>{totalCount}</span>
+                전체
+                <span className={styles.tabCount}>{categoryCount}</span>
             </button>
 
             {categories.map((category) => (
                 <button
                     key={category.id}
                     className={`${styles.tab} ${selectedCategory === category.id ? styles.active : ''}`}
-                    onClick={() => onSelectCategory(category.id)}
+                    onClick={() => onCategoryChange(category.id)}
                 >
-                    {category.icon && <span className={styles.tabIcon}>{category.icon}</span>}
-                    <span>{category.korName}</span>
-                    <span className={styles.tabCount}>{menuCounts[category.id] || 0}</span>
+                    <span className={styles.tabIcon}>{category.icon}</span>
+                    {category.name}
+                    <span className={styles.tabCount}>{0}</span>
                 </button>
             ))}
-        </div>
+        </section>
     );
 }
