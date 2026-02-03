@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Menu } from '@/types/menu';
 import { Loader2, UtensilsCrossed, ChevronLeft, ChevronRight } from 'lucide-react';
 import Modal from '@/components/common/Modal/Modal';
 import MenuCard from '../MenuCard/MenuCard';
@@ -21,17 +20,15 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
     //     deleteMenu
     // } = useMenus({ selectedCategory, searchQuery });
 
-    const menuListRequest = {
-        categoryId: selectedCategory || undefined,
-        searchQuery: searchQuery || undefined,
-        page: 0,
-        size: ITEMS_PER_PAGE
-    };
-
-    const { menus } = useMenus(menuListRequest);
-
     const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const { menus, toggleSoldOut, isLoading } = useMenus({
+        selectedCategory: selectedCategory || undefined,
+        searchQuery: searchQuery || undefined,
+        page: currentPage - 1,
+        size: ITEMS_PER_PAGE
+    });
 
     // Reset pagination when filter changes
     useEffect(() => {
@@ -59,25 +56,25 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
     //     }
     // };
 
-    // if (isLoading) {
-    //     return (
-    //         <div className={styles.loadingState}>
-    //             <Loader2 className={styles.loadingIcon} size={40} />
-    //             <p>메뉴 정보를 불러오는 중...</p>
-    //         </div>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+            <div className={styles.loadingState}>
+                <Loader2 className={styles.loadingIcon} size={40} />
+                <p>메뉴 정보를 불러오는 중...</p>
+            </div>
+        );
+    }
 
     return (
         <>
             <section className={styles.menuGrid} aria-label="Menu list">
                 {currentMenus.map((menu) => (
-                    // <MenuCard
-                    //     key={menu.id}
-                    //     menu={menu}
-                    //     onDelete={handleDeleteClick}
-                    // />
-                    <div key={menu.id}>{menu.korName}</div>
+                    <MenuCard
+                        key={menu.id}
+                        menu={menu}
+                        onToggleSoldOut={toggleSoldOut}
+                        onDelete={handleDeleteClick}
+                    />
                 ))}
             </section>
 

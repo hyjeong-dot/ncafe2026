@@ -4,18 +4,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Edit2, Trash2, ImageIcon } from 'lucide-react';
-import { Menu } from '@/types/menu';
 import styles from './MenuCard.module.css';
+import { MenuResponse } from '../MenuGrid/useMenus';
 
 interface MenuCardProps {
-    menu: Menu;
+    menu: MenuResponse | null;
     onToggleSoldOut: (menuId: string) => void;
     onDelete: (menuId: string) => void;
 }
 
 export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardProps) {
-    const primaryImage = menu.images.find((img) => img.isPrimary) || menu.images[0];
     const router = useRouter();
+
+    if (!menu) return null;
 
     const handleCardClick = () => {
         router.push(`/admin/menus/${menu.id}`);
@@ -25,6 +26,8 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
         return new Intl.NumberFormat('ko-KR').format(price);
     };
 
+    const menuIdStr = String(menu.id);
+
     return (
         <div
             className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}
@@ -32,9 +35,9 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
         >
             {/* Image */}
             <div className={styles.imageWrapper}>
-                {primaryImage ? (
+                {menu.imageSrc ? (
                     <Image
-                        src={primaryImage.url}
+                        src={menu.imageSrc}
                         alt={menu.korName}
                         fill
                         className={styles.image}
@@ -51,7 +54,7 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                 )}
 
                 <span className={styles.categoryBadge}>
-                    {menu.category.icon} {menu.category.korName}
+                    {menu.categoryName}
                 </span>
             </div>
 
@@ -75,7 +78,7 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                             className={`${styles.toggle} ${menu.isSoldOut ? styles.active : ''}`}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleSoldOut(menu.id);
+                                onToggleSoldOut(menuIdStr);
                             }}
                             title={menu.isSoldOut ? '품절 해제' : '품절 처리'}
                         >
@@ -96,7 +99,7 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                             className={`${styles.actionButton} ${styles.delete}`}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onDelete(menu.id);
+                                onDelete(menuIdStr);
                             }}
                             title="삭제"
                         >
