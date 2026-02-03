@@ -36,7 +36,7 @@ public class NewCategoryRepository implements CategoryRepository {
                 // category.setIcon(rs.getString("icon"));
                 // category.setSortOrder(rs.getInt("sort_order"));
                 Category category = Category.builder()
-                        .id(rs.getInt("id"))
+                        .id(rs.getLong("id"))
                         .name(rs.getString("name"))
                         .icon(rs.getString("icon"))
                         .sortOrder(rs.getInt("sort_order"))
@@ -52,7 +52,7 @@ public class NewCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Category findById(Integer id) {
+    public Category findById(Long id) {
         String sql = "SELECT * FROM categories WHERE id = " + id;
 
         try (
@@ -66,7 +66,7 @@ public class NewCategoryRepository implements CategoryRepository {
                 // category.setIcon(rs.getString("icon"));
                 // category.setSortOrder(rs.getInt("sort_order"));
                 Category category = Category.builder()
-                        .id(rs.getInt("id"))
+                        .id(rs.getLong("id"))
                         .name(rs.getString("name"))
                         .icon(rs.getString("icon"))
                         .sortOrder(rs.getInt("sort_order"))

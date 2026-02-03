@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class MenuImage {
     private Long id;
-    private String name;
-    private String icon;
-    private int sortOrder;
+    private Long menuId;
+    private String srcUrl;
+    private Integer sortOrder;
+    private Timestamp createdAt;
 }

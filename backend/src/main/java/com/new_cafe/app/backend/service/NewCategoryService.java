@@ -20,7 +20,7 @@ public class NewCategoryService implements CategoryService {
     }
 
     @Override
-    public Category getById(Integer id) {
+    public Category getById(Long id) {
         return categoryRepository.findById(id);
     }
 

@@ -27,7 +27,7 @@ public class CategoryController {
 
     // 카테고리 상세 조회
     @GetMapping("/admin/categories/{id}")
-    public Category detail(@PathVariable("id") Integer id) {
+    public Category detail(@PathVariable("id") Long id) {
         return categoryService.getById(id);
     }
 

@@ -16,7 +16,7 @@ public class Menu {
     private String description;
     private int price;
     private String image;
-    private int categoryId;
+    private Long categoryId;
     private Boolean isAvailable;
     private Boolean isSoldOut;
     private Integer sortOrder;

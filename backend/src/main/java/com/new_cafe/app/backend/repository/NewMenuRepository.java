@@ -45,7 +45,7 @@ public class NewMenuRepository implements MenuRepository {
                         .price(rs.getInt("price"))
                         .description(rs.getString("description"))
                         .image(rs.getString("image_url"))
-                        .categoryId(rs.getInt("category_id"))
+                        .categoryId(rs.getLong("category_id"))
                         .createdAt(rs.getTimestamp("created_at"))
                         .updatedAt(rs.getTimestamp("updated_at"))
                         .build();
@@ -59,7 +59,7 @@ public class NewMenuRepository implements MenuRepository {
     }
 
     @Override
-    public List<Menu> findAllByCategoryId(Integer categoryId) {
+    public List<Menu> findAllByCategoryId(Long categoryId) {
         List<Menu> menus = new ArrayList<>();
         String sql = "SELECT m.*, (SELECT src_url FROM menu_images mi WHERE mi.menu_id = m.id ORDER BY mi.sort_order ASC LIMIT 1) as image_url FROM menus m";
         if (categoryId != null) {
@@ -78,7 +78,7 @@ public class NewMenuRepository implements MenuRepository {
                         .price(rs.getInt("price"))
                         .description(rs.getString("description"))
                         .image(rs.getString("image_url"))
-                        .categoryId(rs.getInt("category_id"))
+                        .categoryId(rs.getLong("category_id"))
                         .createdAt(rs.getTimestamp("created_at"))
                         .updatedAt(rs.getTimestamp("updated_at"))
                         .build();
@@ -90,8 +90,9 @@ public class NewMenuRepository implements MenuRepository {
         }
         return menus;
     }
+
     @Override
-    public List<Menu> findAllByCategoryIdAndSearchQuery(Integer categoryId, String searchQuery) {
+    public List<Menu> findAllByCategoryIdAndSearchQuery(Long categoryId, String searchQuery) {
         List<Menu> menus = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
                 "SELECT m.*, (SELECT src_url FROM menu_images mi WHERE mi.menu_id = m.id ORDER BY mi.sort_order ASC LIMIT 1) as image_url FROM menus m WHERE 1=1");
@@ -115,7 +116,7 @@ public class NewMenuRepository implements MenuRepository {
                         .price(rs.getInt("price"))
                         .description(rs.getString("description"))
                         .image(rs.getString("image_url"))
-                        .categoryId(rs.getInt("category_id"))
+                        .categoryId(rs.getLong("category_id"))
                         .createdAt(rs.getTimestamp("created_at"))
                         .updatedAt(rs.getTimestamp("updated_at"))
                         .build();

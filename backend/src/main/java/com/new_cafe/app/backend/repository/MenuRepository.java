@@ -8,7 +8,7 @@ public interface MenuRepository {
 
     List<Menu> findAllByName(String name);
 
-    List<Menu> findAllByCategoryId(Integer categoryId);
+    List<Menu> findAllByCategoryId(Long categoryId);
 
-    List<Menu> findAllByCategoryIdAndSearchQuery(Integer categoryId, String searchQuery);
+    List<Menu> findAllByCategoryIdAndSearchQuery(Long categoryId, String searchQuery);
 }

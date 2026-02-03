@@ -6,5 +6,5 @@ import com.new_cafe.app.backend.entity.Category;
 public interface CategoryService {
     List<Category> getAll();
 
-    Category getById(Integer id);
+    Category getById(Long id);
 }

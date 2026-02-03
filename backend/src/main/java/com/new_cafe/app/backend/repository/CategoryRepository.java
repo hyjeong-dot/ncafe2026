@@ -6,5 +6,5 @@ import com.new_cafe.app.backend.entity.Category;
 public interface CategoryRepository {
     List<Category> findAll();
 
-    Category findById(Integer id);
+    Category findById(Long id);
 }
