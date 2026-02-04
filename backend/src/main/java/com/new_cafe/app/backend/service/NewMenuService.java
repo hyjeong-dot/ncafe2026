@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.new_cafe.app.backend.dto.*;
 import com.new_cafe.app.backend.entity.Menu;
-import com.new_cafe.app.backend.entity.Category;
+// import com.new_cafe.app.backend.entity.Category;
 import com.new_cafe.app.backend.entity.MenuImage;
 import com.new_cafe.app.backend.repository.CategoryRepository;
 import com.new_cafe.app.backend.repository.MenuRepository;
@@ -35,8 +35,16 @@ public class NewMenuService implements MenuService {
             String categoryName = categoryRepository.findById(menu.getCategoryId()).getName();
 
             List<MenuImage> images = menuImageRepository.findAllByMenuId(menu.getId());
-            String imageSrc = images.get(0).getSrcUrl();
-
+            // primary image or first image or default image
+            String imageSrc = "";
+            // images의 갯수가 0인 경우는 blank image를 사용한다.
+            if (!images.isEmpty()) {
+                imageSrc = images.get(0).getSrcUrl();
+            } else {
+                imageSrc = "images/blank.png";
+            }
+            // String imageSrc = images.isEmpty() ? "images/blank.png" :
+            // images.get(0).getSrcUrl();
             return MenuResponse.builder()
                     .id(menu.getId())
                     .korName(menu.getKorName())

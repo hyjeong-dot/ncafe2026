@@ -29,17 +29,19 @@ public class NewMenuImageRepository implements MenuImageRepository {
 
         try (
                 Connection conn = dataSource.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                MenuImage image = MenuImage.builder()
-                        .id(rs.getLong("id"))
-                        .menuId(rs.getLong("menu_id"))
-                        .srcUrl(rs.getString("src_url"))
-                        .sortOrder(rs.getInt("sort_order"))
-                        .createdAt(rs.getTimestamp("created_at"))
-                        .build();
-                images.add(image);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setLong(1, menuId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    MenuImage image = MenuImage.builder()
+                            .id(rs.getLong("id"))
+                            .menuId(rs.getLong("menu_id"))
+                            .srcUrl(rs.getString("src_url"))
+                            .sortOrder(rs.getInt("sort_order"))
+                            .createdAt(rs.getTimestamp("created_at"))
+                            .build();
+                    images.add(image);
+                }
             }
         } catch (SQLException e) {
             System.err.println("MenuImage findAllByMenuId error: " + e.getMessage());
