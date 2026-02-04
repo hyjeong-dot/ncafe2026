@@ -11,7 +11,7 @@ interface CategoryTabsProps {
 
 export default function CategoryTabs({ onCategoryChange, selectedCategory }: CategoryTabsProps) {
     const { categories } = useCategories();
-    const { menuCounts } = useMenus();
+    const { menuCounts, stats } = useMenus();
 
 
     return (
@@ -22,7 +22,7 @@ export default function CategoryTabs({ onCategoryChange, selectedCategory }: Cat
             >
                 <span className={styles.tabIcon}>📋</span>
                 전체
-                <span className={styles.tabCount}>{menuCounts['null']}</span>
+                <span className={styles.tabCount}>{stats.total}</span>
             </button>
 
             {categories.map((category) => (
@@ -33,7 +33,7 @@ export default function CategoryTabs({ onCategoryChange, selectedCategory }: Cat
                 >
                     <span className={styles.tabIcon}>{category.icon}</span>
                     {category.name}
-                    <span className={styles.tabCount}>{menuCounts[category.id]}</span>
+                    <span className={styles.tabCount}>{menuCounts[category.name] || 0}</span>
                 </button>
             ))}
         </section>

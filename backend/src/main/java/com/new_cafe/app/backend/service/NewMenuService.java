@@ -41,7 +41,7 @@ public class NewMenuService implements MenuService {
             if (!images.isEmpty()) {
                 imageSrc = images.get(0).getSrcUrl();
             } else {
-                imageSrc = "images/blank.png";
+                imageSrc = "blank.png";
             }
             // String imageSrc = images.isEmpty() ? "images/blank.png" :
             // images.get(0).getSrcUrl();
