@@ -1,0 +1,139 @@
+/* Info Section */
+.infoSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+/* Title Area */
+.titleArea {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--space-6);
+}
+
+.statusBadges {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.badge {
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+}
+
+.available {
+    background-color: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.soldOut {
+    background-color: var(--color-error-light);
+    color: var(--color-error);
+}
+
+.categoryBadge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+}
+
+.korName {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+    letter-spacing: -0.02em;
+}
+
+.engName {
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* Dashboard Cards */
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.statCard {
+    background-color: var(--bg-secondary);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.statLabel {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.statValue {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+}
+
+.statTrend {
+    font-size: var(--text-xs);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.trendUp {
+    color: var(--color-success);
+}
+
+.trendDown {
+    color: var(--color-error);
+}
+
+/* Price & Description */
+.priceArea {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+}
+
+.priceLabel {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+}
+
+.price {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary-600);
+}
+
+.description {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding: var(--space-4);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--color-primary-300);
+}
+
+@media (max-width: 768px) {
+    .dashboardGrid {
+        grid-template-columns: 1fr;
+    }
+}

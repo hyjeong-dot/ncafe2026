@@ -1,5 +1,5 @@
 import { TrendingUp, Star } from 'lucide-react';
-import styles from '../page.module.css';
+import styles from './MenuDetailInfo.module.css';
 import { Menu } from '@/types/menu';
 
 interface MenuDetailInfoProps {

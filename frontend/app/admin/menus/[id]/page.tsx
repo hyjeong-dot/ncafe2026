@@ -3,13 +3,12 @@
 import { useState, use, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { useMenuStore } from '@/stores/menuStore';
 import styles from './page.module.css';
 import Modal from '@/components/common/Modal/Modal';
-import MenuDetailHeader from './_components/MenuDetailHeader';
-import MenuDetailImage from './_components/MenuDetailImage';
-import MenuDetailInfo from './_components/MenuDetailInfo';
-import MenuDetailOptions from './_components/MenuDetailOptions';
+import MenuDetailHeader from './_components/MenuDetailHeader/MenuDetailHeader';
+import MenuDetailImage from './_components/MenuDetailImage/MenuDetailImage';
+import MenuDetailInfo from './_components/MenuDetailInfo/MenuDetailInfo';
+import MenuDetailOptions from './_components/MenuDetailOptions/MenuDetailOptions';
 
 // Next.js 15+ compatible props type
 interface MenuDetailPageProps {

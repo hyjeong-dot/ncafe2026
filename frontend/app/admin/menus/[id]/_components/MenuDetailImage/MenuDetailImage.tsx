@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Activity, Zap, Droplet, Cpu, ImageIcon } from 'lucide-react';
-import styles from '../page.module.css';
+import styles from './MenuDetailImage.module.css';
 
 interface MenuDetailImageProps {
     imageUrl?: string;

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, Edit2, Trash2 } from 'lucide-react';
 import Button from '@/components/common/Button/Button';
-import styles from '../page.module.css';
+import styles from './MenuDetailHeader.module.css';
 
 interface MenuDetailHeaderProps {
     menuId: string;

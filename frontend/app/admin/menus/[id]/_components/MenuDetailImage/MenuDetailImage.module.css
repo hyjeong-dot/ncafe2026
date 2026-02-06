@@ -1,0 +1,80 @@
+/* Image Section */
+.imageSection {
+    position: sticky;
+    top: var(--space-6);
+}
+
+.mainImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+}
+
+.mainImage {
+    object-fit: cover;
+}
+
+.noImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+}
+
+/* Nutrition Grid */
+.nutritionGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    background-color: var(--bg-secondary);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+}
+
+.nutritionItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.nutritionIcon {
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-500);
+}
+
+.nutritionInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.nutritionLabel {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.nutritionValue {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .nutritionGrid {
+        grid-template-columns: 1fr;
+    }
+}

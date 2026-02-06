@@ -1,4 +1,4 @@
-import styles from '../page.module.css';
+import styles from './MenuDetailOptions.module.css';
 import { MenuOption } from '@/types/menu';
 
 interface MenuDetailOptionsProps {

@@ -1,0 +1,75 @@
+/* Options Section */
+.optionsSection {
+    margin-top: var(--space-2);
+}
+
+.sectionTitle {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.optionCard {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+    overflow: hidden;
+}
+
+.optionHeader {
+    background-color: var(--bg-secondary);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.optionName {
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.requiredBadge {
+    font-size: var(--text-xs);
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-700);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-medium);
+}
+
+.optionList {
+    padding: var(--space-2) 0;
+}
+
+.optionItem {
+    padding: var(--space-2) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.optionItem:not(:last-child) {
+    border-bottom: 1px solid var(--color-gray-50);
+}
+
+.itemPrice {
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+}
+
+.emptyOptions {
+    text-align: center;
+    padding: var(--space-6);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
