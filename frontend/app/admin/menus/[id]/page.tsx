@@ -1,29 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import Image from 'next/image';
-import Link from 'next/link';
-import {
-    ArrowLeft,
-    Edit2,
-    Trash2,
-    ImageIcon,
-    Activity,
-    Zap,
-    Droplet,
-    Cpu,
-    TrendingUp,
-    Star,
-    QrCode,
-    Clock
-} from 'lucide-react';
 import { useMenuStore } from '@/stores/menuStore';
 import styles from './page.module.css';
-import { use } from 'react';
 import Modal from '@/components/common/Modal/Modal';
-import Button from '@/components/common/Button/Button';
+import MenuDetailHeader from './_components/MenuDetailHeader';
+import MenuDetailImage from './_components/MenuDetailImage';
+import MenuDetailInfo from './_components/MenuDetailInfo';
+import MenuDetailOptions from './_components/MenuDetailOptions';
 
 // Next.js 15+ compatible props type
 interface MenuDetailPageProps {
@@ -38,34 +24,80 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    // Use Zustand store for menu data
-    const menu = useMenuStore((state) => state.getMenuById(id));
-    const deleteMenuFromStore = useMenuStore((state) => state.deleteMenu);
+    // const menu = useMenuStore((state) => state.getMenuById(id));
+    // Data Fetching Plan: Will use API fetch in the future. Currently using Mock Data.
+
+    // Mock Data Definition
+    const menu = {
+        id: '1',
+        korName: '아이스 아메리카노',
+        engName: 'Iced Americano',
+        description: '진한 에스프레소와 시원한 물이 어우러진 깔끔한 맛의 커피',
+        price: 4500,
+        category: {
+            id: 'coffee',
+            korName: '커피',
+            engName: 'Coffee',
+            icon: '☕',
+            sortOrder: 1
+        },
+        images: [
+            { id: 'img1', url: '/images/menu/americano.jpg', isPrimary: true, sortOrder: 1 }
+        ],
+        isSoldOut: false,
+        isAvailable: true,
+        options: [
+            {
+                id: 'opt1',
+                name: '샷 추가',
+                type: 'checkbox' as const,
+                required: false,
+                items: [
+                    { id: 'item1', name: '1샷 추가', priceDelta: 500 },
+                    { id: 'item2', name: '2샷 추가', priceDelta: 1000 }
+                ]
+            },
+            {
+                id: 'opt2',
+                name: '시럽 선택',
+                type: 'radio' as const,
+                required: true,
+                items: [
+                    { id: 'item3', name: '설탕 시럽', priceDelta: 0 },
+                    { id: 'item4', name: '헤이즐넛 시럽', priceDelta: 500 }
+                ]
+            }
+        ],
+        sortOrder: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+    };
+
+    // const deleteMenuFromStore = useMenuStore((state) => state.deleteMenu);
+
+    // 백엔드에서 데이터 fetch (새로고침 시 store가 비어있을 수 있음)
+    // 실제 구현 시에는 react-query 등을 사용하거나 useEffect에서 fetch 로직이 필요할 수 있음
+    // 현재는 store에 없으면 notFound 처리 중 -> 이 부분은 추후 보완 필요할 수 있음.
+    // 우선 store 로직 유지.
 
     // If deleting, show nothing (will redirect soon)
     if (isDeleting) {
         return null;
     }
 
+    // Store에 데이터가 없으면 로딩 중이거나 에러일 수 있음
+    // 여기서는 예시로 notFound 처리 (실제 앱에서는 fetch 로직 필요)
     if (!menu) {
-        notFound();
+        // 실제로는 여기서 fetch를 시도하거나 해야 함.
+        // 임시로 notFound();
+        // notFound(); 
+        // 404 에러 방지를 위해, 데이터가 없으면 로딩중 표시 혹은 fetch 시도 로직을 넣어야 하지만
+        // 현재 store 기반 구조이므로 일단 return null 하거나 notFound 유지
+        return <div className={styles.container}>메뉴 정보를 불러오는 중입니다...</div>;
+        // notFound();
     }
 
     const primaryImage = menu.images.find((img) => img.isPrimary) || menu.images[0];
-
-    // Mock Data (Fixed values to prevent hydration mismatch)
-    const mockStats = {
-        todaySales: 32,
-        totalSales: 847,
-        rating: '4.7',
-    };
-
-    const mockNutrition = {
-        calories: 185,
-        sugars: 24,
-        protein: 5,
-        caffeine: 95,
-    };
 
     const handleDeleteClick = () => {
         setIsDeleteModalOpen(true);
@@ -73,200 +105,34 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
     const handleConfirmDelete = () => {
         setIsDeleting(true);
-        deleteMenuFromStore(id);
+        // deleteMenuFromStore(id); // Mock delete
+        console.log('Mock delete menu:', id);
         toast.success('메뉴가 삭제되었습니다.');
         router.push('/admin/menus');
     };
 
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('ko-KR').format(price);
-    };
-
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <Link href="/admin/menus" className={styles.backButton}>
-                    <ArrowLeft size={20} />
-                    <span>목록으로 돌아가기</span>
-                </Link>
-                <div className={styles.actions}>
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => toast('QR코드가 생성되었습니다 (Mock)', { icon: '📱' })}
-                    >
-                        <QrCode size={16} />
-                        키오스크 미리보기
-                    </Button>
-                </div>
-            </div>
+            <MenuDetailHeader
+                menuId={menu.id}
+                onDeleteClick={handleDeleteClick}
+            />
 
             <main className={styles.content}>
-                {/* Left Column: Image */}
-                <section className={styles.imageSection}>
-                    <div className={styles.mainImageWrapper}>
-                        {primaryImage ? (
-                            <Image
-                                src={primaryImage.url}
-                                alt={menu.korName}
-                                fill
-                                className={styles.mainImage}
-                                priority
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                            />
-                        ) : (
-                            <div className={styles.noImage}>
-                                <ImageIcon size={64} />
-                                <span>이미지가 없습니다</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Nutrition Info (New) */}
-                    <div className={styles.nutritionGrid} style={{ marginTop: '1.5rem' }}>
-                        <div className={styles.nutritionItem}>
-                            <div className={styles.nutritionIcon}><Activity size={16} /></div>
-                            <div className={styles.nutritionInfo}>
-                                <span className={styles.nutritionLabel}>칼로리</span>
-                                <span className={styles.nutritionValue}>{mockNutrition.calories} kcal</span>
-                            </div>
-                        </div>
-                        <div className={styles.nutritionItem}>
-                            <div className={styles.nutritionIcon}><Zap size={16} /></div>
-                            <div className={styles.nutritionInfo}>
-                                <span className={styles.nutritionLabel}>카페인</span>
-                                <span className={styles.nutritionValue}>{mockNutrition.caffeine} mg</span>
-                            </div>
-                        </div>
-                        <div className={styles.nutritionItem}>
-                            <div className={styles.nutritionIcon}><Droplet size={16} /></div>
-                            <div className={styles.nutritionInfo}>
-                                <span className={styles.nutritionLabel}>당류</span>
-                                <span className={styles.nutritionValue}>{mockNutrition.sugars} g</span>
-                            </div>
-                        </div>
-                        <div className={styles.nutritionItem}>
-                            <div className={styles.nutritionIcon}><Cpu size={16} /></div>
-                            <div className={styles.nutritionInfo}>
-                                <span className={styles.nutritionLabel}>단백질</span>
-                                <span className={styles.nutritionValue}>{mockNutrition.protein} g</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                {/* Left Column: Image & Nutrition */}
+                <MenuDetailImage
+                    imageUrl={primaryImage?.url}
+                    altText={menu.korName}
+                />
 
                 {/* Right Column: Info & Options */}
-                <section className={styles.infoSection}>
-                    <div className={styles.titleArea}>
-                        <div className={styles.statusBadges}>
-                            {menu.isSoldOut ? (
-                                <span className={`${styles.badge} ${styles.soldOut}`}>품절</span>
-                            ) : (
-                                <span className={`${styles.badge} ${styles.available}`}>판매중</span>
-                            )}
-                        </div>
-                        <span className={styles.categoryBadge}>
-                            {menu.category.icon} {menu.category.korName}
-                        </span>
-                        <h1 className={styles.korName}>{menu.korName}</h1>
-                        <p className={styles.engName}>{menu.engName}</p>
-                    </div>
+                <div className={styles.infoSection}>
+                    <MenuDetailInfo
+                        menu={menu}
+                    />
 
-                    {/* Sales Dashboard (New) */}
-                    <div className={styles.dashboardGrid}>
-                        <div className={styles.statCard}>
-                            <span className={styles.statLabel}>오늘 판매량</span>
-                            <span className={styles.statValue}>{mockStats.todaySales}잔</span>
-                            <span className={`${styles.statTrend} ${styles.trendUp}`}>
-                                <TrendingUp size={12} /> +12%
-                            </span>
-                        </div>
-                        <div className={styles.statCard}>
-                            <span className={styles.statLabel}>예상 매출</span>
-                            <span className={styles.statValue}>
-                                {formatPrice(mockStats.todaySales * menu.price)}원
-                            </span>
-                        </div>
-                        <div className={styles.statCard}>
-                            <span className={styles.statLabel}>고객 평점</span>
-                            <span className={styles.statValue}>★ {mockStats.rating}</span>
-                            <span className={styles.statTrend} style={{ color: '#fbbf24' }}>
-                                <Star size={12} fill="#fbbf24" /> 4.8 (120)
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className={styles.priceArea}>
-                        <span className={styles.priceLabel}>판매가</span>
-                        <span className={styles.price}>{formatPrice(menu.price)}원</span>
-                    </div>
-
-                    <div className={styles.description}>
-                        {menu.description || '메뉴 설명이 없습니다.'}
-                    </div>
-
-                    {/* Options */}
-                    <div className={styles.optionsSection}>
-                        <h3 className={styles.sectionTitle}>옵션 정보</h3>
-                        {menu.options && menu.options.length > 0 ? (
-                            menu.options.map((option) => (
-                                <div key={option.id} className={styles.optionCard}>
-                                    <div className={styles.optionHeader}>
-                                        <span className={styles.optionName}>{option.name}</span>
-                                        {option.required && (
-                                            <span className={styles.requiredBadge}>필수</span>
-                                        )}
-                                    </div>
-                                    <div className={styles.optionList}>
-                                        {option.items.map((item) => (
-                                            <div key={item.id} className={styles.optionItem}>
-                                                <span>{item.name}</span>
-                                                <span className={styles.itemPrice}>
-                                                    {item.priceDelta > 0
-                                                        ? `+${formatPrice(item.priceDelta)}원`
-                                                        : '무료'}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <div className={styles.emptyOptions}>
-                                등록된 옵션이 없습니다.
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Actions */}
-                    {/* Meta Info (New) */}
-                    <div className={styles.metaInfo}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Clock size={14} /> 최초 등록일: 2024.01.15
-                        </div>
-                        <div>최근 수정: 방금 전</div>
-                        <div>관리자: dev_admin</div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className={styles.actions} style={{ marginTop: '0', paddingTop: '0', border: 'none' }}>
-                        <Link href={`/admin/menus/${menu.id}/edit`} style={{ width: '100%' }}>
-                            <Button variant="primary" size="lg" className={styles.fullWidthButton} style={{ width: '100%' }}>
-                                <Edit2 size={20} />
-                                메뉴 수정하기
-                            </Button>
-                        </Link>
-                        <Button
-                            variant="danger"
-                            size="lg"
-                            onClick={handleDeleteClick}
-                            style={{ minWidth: '140px' }}
-                        >
-                            <Trash2 size={20} />
-                            삭제
-                        </Button>
-                    </div>
-                </section>
+                    <MenuDetailOptions options={menu.options} />
+                </div>
             </main>
 
             <Modal
