@@ -2,12 +2,7 @@ import Image from 'next/image';
 import { Activity, Zap, Droplet, Cpu, ImageIcon } from 'lucide-react';
 import styles from './MenuDetailImage.module.css';
 
-interface MenuDetailImageProps {
-    imageUrl?: string;
-    altText: string;
-}
-
-export default function MenuDetailImage({ imageUrl, altText }: MenuDetailImageProps) {
+export default function MenuDetailImage() {
     // Mock Data for Nutrition
     const mockNutrition = {
         calories: 185,
@@ -15,6 +10,9 @@ export default function MenuDetailImage({ imageUrl, altText }: MenuDetailImagePr
         protein: 5,
         caffeine: 95,
     };
+
+    const imageUrl = '';
+    const altText = 'Menu Image';
 
     return (
         <section className={styles.imageSection}>

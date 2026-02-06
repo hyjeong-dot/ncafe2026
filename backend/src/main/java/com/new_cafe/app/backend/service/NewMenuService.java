@@ -67,8 +67,28 @@ public class NewMenuService implements MenuService {
     }
 
     @Override
-    public MenuDetailResponse getMenu(String id) {
-        return null;
+    public MenuDetailResponse getMenu(Long id) {
+        Menu menu = menuRepository.findById(id);
+        if (menu == null) {
+            return null;
+        }
+
+        // List<MenuImage> menuImages =
+        // menuImageRepository.findAllByMenuId(menu.getId());
+        // List<String> imageUrls = menuImages.stream()
+        // .map(MenuImage::getSrcUrl)
+        // .toList();
+
+        return MenuDetailResponse.builder()
+                .id(menu.getId())
+                .korName(menu.getKorName())
+                .engName(menu.getEngName())
+                .description(menu.getDescription())
+                .price(menu.getPrice())
+                .categoryName(categoryRepository.findById(menu.getCategoryId()).getName())
+                .isAvailable(menu.getIsAvailable())
+                .updatedAt(menu.getUpdatedAt() != null ? menu.getUpdatedAt().toLocalDateTime() : null)
+                .build();
     }
 
     @Override
@@ -77,7 +97,7 @@ public class NewMenuService implements MenuService {
     }
 
     @Override
-    public void deleteMenu(String id) {
+    public void deleteMenu(Long id) {
     }
 
     @Override

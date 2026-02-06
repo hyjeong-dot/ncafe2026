@@ -11,11 +11,11 @@ import com.new_cafe.app.backend.dto.MenuUpdateResponse;
 public interface MenuService {
     MenuListResponse getMenus(MenuListRequest request);
 
-    MenuDetailResponse getMenu(String id);
+    MenuDetailResponse getMenu(Long id);
 
     MenuCreateResponse createMenu(MenuCreateRequest request);
 
-    void deleteMenu(String id);
+    void deleteMenu(Long id);
 
     MenuUpdateResponse updateMenu(MenuUpdateRequest request);
 }
