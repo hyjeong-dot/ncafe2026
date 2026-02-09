@@ -1,0 +1,45 @@
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(13,20): error TS2307: Cannot find module './AdminSidebar.module.css' or its corresponding type declarations.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(65,9): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(67,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(68,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(69,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(71,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(76,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(78,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(79,25): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(83,33): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(88,37): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(89,37): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(91,41): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(101,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(102,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(103,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(104,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(105,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(107,17): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+app/admin/_components/AdminSidebar/AdminSidebar.tsx(108,21): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+node_modules/next/dist/build/templates/app-page.d.ts(3,25): error TS2307: Cannot find module 'VAR_MODULE_GLOBAL_ERROR' or its corresponding type declarations.
+node_modules/next/dist/build/webpack-config.d.ts(10,104): error TS2694: Namespace '"C:/Project/ncafe/frontend/node_modules/next/dist/compiled/webpack/webpack".webpack' has no exported member 'RuleSetUseItem'.
+node_modules/next/dist/build/webpack/loaders/next-app-loader/index.d.ts(1,13): error TS2613: Module '"C:/Project/ncafe/frontend/node_modules/next/dist/compiled/webpack/webpack"' has no default export. Did you mean to use 'import { webpack } from "C:/Project/ncafe/frontend/node_modules/next/dist/compiled/webpack/webpack"' instead?
+node_modules/next/dist/client/components/error-boundary.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/client/components/http-access-fallback/error-boundary.d.ts(11,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/client/components/layout-router.d.ts(2,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/client/link.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/client/with-router.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/lib/metadata/metadata.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/server/app-render/entry-base.d.ts(1,114): error TS2307: Cannot find module 'react-server-dom-webpack/server' or its corresponding type declarations.
+node_modules/next/dist/server/app-render/entry-base.d.ts(2,27): error TS2307: Cannot find module 'react-server-dom-webpack/static' or its corresponding type declarations.
+node_modules/next/dist/server/web/spec-extension/adapters/headers.d.ts(39,16): error TS2304: Cannot find name 'HeadersIterator'.
+node_modules/next/dist/server/web/spec-extension/adapters/headers.d.ts(40,13): error TS2304: Cannot find name 'HeadersIterator'.
+node_modules/next/dist/server/web/spec-extension/adapters/headers.d.ts(41,15): error TS2304: Cannot find name 'HeadersIterator'.
+node_modules/next/dist/server/web/spec-extension/adapters/headers.d.ts(42,26): error TS2304: Cannot find name 'HeadersIterator'.
+node_modules/next/dist/shared/lib/app-router-context.shared-runtime.d.ts(4,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/app-router-types.d.ts(7,13): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/head-manager-context.shared-runtime.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/image-config-context.shared-runtime.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/loadable-context.shared-runtime.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/loadable.shared-runtime.d.ts(21,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/router-context.shared-runtime.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/server-inserted-html.shared-runtime.d.ts(1,8): error TS1259: Module '"C:/Project/ncafe/frontend/node_modules/@types/react/index"' can only be default-imported using the 'esModuleInterop' flag
+node_modules/next/dist/shared/lib/utils.d.ts(10,13): error TS1192: Module '"fs"' has no default export.

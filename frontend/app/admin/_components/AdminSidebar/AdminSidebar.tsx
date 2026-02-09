@@ -8,10 +8,23 @@ import {
     ShoppingBag,
     Settings,
     LogOut,
+    LucideIcon,
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
-const navItems = [
+interface NavItem {
+    href: string;
+    label: string;
+    icon: LucideIcon;
+    badge?: number;
+}
+
+interface NavGroup {
+    group: string;
+    items: NavItem[];
+}
+
+const navItems: NavGroup[] = [
     {
         group: '메인',
         items: [
@@ -64,19 +77,22 @@ export default function AdminSidebar() {
                 {navItems.map((group) => (
                     <div key={group.group} className={styles.navGroup}>
                         <div className={styles.navGroupTitle}>{group.group}</div>
-                        {group.items.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={`${styles.navItem} ${isActive(item.href) ? styles.active : ''}`}
-                            >
-                                <item.icon className={styles.navIcon} />
-                                <span>{item.label}</span>
-                                {item.badge && (
-                                    <span className={styles.navBadge}>{item.badge}</span>
-                                )}
-                            </Link>
-                        ))}
+                        {group.items.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className={`${styles.navItem} ${isActive(item.href) ? styles.active : ''}`}
+                                >
+                                    <Icon className={styles.navIcon} />
+                                    <span>{item.label}</span>
+                                    {item.badge && (
+                                        <span className={styles.navBadge}>{item.badge}</span>
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
                 ))}
             </nav>

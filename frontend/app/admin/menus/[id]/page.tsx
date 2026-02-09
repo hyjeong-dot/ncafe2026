@@ -17,8 +17,9 @@ import MenuDetailOptions from './_components/MenuDetailOptions/MenuDetailOptions
 //     }>;
 // }
 
-export default function MenuDetailPage({ params }: { params: Promise<{ id: number }> }) {
-    const { id } = use(params);
+export default function MenuDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id: idStr } = use(params);
+    const id = Number(idStr);
     const router = useRouter();
 
     // const menu = useMenuStore((state) => state.getMenuById(id));

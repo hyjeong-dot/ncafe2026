@@ -23,7 +23,7 @@ export interface MenuListResponse {
 }
 
 interface UseMenusOptions {
-    selectedCategory?: number;
+    selectedCategory?: number | null;
     searchQuery?: string;
     page?: number;
     size?: number;

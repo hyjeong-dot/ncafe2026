@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { Activity, Zap, Droplet, Cpu, ImageIcon } from 'lucide-react';
+import { Activity, Zap, Droplet, Cpu, ImageIcon, Star } from 'lucide-react';
 import styles from './MenuDetailImage.module.css';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 import { useMenuImages } from './useMenuImages';
@@ -28,14 +28,22 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
         <section className={styles.imageSection}>
             <div className={styles.mainImageWrapper}>
                 {currentImage ? (
-                    <Image
-                        src={`http://localhost:8080/${currentImage.srcUrl}`}
-                        alt={currentImage.altText || fallbackAlt}
-                        fill
-                        className={styles.mainImage}
-                        priority
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                    />
+                    <>
+                        {currentImage.sortOrder === 1 && (
+                            <div className={styles.primaryBadge}>
+                                <Star size={12} fill="white" />
+                                <span>대표 이미지</span>
+                            </div>
+                        )}
+                        <Image
+                            src={`http://localhost:8080/${currentImage.srcUrl}`}
+                            alt={currentImage.altText || fallbackAlt}
+                            fill
+                            className={styles.mainImage}
+                            priority
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                    </>
                 ) : (
                     <div className={styles.noImage}>
                         <ImageIcon size={64} />
@@ -52,6 +60,11 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                             className={`${styles.thumbnailItem} ${selectedIndex === index ? styles.activeThumbnail : ''}`}
                             onClick={() => setSelectedIndex(index)}
                         >
+                            {image.sortOrder === 1 && (
+                                <div className={styles.thumbnailBadge}>
+                                    <Star size={10} fill="white" />
+                                </div>
+                            )}
                             <Image
                                 src={`http://localhost:8080/${image.srcUrl}`}
                                 alt={`${image.altText || fallbackAlt} ${index + 1}`}
