@@ -38,7 +38,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: numbe
 
             <main className={styles.content}>
                 {/* Left Column: Image & Nutrition */}
-                <MenuDetailImage
+                <MenuDetailImage menuId={id}
                 />
 
                 {/* Right Column: Info & Options */}

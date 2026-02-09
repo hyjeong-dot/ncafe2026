@@ -3,9 +3,11 @@ import Image from 'next/image';
 import { Activity, Zap, Droplet, Cpu, ImageIcon } from 'lucide-react';
 import styles from './MenuDetailImage.module.css';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
+import { useMenuImages } from './useMenuImages';
 
 export default function MenuDetailImage({ menuId }: { menuId: number }) {
-    const { menu, isLoading, error } = useMenuDetail(menuId);
+    const { menu, isLoading: isMenuLoading } = useMenuDetail(menuId);
+    const { images, isLoading: isImagesLoading, error } = useMenuImages(menuId);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     // Nutrition placeholder
@@ -16,20 +18,19 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
         caffeine: 95,
     };
 
-    const images = menu?.images || [];
     const currentImage = images[selectedIndex];
-    const altText = menu?.korName || 'Menu Image';
+    const fallbackAlt = menu?.korName || 'Menu Image';
 
-    if (isLoading) return <div className={styles.imageSection}>이미지를 불러오는 중...</div>;
-    if (error) return <div className={styles.imageSection}>이미지 로드 오류</div>;
+    if (isMenuLoading || isImagesLoading) return <div className={styles.imageSection}>이미지를 불러오는 중...</div>;
+    if (error) return <div className={styles.imageSection}>이미지 로드 오류: {error}</div>;
 
     return (
         <section className={styles.imageSection}>
             <div className={styles.mainImageWrapper}>
                 {currentImage ? (
                     <Image
-                        src={currentImage}
-                        alt={altText}
+                        src={`http://localhost:8080/${currentImage.srcUrl}`}
+                        alt={currentImage.altText || fallbackAlt}
                         fill
                         className={styles.mainImage}
                         priority
@@ -45,15 +46,15 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
 
             {images.length > 1 && (
                 <div className={styles.thumbnailList}>
-                    {images.map((url, index) => (
+                    {images.map((image, index) => (
                         <button
-                            key={index}
+                            key={image.id}
                             className={`${styles.thumbnailItem} ${selectedIndex === index ? styles.activeThumbnail : ''}`}
                             onClick={() => setSelectedIndex(index)}
                         >
                             <Image
-                                src={url}
-                                alt={`${altText} ${index + 1}`}
+                                src={`http://localhost:8080/${image.srcUrl}`}
+                                alt={`${image.altText || fallbackAlt} ${index + 1}`}
                                 fill
                                 className={styles.thumbnailImage}
                             />
