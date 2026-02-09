@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.new_cafe.app.backend.dto.MenuDetailResponse;
 import com.new_cafe.app.backend.dto.MenuListRequest;
+import com.new_cafe.app.backend.dto.MenuImageListResponse;
 import com.new_cafe.app.backend.dto.MenuListResponse;
 import com.new_cafe.app.backend.entity.Menu;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,5 +58,11 @@ public class MenuController {
     @DeleteMapping("/{id}")
     public String deleteMenu() {
         return "deleteMenu";
+    }
+
+    @GetMapping("/{id}/menu-images")
+    public MenuImageListResponse getMenuImages(@PathVariable Long id) {
+        MenuImageListResponse response = menuService.getMenuImages(id);
+        return response;
     }
 }

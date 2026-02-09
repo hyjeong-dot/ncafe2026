@@ -9,7 +9,7 @@ export default function MenuDetailOptions() {
 
     return (
         <div className={styles.optionsSection}>
-            <h3 className={styles.sectionTitle}>옵션 정보</h3>
+            <h1 className={styles.sectionTitle}>옵션 정보</h1>
         </div>
     );
 }

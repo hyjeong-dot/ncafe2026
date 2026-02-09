@@ -11,13 +11,13 @@ import MenuDetailInfo from './_components/MenuDetailInfo/MenuDetailInfo';
 import MenuDetailOptions from './_components/MenuDetailOptions/MenuDetailOptions';
 
 // Next.js 15+ compatible props type
-interface MenuDetailPageProps {
-    params: Promise<{
-        id: string;
-    }>;
-}
+// interface MenuDetailPageProps {
+//     params: Promise<{
+//         id: string;
+//     }>;
+// }
 
-export default function MenuDetailPage({ params }: MenuDetailPageProps) {
+export default function MenuDetailPage({ params }: { params: Promise<{ id: number }> }) {
     const { id } = use(params);
     const router = useRouter();
 
@@ -43,7 +43,7 @@ export default function MenuDetailPage({ params }: MenuDetailPageProps) {
 
                 {/* Right Column: Info & Options */}
                 <div className={styles.infoSection}>
-                    <MenuDetailInfo
+                    <MenuDetailInfo id={id}
                     />
 
                     <MenuDetailOptions

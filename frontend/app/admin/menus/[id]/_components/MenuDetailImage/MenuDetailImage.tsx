@@ -1,9 +1,14 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import { Activity, Zap, Droplet, Cpu, ImageIcon } from 'lucide-react';
 import styles from './MenuDetailImage.module.css';
+import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 
-export default function MenuDetailImage() {
-    // Mock Data for Nutrition
+export default function MenuDetailImage({ menuId }: { menuId: number }) {
+    const { menu, isLoading, error } = useMenuDetail(menuId);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    // Nutrition placeholder
     const mockNutrition = {
         calories: 185,
         sugars: 24,
@@ -11,15 +16,19 @@ export default function MenuDetailImage() {
         caffeine: 95,
     };
 
-    const imageUrl = '';
-    const altText = 'Menu Image';
+    const images = menu?.images || [];
+    const currentImage = images[selectedIndex];
+    const altText = menu?.korName || 'Menu Image';
+
+    if (isLoading) return <div className={styles.imageSection}>이미지를 불러오는 중...</div>;
+    if (error) return <div className={styles.imageSection}>이미지 로드 오류</div>;
 
     return (
         <section className={styles.imageSection}>
             <div className={styles.mainImageWrapper}>
-                {imageUrl ? (
+                {currentImage ? (
                     <Image
-                        src={imageUrl}
+                        src={currentImage}
                         alt={altText}
                         fill
                         className={styles.mainImage}
@@ -33,6 +42,25 @@ export default function MenuDetailImage() {
                     </div>
                 )}
             </div>
+
+            {images.length > 1 && (
+                <div className={styles.thumbnailList}>
+                    {images.map((url, index) => (
+                        <button
+                            key={index}
+                            className={`${styles.thumbnailItem} ${selectedIndex === index ? styles.activeThumbnail : ''}`}
+                            onClick={() => setSelectedIndex(index)}
+                        >
+                            <Image
+                                src={url}
+                                alt={`${altText} ${index + 1}`}
+                                fill
+                                className={styles.thumbnailImage}
+                            />
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {/* Nutrition Info */}
             <div className={styles.nutritionGrid} style={{ marginTop: '1.5rem' }}>

@@ -18,5 +18,6 @@ public class MenuDetailResponse {
     private int price;
     private String categoryName;
     private Boolean isAvailable;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

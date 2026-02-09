@@ -87,7 +87,33 @@ public class NewMenuService implements MenuService {
                 .price(menu.getPrice())
                 .categoryName(categoryRepository.findById(menu.getCategoryId()).getName())
                 .isAvailable(menu.getIsAvailable())
+                .createdAt(menu.getCreatedAt() != null ? menu.getCreatedAt().toLocalDateTime() : null)
                 .updatedAt(menu.getUpdatedAt() != null ? menu.getUpdatedAt().toLocalDateTime() : null)
+                .build();
+    }
+
+    @Override
+    public MenuImageListResponse getMenuImages(Long id) {
+        Menu menu = menuRepository.findById(id);
+        if (menu == null) {
+            return null;
+        }
+
+        List<MenuImage> menuImages = menuImageRepository.findAllByMenuId(menu.getId());
+        String altText = menu.getKorName(); // 부모 테이블인 Menu에서 가져옴
+
+        List<MenuImageResponse> imageItems = menuImages.stream()
+                .map(img -> MenuImageResponse.builder()
+                        .id(img.getId())
+                        .menuId(img.getMenuId())
+                        .srcUrl(img.getSrcUrl())
+                        .altText(altText)
+                        .sortOrder(img.getSortOrder() != null ? img.getSortOrder() : 0)
+                        .build())
+                .toList();
+
+        return MenuImageListResponse.builder()
+                .images(imageItems)
                 .build();
     }
 
@@ -104,4 +130,5 @@ public class NewMenuService implements MenuService {
     public MenuUpdateResponse updateMenu(MenuUpdateRequest request) {
         return null;
     }
+
 }

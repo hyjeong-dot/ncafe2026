@@ -1,8 +1,7 @@
-/* Header */
-.header {
+.wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: var(--space-4);
     margin-bottom: var(--space-6);
 }
 
@@ -16,11 +15,25 @@
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     transition: all var(--transition-fast);
+    align-self: flex-start;
 }
 
 .backButton:hover {
     background-color: var(--color-gray-100);
     color: var(--text-primary);
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0;
 }
 
 .actions {

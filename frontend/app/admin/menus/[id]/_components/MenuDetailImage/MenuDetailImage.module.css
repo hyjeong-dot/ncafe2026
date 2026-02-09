@@ -30,6 +30,41 @@
     color: var(--text-muted);
 }
 
+/* Thumbnail Gallery */
+.thumbnailList {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+}
+
+.thumbnailItem {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    transition: all var(--transition-fast);
+    padding: 0;
+    background: none;
+}
+
+.thumbnailItem:hover {
+    border-color: var(--color-primary-300);
+}
+
+.activeThumbnail {
+    border-color: var(--color-primary-500);
+    box-shadow: var(--shadow-sm);
+}
+
+.thumbnailImage {
+    object-fit: cover;
+}
+
 /* Nutrition Grid */
 .nutritionGrid {
     display: grid;
