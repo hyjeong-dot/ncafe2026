@@ -1,75 +1,119 @@
-/* Options Section */
 .optionsSection {
-    margin-top: var(--space-2);
+    background: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
 }
 
-.sectionTitle {
-    font-size: var(--text-lg);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-4);
+.header {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid var(--bg-secondary);
+}
+
+.title {
+    font-size: var(--text-xl);
+    font-weight: 700;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+}
+
+.optionsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+}
+
+.optionGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.groupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.groupName {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+}
+
+.requiredMark {
+    color: var(--color-error, #ff4d4f);
+    font-size: var(--text-lg);
+}
+
+.typeBadge {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+}
+
+.itemList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.item:hover {
+    background: white;
+    border-color: var(--color-primary-200);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.itemContent {
     display: flex;
     align-items: center;
     gap: var(--space-2);
 }
 
-.optionCard {
-    background-color: white;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-3);
-    overflow: hidden;
+.icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
 }
 
-.optionHeader {
-    background-color: var(--bg-secondary);
-    padding: var(--space-3) var(--space-4);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
+.item:hover .icon {
+    color: var(--color-primary-500);
 }
 
-.optionName {
-    font-weight: var(--font-semibold);
-    color: var(--text-primary);
-}
-
-.requiredBadge {
-    font-size: var(--text-xs);
-    background-color: var(--color-primary-100);
-    color: var(--color-primary-700);
-    padding: 2px 6px;
-    border-radius: var(--radius-sm);
-    font-weight: var(--font-medium);
-}
-
-.optionList {
-    padding: var(--space-2) 0;
-}
-
-.optionItem {
-    padding: var(--space-2) var(--space-4);
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--text-sm);
+.itemName {
     color: var(--text-secondary);
-}
-
-.optionItem:not(:last-child) {
-    border-bottom: 1px solid var(--color-gray-50);
+    font-weight: 500;
 }
 
 .itemPrice {
-    font-weight: var(--font-medium);
-    color: var(--text-primary);
-}
-
-.emptyOptions {
-    text-align: center;
-    padding: var(--space-6);
-    background-color: var(--bg-secondary);
-    border-radius: var(--radius-lg);
-    color: var(--text-muted);
-    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-primary-600);
+    font-variant-numeric: tabular-nums;
 }
