@@ -16,7 +16,7 @@ export default function PageHeader({ searchQuery, setSearchQuery }: PageHeaderPr
     // useEffect(() => {
     //     const fetchTotalCount = async () => {
     //         try {
-    //             const response = await fetch('http://localhost:8080/admin/menus/count');
+    //             const response = await fetch('/api/admin/menus/count');
     //             if (!response.ok) {
     //                 throw new Error('Failed to fetch total count');
     //             }

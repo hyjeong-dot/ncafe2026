@@ -36,7 +36,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                             </div>
                         )}
                         <Image
-                            src={`http://localhost:8080/${currentImage.srcUrl}`}
+                            src={`/images/${currentImage.srcUrl}`}
                             alt={currentImage.altText || fallbackAlt}
                             fill
                             className={styles.mainImage}
@@ -66,7 +66,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                                 </div>
                             )}
                             <Image
-                                src={`http://localhost:8080/${image.srcUrl}`}
+                                src={`/images/${image.srcUrl}`}
                                 alt={`${image.altText || fallbackAlt} ${index + 1}`}
                                 fill
                                 className={styles.thumbnailImage}

@@ -25,7 +25,7 @@ export function useMenuDetail(id: number) {
             try {
                 setIsLoading(true);
                 // Adjust URL if needed (e.g., environment variable)
-                const response = await fetch(`http://localhost:8080/admin/menus/${id}`);
+                const response = await fetch(`/api/admin/menus/${id}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu details');
