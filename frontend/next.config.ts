@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       {
         // 업로드된 이미지 등 정적 파일 전용 통로
         source: '/images/:path*',
-        destination: 'http://localhost:8080/:path*',
+        destination: 'http://localhost:8080/images/:path*',
       },
     ];
   },

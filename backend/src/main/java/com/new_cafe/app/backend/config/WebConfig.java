@@ -7,6 +7,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // CORS 설정을 위한 configuration
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers(
+            org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:./upload/images/");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
