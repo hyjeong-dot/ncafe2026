@@ -144,8 +144,22 @@
     color: var(--text-primary);
 }
 
+@media (max-width: 1024px) {
+    .imageSection {
+        position: static;
+    }
+
+    .mainImageWrapper {
+        max-height: 400px;
+    }
+}
+
 @media (max-width: 768px) {
     .nutritionGrid {
         grid-template-columns: 1fr;
+    }
+
+    .mainImageWrapper {
+        max-height: 300px;
     }
 }
