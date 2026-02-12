@@ -22,7 +22,7 @@ export default function AdminDashboard() {
         <div className={styles.container}>
             {/* Header */}
             <div className={styles.header}>
-                <h1 className={styles.greeting}>안녕하세요, 김사장님! 👋</h1>
+                <h1 className={styles.greeting}>안녕하세요, 정사장님! 👋</h1>
                 <p className={styles.date}>{today}</p>
             </div>
 

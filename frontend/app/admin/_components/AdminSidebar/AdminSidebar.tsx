@@ -99,9 +99,9 @@ export default function AdminSidebar() {
 
             {/* User Section */}
             <div className={styles.userSection}>
-                <div className={styles.userAvatar}>김</div>
+                <div className={styles.userAvatar}>정</div>
                 <div className={styles.userInfo}>
-                    <div className={styles.userName}>김사장님</div>
+                    <div className={styles.userName}>정사장님</div>
                     <div className={styles.userRole}>카페 관리자</div>
                 </div>
                 <button className={styles.settingsButton} title="로그아웃">
