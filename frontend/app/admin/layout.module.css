@@ -16,5 +16,7 @@
 @media (max-width: 768px) {
     .main {
         margin-left: 0;
+        padding-top: 60px;
+        /* 햄버거 버튼 높이만큼 여백 */
     }
 }
