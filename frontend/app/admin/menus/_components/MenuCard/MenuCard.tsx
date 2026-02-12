@@ -56,7 +56,7 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                 )}
 
                 <span className={styles.categoryBadge}>
-                    {menu.categoryName}
+                    {menu.categoryIcon} {menu.categoryName}
                 </span>
             </div>
 

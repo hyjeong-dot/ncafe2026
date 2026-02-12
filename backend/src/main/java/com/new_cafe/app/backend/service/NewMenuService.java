@@ -33,6 +33,7 @@ public class NewMenuService implements MenuService {
 
         List<MenuResponse> menuResponses = menus.stream().map(menu -> {
             String categoryName = categoryRepository.findById(menu.getCategoryId()).getName();
+            String categoryIcon = categoryRepository.findById(menu.getCategoryId()).getIcon();
 
             List<MenuImage> images = menuImageRepository.findAllByMenuId(menu.getId());
             // primary image or first image or default image
@@ -52,6 +53,7 @@ public class NewMenuService implements MenuService {
                     .description(menu.getDescription())
                     .price(menu.getPrice())
                     .categoryName(categoryName)
+                    .categoryIcon(categoryIcon)
                     .imageSrc(imageSrc)
                     .isAvailable(menu.getIsAvailable())
                     .isSoldOut(menu.getIsSoldOut())

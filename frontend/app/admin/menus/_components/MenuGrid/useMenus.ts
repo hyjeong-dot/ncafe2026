@@ -8,6 +8,7 @@ export interface MenuResponse {
     description: string;
     price: number;
     categoryName: string;
+    categoryIcon: string;
     imageSrc: string;
     images?: any[];
     isAvailable: boolean;

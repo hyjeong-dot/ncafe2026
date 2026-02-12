@@ -18,6 +18,7 @@ public class MenuResponse {
     private String description;
     private Integer price;
     private String categoryName;
+    private String categoryIcon;
     private String imageSrc;
     private Boolean isAvailable;
     private Boolean isSoldOut;
