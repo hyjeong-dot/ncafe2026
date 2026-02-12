@@ -1,0 +1,42 @@
+.searchBar {
+    position: relative;
+    max-width: 360px;
+    margin-bottom: var(--space-4);
+}
+
+.searchIcon {
+    position: absolute;
+    left: var(--space-4);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--space-3) var(--space-4) var(--space-3) calc(var(--space-4) + 24px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: all var(--transition-fast);
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: var(--text-muted);
+}
+
+.searchInput:focus {
+    border-color: var(--color-primary-400);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-500-rgb, 99, 102, 241), 0.15);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .searchBar {
+        max-width: 100%;
+    }
+}

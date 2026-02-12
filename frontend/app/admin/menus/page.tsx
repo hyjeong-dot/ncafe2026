@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import PageHeader from './_components/PageHeader';
 import MenuStats from './_components/MenuStats';
+import SearchBar from './_components/SearchBar';
 import CategoryTabs from './_components/CategoryTabs';
 import MenuGrid from './_components/MenuGrid';
 import { useMenus } from './_components/MenuGrid/useMenus';
@@ -16,11 +17,13 @@ export default function MenusPage() {
 
     return (
         <main className={styles.container}>
-            <PageHeader
+            <PageHeader />
+            <MenuStats stats={stats} />
+
+            <SearchBar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
             />
-            <MenuStats stats={stats} />
 
             <CategoryTabs
                 onCategoryChange={setSelectedCategory}
