@@ -1,0 +1,306 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg,
+            var(--color-primary-50) 0%,
+            var(--color-primary-100) 50%,
+            var(--color-primary-200) 100%);
+    padding: var(--space-4);
+}
+
+/* =============================================
+   카드 (Glass Morphism)
+   ============================================= */
+.card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-2xl);
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =============================================
+   헤더 영역
+   ============================================= */
+.header {
+    text-align: center;
+    padding: var(--space-10) var(--space-8) var(--space-6);
+}
+
+.logoWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-5);
+    box-shadow: 0 8px 24px rgba(164, 117, 81, 0.3);
+}
+
+.logoEmoji {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* =============================================
+   폼 영역
+   ============================================= */
+.body {
+    padding: var(--space-2) var(--space-8) var(--space-8);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+/* =============================================
+   에러 메시지
+   ============================================= */
+.errorMessage {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-error-light);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-lg);
+    color: var(--color-error);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    animation: shake 0.4s ease-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-6px);
+    }
+
+    75% {
+        transform: translateX(6px);
+    }
+}
+
+.errorIcon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+/* =============================================
+   입력 필드 그룹
+   ============================================= */
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: var(--space-4);
+    width: 20px;
+    height: 20px;
+    color: var(--color-gray-400);
+    pointer-events: none;
+    transition: color var(--transition-fast);
+}
+
+.input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    padding-left: 48px;
+    background: var(--bg-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    outline: none;
+    transition: all var(--transition-normal);
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+}
+
+.input:hover {
+    border-color: var(--border-color-hover);
+}
+
+.input:focus {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(164, 117, 81, 0.15);
+}
+
+.input:focus~.inputIcon,
+.inputWrapper:focus-within .inputIcon {
+    color: var(--color-primary-500);
+}
+
+.inputError {
+    border-color: var(--color-error);
+}
+
+.inputError:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* 비밀번호 토글 버튼 */
+.togglePassword {
+    position: absolute;
+    right: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    color: var(--color-gray-400);
+    transition: all var(--transition-fast);
+}
+
+.togglePassword:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+/* =============================================
+   제출 버튼
+   ============================================= */
+.submitButton {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+    color: var(--text-inverse);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 12px rgba(164, 117, 81, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.submitButton:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(164, 117, 81, 0.4);
+}
+
+.submitButton:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* 로딩 스피너 */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =============================================
+   푸터
+   ============================================= */
+.footer {
+    text-align: center;
+    padding: var(--space-4) var(--space-8) var(--space-6);
+    border-top: 1px solid var(--border-color);
+}
+
+.footerText {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* =============================================
+   반응형
+   ============================================= */
+@media (max-width: 480px) {
+    .card {
+        border-radius: var(--radius-xl);
+    }
+
+    .header {
+        padding: var(--space-8) var(--space-6) var(--space-4);
+    }
+
+    .body {
+        padding: var(--space-2) var(--space-6) var(--space-6);
+    }
+
+    .footer {
+        padding: var(--space-4) var(--space-6) var(--space-5);
+    }
+}

@@ -10,11 +10,9 @@ services:
       - /home/hyjeong/dist/ncafe2026/backend/upload:/app/upload
     environment:
       - TZ=Asia/Seoul
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/ncafedb?useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
       - SPRING_DATASOURCE_USERNAME=ncafe
       - SPRING_DATASOURCE_PASSWORD=new_ibm2
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
   frontend:
@@ -31,4 +29,20 @@ services:
       - TZ=Asia/Seoul
     depends_on:
       - backend
+    restart: unless-stopped
+
+  # DB 서비스 추가 (필요한 사람만 사용)
+  db:
+    image: postgres:17
+    profiles: [ "with-db" ] # 이 프로필을 지정해야만 실행됨
+    container_name: ${USER_ID:-ncafe}-db
+    environment:
+      - POSTGRES_DB=ncafedb
+      - POSTGRES_USER=ncafe
+      - POSTGRES_PASSWORD=new_ibm2
+      - TZ=Asia/Seoul
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - /home/hyjeong/dist/ncafe2026/db:/var/lib/postgresql/data
     restart: unless-stopped
