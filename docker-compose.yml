@@ -7,10 +7,10 @@ services:
     ports:
       - "8034:8080"
     volumes:
-      - /home/hyjeong/workspace/ncafe2026/backend/upload:/app/upload
+      - /home/hyjeong/dist/ncafe2026/backend/upload:/app/upload
     environment:
       - TZ=Asia/Seoul
-    restart: always
+    restart: unless-stopped
 
   frontend:
     build: 
@@ -26,4 +26,4 @@ services:
       - TZ=Asia/Seoul
     depends_on:
       - backend
-    restart: always
+    restart: unless-stopped
