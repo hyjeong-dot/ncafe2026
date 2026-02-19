@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ncafe-backend
+    ports:
+      - "8034:8080"
+    volumes:
+      - /home/hyjeong/workspace/ncafe2026/backend/upload:/app/upload
+    environment:
+      - TZ=Asia/Seoul
+    restart: always
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ncafe-frontend
+    ports:
+      - "3034:3000"
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://ncafe-backend:8080
+      - ENABLE_PROXY=true
+      - TZ=Asia/Seoul
+    depends_on:
+      - backend
+    restart: always
