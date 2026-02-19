@@ -12,7 +12,7 @@ services:
       - TZ=Asia/Seoul
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
       - SPRING_DATASOURCE_USERNAME=ncafe
-      - SPRING_DATASOURCE_PASSWORD=new_ibm2
+      - SPRING_DATASOURCE_PASSWORD=1111
       - SERVER_PORT=8034
     restart: unless-stopped
 
@@ -35,12 +35,12 @@ services:
   # DB 서비스 추가 (필요한 사람만 사용)
   db:
     image: postgres:17
-    profiles: [ "with-db" ] # 이 프로필을 지정해야만 실행됨
+    profiles: [ "db" ] # 이제 --profile db 로 실행하면 됩니다.
     container_name: ${USER_ID:-ncafe}-db
     environment:
       - POSTGRES_DB=ncafedb
       - POSTGRES_USER=ncafe
-      - POSTGRES_PASSWORD=new_ibm2
+      - POSTGRES_PASSWORD=1111
       - TZ=Asia/Seoul
     ports:
       - "${DB_PORT:-5432}:5432"
