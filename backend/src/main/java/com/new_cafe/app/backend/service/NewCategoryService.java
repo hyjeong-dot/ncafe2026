@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.new_cafe.app.backend.entity.Category;
 import com.new_cafe.app.backend.repository.CategoryRepository;
 
-@Service
+// @Service // → menu 헥사고날 아키텍처로 이관됨 (MenuQueryService)
 public class NewCategoryService implements CategoryService {
 
     @Autowired

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.new_cafe.app.backend.entity.Menu;
 
-@Repository
+// @Repository // → menu 헥사고날 아키텍처로 이관됨 (MenuPersistenceAdapter)
 public class NewMenuRepository implements MenuRepository {
 
     private DataSource dataSource;

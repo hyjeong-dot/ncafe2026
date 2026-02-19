@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.new_cafe.app.backend.entity.Category;
 
-@Repository
+// @Repository // → menu 헥사고날 아키텍처로 이관됨 (CategoryPersistenceAdapter)
 public class NewCategoryRepository implements CategoryRepository {
 
     @Autowired

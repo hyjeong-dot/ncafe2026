@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.new_cafe.app.backend.service.MenuService;
 
-@RestController
-@RequestMapping("/admin/menus")
+// @RestController  // → menu 헥사고날 아키텍처로 이관됨 (AdminMenuController)
+// @RequestMapping("/admin/menus")
 public class MenuController {
 
     private MenuService menuService;

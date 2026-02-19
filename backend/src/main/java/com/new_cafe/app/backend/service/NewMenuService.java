@@ -10,7 +10,7 @@ import com.new_cafe.app.backend.repository.CategoryRepository;
 import com.new_cafe.app.backend.repository.MenuRepository;
 import com.new_cafe.app.backend.repository.MenuImageRepository;
 
-@Service // new MenuService를 대신 사용
+// @Service // → menu 헥사고날 아키텍처로 이관됨 (MenuQueryService)
 public class NewMenuService implements MenuService {
 
     private CategoryRepository categoryRepository;

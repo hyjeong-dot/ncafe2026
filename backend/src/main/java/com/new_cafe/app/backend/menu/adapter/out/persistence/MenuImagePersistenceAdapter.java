@@ -1,5 +1,10 @@
-package com.new_cafe.app.backend.repository;
+package com.new_cafe.app.backend.menu.adapter.out.persistence;
 
+import com.new_cafe.app.backend.menu.application.port.out.LoadMenuImagePort;
+import com.new_cafe.app.backend.menu.domain.model.MenuImage;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,18 +12,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
+/**
+ * 메뉴 이미지 영속성 어댑터 (Output Adapter)
+ */
+@Repository("menuLoadMenuImagePort")
+public class MenuImagePersistenceAdapter implements LoadMenuImagePort {
 
-import org.springframework.stereotype.Repository;
+    private final DataSource dataSource;
 
-import com.new_cafe.app.backend.entity.MenuImage;
-
-// @Repository // → menu 헥사고날 아키텍처로 이관됨 (MenuImagePersistenceAdapter)
-public class NewMenuImageRepository implements MenuImageRepository {
-
-    private DataSource dataSource;
-
-    public NewMenuImageRepository(DataSource dataSource) {
+    public MenuImagePersistenceAdapter(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -27,9 +29,8 @@ public class NewMenuImageRepository implements MenuImageRepository {
         List<MenuImage> images = new ArrayList<>();
         String sql = "SELECT * FROM menu_images WHERE menu_id = ? ORDER BY sort_order ASC";
 
-        try (
-                Connection conn = dataSource.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, menuId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -38,14 +39,14 @@ public class NewMenuImageRepository implements MenuImageRepository {
                             .menuId(rs.getLong("menu_id"))
                             .srcUrl(rs.getString("src_url"))
                             .sortOrder(rs.getInt("sort_order"))
-                            .createdAt(rs.getTimestamp("created_at"))
+                            .createdAt(rs.getTimestamp("created_at") != null
+                                    ? rs.getTimestamp("created_at").toLocalDateTime() : null)
                             .build();
                     images.add(image);
                 }
             }
         } catch (SQLException e) {
             System.err.println("MenuImage findAllByMenuId error: " + e.getMessage());
-            e.printStackTrace();
         }
         return images;
     }

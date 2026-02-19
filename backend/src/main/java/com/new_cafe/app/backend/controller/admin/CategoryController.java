@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.new_cafe.app.backend.entity.Category;
 import com.new_cafe.app.backend.service.CategoryService;
 
-@RestController
+// @RestController  // → menu 헥사고날 아키텍처로 이관됨 (AdminMenuController)
 public class CategoryController {
 
     @Autowired
