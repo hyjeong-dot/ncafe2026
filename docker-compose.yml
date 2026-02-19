@@ -13,6 +13,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
       - SPRING_DATASOURCE_USERNAME=ncafe
       - SPRING_DATASOURCE_PASSWORD=new_ibm2
+      - SERVER_PORT=8034
     restart: unless-stopped
 
   frontend:
