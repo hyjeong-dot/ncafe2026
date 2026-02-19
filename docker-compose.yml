@@ -25,7 +25,7 @@ services:
       - "3034:3034"
     environment:
       - NODE_ENV=production
-      - API_URL=http://hyjeong-ncafe-backend:8080
+      - API_URL=http://hyjeong-ncafe-backend:8034
       - ENABLE_PROXY=true
       - TZ=Asia/Seoul
     depends_on:
