@@ -3,7 +3,7 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    container_name: ncafe-backend
+    container_name: hyjeong-ncafe-backend
     ports:
       - "8034:8080"
     volumes:
@@ -16,12 +16,12 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: ncafe-frontend
+    container_name: hyjeong-ncafe-frontend
     ports:
       - "3034:3000"
     environment:
       - NODE_ENV=production
-      - API_URL=http://ncafe-backend:8080
+      - API_URL=http://hyjeong-ncafe-backend:8080
       - ENABLE_PROXY=true
       - TZ=Asia/Seoul
     depends_on:
