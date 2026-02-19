@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: hyjeong-ncafe-backend
     ports:
-      - "8034:8080"
+      - "8034:8034"
     volumes:
       - /home/hyjeong/dist/ncafe2026/backend/upload:/app/upload
     environment:
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     container_name: hyjeong-ncafe-frontend
     ports:
-      - "3034:3000"
+      - "3034:3034"
     environment:
       - NODE_ENV=production
       - API_URL=http://hyjeong-ncafe-backend:8080
