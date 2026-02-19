@@ -10,6 +10,11 @@ services:
       - /home/hyjeong/dist/ncafe2026/backend/upload:/app/upload
     environment:
       - TZ=Asia/Seoul
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/ncafedb?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ncafe
+      - SPRING_DATASOURCE_PASSWORD=new_ibm2
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
   frontend:
