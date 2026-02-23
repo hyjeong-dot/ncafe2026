@@ -5,6 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LoadCategoryPort {
-    List<Category> findAll();
+    List<Category> findAllActive();
     Optional<Category> findById(Long id);
 }
