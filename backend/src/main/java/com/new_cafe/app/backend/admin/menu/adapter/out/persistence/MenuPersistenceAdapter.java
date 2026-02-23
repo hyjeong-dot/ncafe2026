@@ -22,7 +22,18 @@ public class MenuPersistenceAdapter implements SaveMenuPort, LoadMenuPort, Delet
 
     @Override
     public List<Menu> findAll(Long categoryId, String searchQuery) {
-        return menuJpaRepository.findAllByFilter(categoryId, searchQuery);
+        boolean hasCategory = categoryId != null;
+        boolean hasSearch = searchQuery != null && !searchQuery.isBlank();
+
+        if (hasCategory && hasSearch) {
+            return menuJpaRepository.findAllByCategoryIdAndQuery(categoryId, searchQuery);
+        } else if (hasCategory) {
+            return menuJpaRepository.findAllByCategoryIdOrderBySortOrderAsc(categoryId);
+        } else if (hasSearch) {
+            return menuJpaRepository.findAllByQuery(searchQuery);
+        } else {
+            return menuJpaRepository.findAllByOrderBySortOrderAsc();
+        }
     }
 
     @Override

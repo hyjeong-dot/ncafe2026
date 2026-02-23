@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * 관리자 전용 메뉴 도메인 모델 및 엔티티
  * - 관리자 활동(등록, 수정, 삭제)에 필요한 모든 필드와 로직을 포함합니다.
  */
-@Entity
+@Entity(name = "AdminMenu")
 @Table(name = "menus")
 @Data
 @Builder
