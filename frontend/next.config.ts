@@ -6,38 +6,40 @@ const nextConfig: NextConfig = {
     const enableProxy = process.env.NODE_ENV === "development" || process.env.ENABLE_PROXY === "true";
 
     if (enableProxy) {
-      return [
-        {
-          // 프론트엔드의 /api/menus/... 호출을 백엔드의 /menus/...로 매핑
-          source: '/api/menus/:path*',
-          destination: `${apiUrl}/menus/:path*`,
-        },
-        {
-          // 프론트엔드의 /api/categories/... 호출을 백엔드의 /categories/...로 매핑
-          source: '/api/categories/:path*',
-          destination: `${apiUrl}/categories/:path*`,
-        },
-        {
-          // 관리자 API 매핑: /api/admin/menus -> /admin/menus
-          source: '/api/admin/:path*',
-          destination: `${apiUrl}/admin/:path*`,
-        },
-        {
-          // 기타 /api/:path* 전체에 대한 기본 매핑 (필요 시)
-          source: '/api/:path*',
-          destination: `${apiUrl}/api/:path*`,
-        },
-        {
-          // 이미지 경로 매핑 (/upload/images/**)
-          source: '/upload/images/:path*',
-          destination: `${apiUrl}/upload/images/:path*`,
-        },
-        {
-          // 기존 /images/** 매핑 유지
-          source: '/images/:path*',
-          destination: `${apiUrl}/images/:path*`,
-        },
-      ];
+      return {
+        fallback: [
+          {
+            // 프론트엔드의 /api/menus/... 호출을 백엔드의 /menus/...로 매핑
+            source: '/api/menus/:path*',
+            destination: `${apiUrl}/menus/:path*`,
+          },
+          {
+            // 프론트엔드의 /api/categories/... 호출을 백엔드의 /categories/...로 매핑
+            source: '/api/categories/:path*',
+            destination: `${apiUrl}/categories/:path*`,
+          },
+          {
+            // 관리자 API 매핑: /api/admin/menus -> /admin/menus
+            source: '/api/admin/:path*',
+            destination: `${apiUrl}/admin/:path*`,
+          },
+          {
+            // 기타 /api/:path* 전체에 대한 기본 매핑 (필요 시)
+            source: '/api/:path*',
+            destination: `${apiUrl}/api/:path*`,
+          },
+          {
+            // 이미지 경로 매핑 (/upload/images/**)
+            source: '/upload/images/:path*',
+            destination: `${apiUrl}/upload/images/:path*`,
+          },
+          {
+            // 기존 /images/** 매핑 유지 (로컬 프론트엔드에 없는 이미지만 서버로 요펑)
+            source: '/images/:path*',
+            destination: `${apiUrl}/images/:path*`,
+          },
+        ]
+      };
     }
     return [];
   },
