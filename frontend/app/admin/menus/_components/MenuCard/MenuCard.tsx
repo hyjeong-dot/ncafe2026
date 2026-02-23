@@ -39,7 +39,7 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
                     <Image
                         // src={menu.imageSrc.startsWith('http') ? menu.imageSrc : `/images/${menu.imageSrc}`}
                         //src={menu.imageSrc}
-                        src={`/images/${menu.imageSrc}`}
+                        src={menu.imageSrc}
                         alt={menu.korName}
                         fill
                         className={styles.image}
