@@ -1,85 +1,48 @@
 package com.new_cafe.app.backend.auth.domain.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 /**
- * 회원 도메인 모델 (순수 자바 객체)
- * - 외부 기술(Spring, JPA 등)에 의존하지 않습니다.
- * - 비즈니스 규칙과 검증 로직을 이 클래스에 작성합니다.
+ * 회원 도메인 모델 및 JPA 엔티티
  */
+@Entity
+@Table(name = "member")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
     private String name;
+
     private String role; // "ADMIN", "USER" 등
-
-    public Member() {
-    }
-
-    public Member(Long id, String username, String password, String name, String role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.role = role;
-    }
 
     // --- 비즈니스 로직 ---
 
     /**
      * 비밀번호가 일치하는지 검증합니다.
-     * TODO: 직접 인증 로직을 구현하세요.
-     *       예) BCrypt 비교, 평문 비교 등
+     * 실제 서비스에서는 PasswordEncoder를 사용하는 것이 좋으나, 
+     * 현재 구조를 유지하며 인증 로직을 보강합니다.
      */
     public boolean authenticate(String rawPassword) {
-        // TODO: 여기에 직접 인증 로직을 구현하세요.
-        // 예시: return this.password.equals(rawPassword);
-        throw new UnsupportedOperationException("인증 로직을 직접 구현하세요.");
+        if (this.password == null || rawPassword == null) {
+            return false;
+        }
+        return this.password.equals(rawPassword);
     }
 
     public boolean isAdmin() {
-        return "ADMIN".equals(this.role);
-    }
-
-    // --- Getters & Setters ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+        return "ADMIN".equalsIgnoreCase(this.role);
     }
 }

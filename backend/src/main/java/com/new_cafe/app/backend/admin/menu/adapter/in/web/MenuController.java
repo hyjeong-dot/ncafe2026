@@ -6,6 +6,7 @@ import com.new_cafe.app.backend.admin.menu.application.port.in.DeleteMenuUseCase
 import com.new_cafe.app.backend.admin.menu.application.port.in.GetMenuListUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.RegisterMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.UpdateMenuUseCase;
+import com.new_cafe.app.backend.admin.menu.application.port.in.ManageMenuImageUseCase;
 import com.new_cafe.app.backend.admin.menu.application.result.MenuListResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class MenuController {
     private final GetMenuListUseCase getMenuListUseCase;
     private final UpdateMenuUseCase updateMenuUseCase;
     private final DeleteMenuUseCase deleteMenuUseCase;
+    private final ManageMenuImageUseCase manageMenuImageUseCase;
 
     @GetMapping
     public MenuListResult getMenus(
@@ -43,5 +45,24 @@ public class MenuController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMenu(@PathVariable Long id) {
         deleteMenuUseCase.deleteMenu(id);
+    }
+
+    // --- 메뉴 이미지 관리 ---
+
+    @PostMapping("/{id}/images")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long addMenuImage(@PathVariable Long id, @RequestBody com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.AddMenuImageRequest request) {
+        return manageMenuImageUseCase.addImage(request.toCommand(id));
+    }
+
+    @PatchMapping("/images/{imageId}/order")
+    public void updateImageOrder(@PathVariable Long imageId, @RequestParam int newOrder) {
+        manageMenuImageUseCase.updateImageOrder(imageId, newOrder);
+    }
+
+    @DeleteMapping("/images/{imageId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeMenuImage(@PathVariable Long imageId) {
+        manageMenuImageUseCase.removeImage(imageId);
     }
 }
