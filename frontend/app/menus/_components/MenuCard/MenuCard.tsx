@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ImageIcon } from 'lucide-react';
 import styles from './MenuCard.module.css';
-import { MenuResponse } from '../hooks/useMenus';
+import { MenuResponse } from '../MenuGrid/useMenus';
 
 interface MenuCardProps {
     menu: MenuResponse;
