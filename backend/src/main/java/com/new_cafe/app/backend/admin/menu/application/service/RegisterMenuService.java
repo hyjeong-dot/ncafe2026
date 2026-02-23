@@ -1,8 +1,9 @@
 package com.new_cafe.app.backend.admin.menu.application.service;
 
+import com.new_cafe.app.backend.admin.menu.application.command.RegisterMenuCommand;
 import com.new_cafe.app.backend.admin.menu.application.port.in.RegisterMenuUseCase;
-import com.new_cafe.app.backend.admin.menu.application.port.out.SaveAdminMenuPort;
-import com.new_cafe.app.backend.admin.menu.domain.model.AdminMenu;
+import com.new_cafe.app.backend.admin.menu.application.port.out.SaveMenuPort;
+import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RegisterMenuService implements RegisterMenuUseCase {
 
-    private final SaveAdminMenuPort saveAdminMenuPort;
+    private final SaveMenuPort saveMenuPort;
 
     @Override
     public Long registerMenu(RegisterMenuCommand command) {
-        // 1. Command를 Domain Entity로 변환 (비즈니스 규칙 적용 가능)
-        AdminMenu menu = AdminMenu.builder()
+        Menu menu = Menu.builder()
                 .korName(command.getKorName())
                 .engName(command.getEngName())
                 .description(command.getDescription())
@@ -30,7 +30,6 @@ public class RegisterMenuService implements RegisterMenuUseCase {
                 .sortOrder(command.getSortOrder())
                 .build();
 
-        // 2. 영속성 계층(Port)을 통해 저장
-        return saveAdminMenuPort.saveAdminMenu(menu);
+        return saveMenuPort.save(menu);
     }
 }

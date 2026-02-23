@@ -1,5 +1,8 @@
 package com.new_cafe.app.backend.admin.menu.application.port.in;
 
-public interface DeleteAdminMenuUseCase {
+/**
+ * 메뉴 삭제 유즈케이스 (관리자 전용)
+ */
+public interface DeleteMenuUseCase {
     void deleteMenu(Long id);
 }

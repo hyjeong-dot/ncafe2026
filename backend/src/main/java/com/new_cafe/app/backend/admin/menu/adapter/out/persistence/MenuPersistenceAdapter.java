@@ -1,6 +1,8 @@
 package com.new_cafe.app.backend.admin.menu.adapter.out.persistence;
 
-import com.new_cafe.app.backend.admin.menu.application.port.out.MenuPort;
+import com.new_cafe.app.backend.admin.menu.application.port.out.DeleteMenuPort;
+import com.new_cafe.app.backend.admin.menu.application.port.out.LoadMenuPort;
+import com.new_cafe.app.backend.admin.menu.application.port.out.SaveMenuPort;
 import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MenuPersistenceAdapter implements MenuPort {
+public class MenuPersistenceAdapter implements SaveMenuPort, LoadMenuPort, DeleteMenuPort {
 
     private final MenuJpaRepository menuJpaRepository;
 

@@ -1,24 +1,28 @@
 package com.new_cafe.app.backend.admin.menu.application.service;
 
-import com.new_cafe.app.backend.admin.menu.application.port.in.UpdateAdminMenuUseCase;
-import com.new_cafe.app.backend.admin.menu.application.port.out.LoadAdminMenuPort;
-import com.new_cafe.app.backend.admin.menu.application.port.out.SaveAdminMenuPort;
-import com.new_cafe.app.backend.admin.menu.domain.model.AdminMenu;
+import com.new_cafe.app.backend.admin.menu.application.command.UpdateMenuCommand;
+import com.new_cafe.app.backend.admin.menu.application.port.in.UpdateMenuUseCase;
+import com.new_cafe.app.backend.admin.menu.application.port.out.LoadMenuPort;
+import com.new_cafe.app.backend.admin.menu.application.port.out.SaveMenuPort;
+import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 메뉴 수정 전용 서비스
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UpdateAdminMenuService implements UpdateAdminMenuUseCase {
+public class UpdateMenuService implements UpdateMenuUseCase {
 
-    private final LoadAdminMenuPort loadAdminMenuPort;
-    private final SaveAdminMenuPort saveAdminMenuPort;
+    private final LoadMenuPort loadMenuPort;
+    private final SaveMenuPort saveMenuPort;
 
     @Override
-    public void updateMenu(UpdateAdminMenuCommand command) {
-        AdminMenu menu = loadAdminMenuPort.findById(command.getId())
+    public void updateMenu(UpdateMenuCommand command) {
+        Menu menu = loadMenuPort.findById(command.getId())
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다. ID: " + command.getId()));
 
         menu.setKorName(command.getKorName());
@@ -30,6 +34,6 @@ public class UpdateAdminMenuService implements UpdateAdminMenuUseCase {
         menu.setIsSoldOut(command.getIsSoldOut());
         menu.setSortOrder(command.getSortOrder());
 
-        saveAdminMenuPort.saveAdminMenu(menu);
+        saveMenuPort.save(menu);
     }
 }
