@@ -28,6 +28,8 @@ services:
       - API_URL=http://hyjeong-ncafe-backend:8034
       - ENABLE_PROXY=true
       - TZ=Asia/Seoul
+    volumes:
+      - /home/hyjeong/dist/ncafe2026/frontend/public/images:/app/public/images
     depends_on:
       - backend
     restart: unless-stopped
