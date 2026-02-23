@@ -26,8 +26,10 @@ public class MenuController {
      * 판매 가능한 메뉴 목록 조회
      */
     @GetMapping
-    public MenuListResult getMenus(@RequestParam(required = false) Long categoryId) {
-        return getMenuListUseCase.getAvailableMenus(categoryId);
+    public MenuListResult getMenus(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String searchQuery) {
+        return getMenuListUseCase.getAvailableMenus(categoryId, searchQuery);
     }
 
     /**

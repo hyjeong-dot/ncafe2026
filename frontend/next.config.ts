@@ -8,14 +8,14 @@ const nextConfig: NextConfig = {
     if (enableProxy) {
       return [
         {
-          // 프론트엔드의 /api/menus 호출을 백엔드의 /menus로 매핑
-          source: '/api/menus',
-          destination: `${apiUrl}/menus`,
+          // 프론트엔드의 /api/menus/... 호출을 백엔드의 /menus/...로 매핑
+          source: '/api/menus/:path*',
+          destination: `${apiUrl}/menus/:path*`,
         },
         {
-          // 프론트엔드의 /api/categories 호출을 백엔드의 /categories로 매핑
-          source: '/api/categories',
-          destination: `${apiUrl}/categories`,
+          // 프론트엔드의 /api/categories/... 호출을 백엔드의 /categories/...로 매핑
+          source: '/api/categories/:path*',
+          destination: `${apiUrl}/categories/:path*`,
         },
         {
           // 관리자 API 매핑: /api/admin/menus -> /admin/menus

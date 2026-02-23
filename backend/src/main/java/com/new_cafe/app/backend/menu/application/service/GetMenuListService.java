@@ -26,10 +26,17 @@ public class GetMenuListService implements GetMenuListUseCase {
     private final LoadCategoryPort loadCategoryPort;
 
     @Override
-    public MenuListResult getAvailableMenus(Long categoryId) {
-        List<Menu> menus = (categoryId != null)
-                ? loadMenuPort.findAllAvailableByCategoryId(categoryId)
-                : loadMenuPort.findAllAvailable();
+    public MenuListResult getAvailableMenus(Long categoryId, String searchQuery) {
+        List<Menu> menus;
+        if (searchQuery != null && !searchQuery.isBlank()) {
+            menus = (categoryId != null)
+                    ? loadMenuPort.searchAvailableByCategoryId(categoryId, searchQuery)
+                    : loadMenuPort.searchAvailable(searchQuery);
+        } else {
+            menus = (categoryId != null)
+                    ? loadMenuPort.findAllAvailableByCategoryId(categoryId)
+                    : loadMenuPort.findAllAvailable();
+        }
 
         List<Category> categories = loadCategoryPort.findAllActive();
 

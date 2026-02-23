@@ -64,43 +64,43 @@ export default function Home() {
           </div>
 
           <div className={styles.heroContent}>
-            {/* Ditto Barista Image */}
-            <div className={styles.dittoCharacter}>
-              <div className={styles.dittoGlow}></div>
-              <Image
-                src="/images/ditto/ditto-barista.png"
-                alt="메타몽 바리스타"
-                width={300}
-                height={300}
-                style={{ objectFit: 'contain' }}
-                priority
-              />
-              <span className={styles.dittoOrbit} style={{ animationDelay: '0s' }}>☕</span>
-              <span className={styles.dittoOrbit} style={{ animationDelay: '1.3s' }}>🍰</span>
-              <span className={styles.dittoOrbit} style={{ animationDelay: '2.6s' }}>💜</span>
+            <div className={styles.heroText}>
+              <div className={styles.badge}>
+                <Sparkles size={14} />
+                메타몽이 직접 서빙하는 카페 ☕
+              </div>
+              <h1 className={styles.title}>
+                메타몽이 서빙해주는
+                <br />
+                <span className={styles.titleHighlight}>카페</span> ☕
+              </h1>
+              <p className={styles.subtitle}>
+                세상에서 가장 귀여운 바리스타 메타몽이 만들어주는
+                <br />
+                스페셜티 커피와 수제 디저트를 만나보세요! 💜
+              </p>
+              <div className={styles.buttonGroup}>
+                <Link href="#about" className={styles.primaryButton}>
+                  카페 소개 보기 🍰
+                </Link>
+                <Link href="/menus" className={styles.secondaryButton}>
+                  메뉴 구경하기 <ArrowRight size={18} />
+                </Link>
+              </div>
             </div>
 
-            <div className={styles.badge}>
-              <Sparkles size={14} />
-              메타몽이 직접 서빙하는 카페 ☕
-            </div>
-            <h1 className={styles.title}>
-              메타몽이 서빙해주는
-              <br />
-              <span className={styles.titleHighlight}>카페</span> ☕
-            </h1>
-            <p className={styles.subtitle}>
-              세상에서 가장 귀여운 바리스타 메타몽이 만들어주는
-              <br />
-              스페셜티 커피와 수제 디저트를 만나보세요! 💜
-            </p>
-            <div className={styles.buttonGroup}>
-              <Link href="#about" className={styles.primaryButton}>
-                카페 소개 보기 🍰
-              </Link>
-              <Link href="/menus" className={styles.secondaryButton}>
-                메뉴 구경하기 <ArrowRight size={18} />
-              </Link>
+            {/* Right Image */}
+            <div className={styles.heroImage}>
+              <div className={styles.dittoCharacter}>
+                <Image
+                  src="/images/ditto/ditto-barista.png"
+                  alt="메타몽 바리스타"
+                  width={480}
+                  height={480}
+                  style={{ objectFit: 'cover', borderRadius: '3rem' }}
+                  priority
+                />
+              </div>
             </div>
           </div>
 
@@ -115,7 +115,6 @@ export default function Home() {
           <div className={styles.container}>
             <div className={styles.storyLayout}>
               <div className={styles.storyImageArea}>
-                <div className={styles.storyDecoTop}>✨ 메타몽 카페에 오신 걸 환영해요! ✨</div>
                 <div className={styles.storyImageWrapper}>
                   <Image
                     src="/images/ditto/ditto-cafe-interior.png"
@@ -124,12 +123,6 @@ export default function Home() {
                     className={styles.storyImage}
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
-                </div>
-                <div className={styles.storyDecoBottom}>
-                  <span>💜</span>
-                  <span>☕</span>
-                  <span>🍰</span>
-                  <span>🎀</span>
                 </div>
               </div>
               <div className={styles.storyContent}>

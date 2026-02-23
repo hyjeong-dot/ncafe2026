@@ -7,5 +7,5 @@ import com.new_cafe.app.backend.menu.application.result.MenuListResult;
  * - 판매 가능한(isAvailable=true) 메뉴만 반환
  */
 public interface GetMenuListUseCase {
-    MenuListResult getAvailableMenus(Long categoryId);
+    MenuListResult getAvailableMenus(Long categoryId, String searchQuery);
 }

@@ -168,43 +168,13 @@
 /* === Ditto Character Image === */
 .dittoCharacter {
   position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto 1.5rem;
+  width: 480px;
+  height: 480px;
+  margin: 0;
   animation: dittoFloat 4s ease-in-out infinite;
   filter: drop-shadow(0 15px 30px rgba(168, 85, 247, 0.12));
 }
 
-/* Glowing circle behind ditto */
-.dittoGlow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--ditto-200) 0%, var(--ditto-100) 40%, transparent 70%);
-  opacity: 0.7;
-  z-index: -1;
-}
-
-/* Orbiting emoji decorations */
-.dittoOrbit {
-  position: absolute;
-  font-size: 1.6rem;
-  animation: orbitDitto 4s linear infinite;
-  z-index: 2;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-.dittoOrbit:nth-child(3) {
-  animation-duration: 5s;
-}
-
-.dittoOrbit:nth-child(4) {
-  animation-duration: 6s;
-}
 
 .badge {
   display: inline-flex;
@@ -224,8 +194,24 @@
 .heroContent {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  text-align: left;
   animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.heroText {
+  flex: 1;
+}
+
+.heroImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .title {
@@ -250,14 +236,12 @@
   margin-bottom: 2rem;
   line-height: 1.8;
   max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .buttonGroup {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
@@ -332,38 +316,14 @@
 .storyImageArea {
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.storyDecoTop {
-  background: linear-gradient(135deg, var(--ditto-300), var(--pink-accent));
-  color: var(--ditto-900);
-  text-align: center;
-  padding: 0.7rem 1rem;
-  border-radius: 1.5rem 1.5rem 0 0;
-  font-weight: 700;
-  font-size: 0.88rem;
-  letter-spacing: 0.03em;
 }
 
 .storyImageWrapper {
   position: relative;
   overflow: hidden;
+  border-radius: 2rem;
   aspect-ratio: 1 / 1;
   box-shadow: 0 20px 40px rgba(168, 85, 247, 0.1);
-  border-left: 3px solid var(--ditto-200);
-  border-right: 3px solid var(--ditto-200);
-  background: var(--ditto-100);
-}
-
-.storyDecoBottom {
-  background: var(--ditto-200);
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 0.6rem;
-  border-radius: 0 0 1.5rem 1.5rem;
-  font-size: 1.3rem;
 }
 
 .storyImage {
@@ -568,10 +528,6 @@
   display: flex;
   justify-content: center;
   margin-bottom: 2.5rem;
-  background: linear-gradient(135deg, var(--ditto-100), #fff0f8);
-  border-radius: 2rem;
-  padding: 2rem;
-  border: 2px dashed var(--ditto-300);
 }
 
 .specialGrid {
@@ -969,6 +925,30 @@
    Responsive
    ============================================= */
 @media (max-width: 1024px) {
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .heroImage {
+    order: -1;
+  }
+
+  .buttonGroup {
+    justify-content: center;
+  }
+
+  .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dittoCharacter {
+    width: 360px;
+    height: 360px;
+  }
+
   .menuGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1003,8 +983,8 @@
   }
 
   .dittoCharacter {
-    width: 220px;
-    height: 220px;
+    width: 280px;
+    height: 280px;
   }
 
   .menuGrid {

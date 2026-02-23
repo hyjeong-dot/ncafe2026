@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface LoadMenuPort {
     List<Menu> findAllAvailable();
     List<Menu> findAllAvailableByCategoryId(Long categoryId);
+    List<Menu> searchAvailable(String searchQuery);
+    List<Menu> searchAvailableByCategoryId(Long categoryId, String searchQuery);
     Optional<Menu> findAvailableById(Long id);
 }

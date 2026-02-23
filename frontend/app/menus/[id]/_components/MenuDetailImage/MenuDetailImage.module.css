@@ -1,0 +1,75 @@
+.gallery {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 2rem;
+    overflow: hidden;
+    background: #f8f4ff;
+    border: 3px solid #f0e6ff;
+    box-shadow: 0 20px 50px rgba(168, 85, 247, 0.1);
+}
+
+.mainImage {
+    object-fit: cover;
+}
+
+.soldOutOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+    z-index: 2;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #f0e6ff transparent;
+}
+
+.thumbnail {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 1rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid #f0e6ff;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.thumbnail:hover {
+    border-color: #d4bbf7;
+    transform: translateY(-2px);
+}
+
+.thumbnail.active {
+    border-color: #8b62c0;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    background: #fdfcff;
+    border-radius: 2rem;
+    color: #a87edb;
+    font-weight: 600;
+}

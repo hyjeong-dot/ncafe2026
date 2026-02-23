@@ -1,0 +1,29 @@
+.header {
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    background: rgba(253, 252, 255, 0.8);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #8b62c0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 200ms ease;
+}
+
+.backLink:hover {
+    color: #6e4a9e;
+    transform: translateX(-3px);
+}

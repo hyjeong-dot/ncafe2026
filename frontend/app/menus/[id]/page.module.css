@@ -1,0 +1,68 @@
+.page {
+    min-height: 100vh;
+    background-color: #fdfcff;
+    padding-bottom: 4rem;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    margin-top: 1rem;
+}
+
+/* Utils */
+.loadingWrapper,
+.errorWrapper {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    color: #a87edb;
+    font-weight: 700;
+}
+
+.backButton {
+    padding: 0.8rem 1.5rem;
+    background: #f0e6ff;
+    color: #8b62c0;
+    border-radius: 99px;
+    font-weight: 700;
+    transition: all 200ms ease;
+    text-decoration: none;
+}
+
+.backButton:hover {
+    background: #e4d4fc;
+    transform: translateY(-2px);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f0e6ff;
+    border-top-color: #c4a4f0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}

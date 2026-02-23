@@ -24,6 +24,16 @@ public class MenuPersistenceAdapter implements LoadMenuPort {
     }
 
     @Override
+    public List<Menu> searchAvailable(String searchQuery) {
+        return menuJpaRepository.findAllByIsAvailableTrueAndKorNameContainingIgnoreCaseOrIsAvailableTrueAndDescriptionContainingIgnoreCaseOrderBySortOrderAsc(searchQuery, searchQuery);
+    }
+
+    @Override
+    public List<Menu> searchAvailableByCategoryId(Long categoryId, String searchQuery) {
+        return menuJpaRepository.findAllByIsAvailableTrueAndCategoryIdAndKorNameContainingIgnoreCaseOrIsAvailableTrueAndCategoryIdAndDescriptionContainingIgnoreCaseOrderBySortOrderAsc(categoryId, searchQuery, categoryId, searchQuery);
+    }
+
+    @Override
     public Optional<Menu> findAvailableById(Long id) {
         return menuJpaRepository.findByIdAndIsAvailableTrue(id);
     }

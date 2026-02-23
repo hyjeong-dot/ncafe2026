@@ -1,0 +1,66 @@
+.header {
+    background: linear-gradient(135deg, #f0e6ff, #fce7f3, #f8f4ff);
+    padding: 2rem 0 2.5rem;
+    text-align: center;
+    border-bottom: 2px solid #e4d4fc;
+}
+
+.inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+}
+
+.backLink {
+    position: absolute;
+    left: 1.5rem;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #8b62c0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 200ms ease;
+}
+
+.backLink:hover {
+    color: #6e4a9e;
+}
+
+.titleArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.emoji {
+    font-size: 2.5rem;
+    display: block;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #6e4a9e;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: #a87edb;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .backLink {
+        position: static;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}

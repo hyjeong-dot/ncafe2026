@@ -1,0 +1,79 @@
+.filterBar {
+    background: #ffffff;
+    border-bottom: 2px solid #f0e6ff;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 0.8rem 0;
+}
+
+.inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.inner::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background: #f8f4ff;
+    border: 2px solid #f0e6ff;
+    border-radius: 99px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #8b62c0;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 250ms ease;
+    flex-shrink: 0;
+}
+
+.chip:hover {
+    background: #f0e6ff;
+    border-color: #d4bbf7;
+    transform: translateY(-1px);
+}
+
+.chip.active {
+    background: linear-gradient(135deg, #d4bbf7, #c4a4f0);
+    border-color: #c4a4f0;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.chipIcon {
+    font-size: 1.05rem;
+}
+
+.chipLabel {
+    font-size: 0.85rem;
+}
+
+.chipCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 0.4rem;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 99px;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.chip.active .chipCount {
+    background: rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
