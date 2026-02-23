@@ -55,19 +55,24 @@ public class AdminMenuController {
     }
 
     // --- 메뉴 이미지 관리 ---
+    
+    @GetMapping("/{id}/menu-images")
+    public com.new_cafe.app.backend.admin.menu.application.result.MenuImageListResult getMenuImages(@PathVariable Long id) {
+        return manageMenuImageUseCase.getImagesByMenuId(id);
+    }
 
-    @PostMapping("/{id}/images")
+    @PostMapping("/{id}/menu-images")
     @ResponseStatus(HttpStatus.CREATED)
     public Long addMenuImage(@PathVariable Long id, @RequestBody com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.AddMenuImageRequest request) {
         return manageMenuImageUseCase.addImage(request.toCommand(id));
     }
 
-    @PatchMapping("/images/{imageId}/order")
+    @PatchMapping("/menu-images/{imageId}/order")
     public void updateImageOrder(@PathVariable Long imageId, @RequestParam int newOrder) {
         manageMenuImageUseCase.updateImageOrder(imageId, newOrder);
     }
 
-    @DeleteMapping("/images/{imageId}")
+    @DeleteMapping("/menu-images/{imageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeMenuImage(@PathVariable Long imageId) {
         manageMenuImageUseCase.removeImage(imageId);

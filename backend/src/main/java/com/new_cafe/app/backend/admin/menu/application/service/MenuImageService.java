@@ -37,4 +37,21 @@ public class MenuImageService implements ManageMenuImageUseCase {
         image.updateSortOrder(newOrder);
         menuImagePort.saveImage(image);
     }
+
+    @Override
+    public com.new_cafe.app.backend.admin.menu.application.result.MenuImageListResult getImagesByMenuId(Long menuId) {
+        java.util.List<AdminMenuImage> images = menuImagePort.findAllByMenuId(menuId);
+        java.util.List<com.new_cafe.app.backend.admin.menu.application.result.MenuImageResult> imageResults = images.stream()
+                .map(img -> com.new_cafe.app.backend.admin.menu.application.result.MenuImageResult.builder()
+                        .id(img.getId())
+                        .menuId(img.getMenuId())
+                        .srcUrl(img.getSrcUrl())
+                        .sortOrder(img.getSortOrder())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+        
+        return com.new_cafe.app.backend.admin.menu.application.result.MenuImageListResult.builder()
+                .images(imageResults)
+                .build();
+    }
 }
