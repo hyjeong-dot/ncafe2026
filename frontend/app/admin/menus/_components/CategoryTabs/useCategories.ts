@@ -9,7 +9,7 @@ export interface CategoryResponseDto {
 
 export interface CategoryListResponseDto {
     categories: CategoryResponseDto[];
-    categoryCount: number;
+    count: number;
 }
 
 
@@ -23,8 +23,8 @@ export function useCategories() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
                 }
-                const data: CategoryResponseDto[] = await response.json();
-                setCategories(data);
+                const data: CategoryListResponseDto = await response.json();
+                setCategories(data.categories);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
