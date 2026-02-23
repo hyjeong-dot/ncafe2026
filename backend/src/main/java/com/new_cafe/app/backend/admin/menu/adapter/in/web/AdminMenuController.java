@@ -4,6 +4,7 @@ import com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.RegisterMenuReques
 import com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.UpdateMenuRequest;
 import com.new_cafe.app.backend.admin.menu.application.port.in.DeleteMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.GetMenuListUseCase;
+import com.new_cafe.app.backend.admin.menu.application.port.in.GetMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.RegisterMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.UpdateMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.ManageMenuImageUseCase;
@@ -13,12 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/menu")
+@RequestMapping("/admin/menus")
 @RequiredArgsConstructor
-public class MenuController {
+public class AdminMenuController {
 
     private final RegisterMenuUseCase registerMenuUseCase;
     private final GetMenuListUseCase getMenuListUseCase;
+    private final GetMenuUseCase getMenuUseCase;
     private final UpdateMenuUseCase updateMenuUseCase;
     private final DeleteMenuUseCase deleteMenuUseCase;
     private final ManageMenuImageUseCase manageMenuImageUseCase;
@@ -28,6 +30,11 @@ public class MenuController {
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String searchQuery) {
         return getMenuListUseCase.getMenus(categoryId, searchQuery);
+    }
+
+    @GetMapping("/{id}")
+    public com.new_cafe.app.backend.admin.menu.application.result.MenuResult getMenu(@PathVariable Long id) {
+        return getMenuUseCase.getMenu(id);
     }
 
     @PostMapping

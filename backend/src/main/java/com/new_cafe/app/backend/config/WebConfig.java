@@ -10,7 +10,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(
             org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
+        // 기존 /images/** 매핑
         registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:./upload/images/");
+        
+        // 데이터베이스 경로와 일치하는 /upload/images/** 매핑 추가
+        registry.addResourceHandler("/upload/images/**")
                 .addResourceLocations("file:./upload/images/");
     }
 

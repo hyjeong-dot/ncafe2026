@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
 
-public interface MenuJpaRepository extends JpaRepository<Menu, Long> {
+public interface AdminMenuJpaRepository extends JpaRepository<Menu, Long> {
 
     // 단순 조건 → 메서드 네이밍
     List<Menu> findAllByOrderBySortOrderAsc();

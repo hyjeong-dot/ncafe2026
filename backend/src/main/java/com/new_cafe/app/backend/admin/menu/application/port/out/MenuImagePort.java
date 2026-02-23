@@ -7,4 +7,5 @@ public interface MenuImagePort {
     Long saveImage(AdminMenuImage image);
     void deleteImage(Long imageId);
     Optional<AdminMenuImage> findImageById(Long imageId);
+    java.util.List<AdminMenuImage> findAllByMenuId(Long menuId);
 }

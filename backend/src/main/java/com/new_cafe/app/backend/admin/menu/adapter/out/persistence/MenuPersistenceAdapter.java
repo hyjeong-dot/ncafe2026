@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Component("adminMenuPersistenceAdapter")
 @RequiredArgsConstructor
 public class MenuPersistenceAdapter implements SaveMenuPort, LoadMenuPort, DeleteMenuPort {
 
-    private final MenuJpaRepository menuJpaRepository;
+    private final AdminMenuJpaRepository menuJpaRepository;
 
     @Override
     public Long save(Menu menu) {

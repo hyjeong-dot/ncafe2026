@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("publicGetMenuListService")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GetMenuListService implements GetMenuListUseCase {

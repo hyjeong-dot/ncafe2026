@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 사용자용 메뉴 조회 컨트롤러 (Input Adapter)
- * - /api/menus 경로를 사용하며, 판매 가능한 메뉴 정보만 노출합니다.
+ * - /menus 경로를 사용하며, 판매 가능한 메뉴 정보만 노출합니다.
  */
 @RestController
-@RequestMapping("/api/menus")
+@RequestMapping("/menus")
 @RequiredArgsConstructor
 public class MenuController {
 

@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Component("adminCategoryPersistenceAdapter")
 @RequiredArgsConstructor
 public class CategoryPersistenceAdapter implements SaveCategoryPort, LoadCategoryPort, DeleteCategoryPort {
 
-    private final CategoryJpaRepository categoryJpaRepository;
+    private final AdminCategoryJpaRepository categoryJpaRepository;
 
     @Override
     public Long save(AdminCategory category) {

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("publicGetCategoryListService")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GetCategoryListService implements GetCategoryListUseCase {

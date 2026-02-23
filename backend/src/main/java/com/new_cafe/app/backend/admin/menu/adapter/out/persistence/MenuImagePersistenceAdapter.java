@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
 
-@Component
+@Component("adminMenuImagePersistenceAdapter")
 @RequiredArgsConstructor
 public class MenuImagePersistenceAdapter implements MenuImagePort {
 
@@ -25,5 +25,10 @@ public class MenuImagePersistenceAdapter implements MenuImagePort {
     @Override
     public Optional<AdminMenuImage> findImageById(Long imageId) {
         return repository.findById(imageId);
+    }
+
+    @Override
+    public java.util.List<AdminMenuImage> findAllByMenuId(Long menuId) {
+        return repository.findAllByMenuIdOrderBySortOrderAsc(menuId);
     }
 }

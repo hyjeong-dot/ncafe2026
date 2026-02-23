@@ -12,9 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/category")
+@RequestMapping("/admin/categories")
 @RequiredArgsConstructor
-public class CategoryController {
+public class AdminCategoryController {
 
     private final CreateCategoryUseCase createCategoryUseCase;
     private final GetCategoryListUseCase getCategoryListUseCase;

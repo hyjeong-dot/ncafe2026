@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
-@Component
+@Component("publicMenuImagePersistenceAdapter")
 @RequiredArgsConstructor
 public class MenuImagePersistenceAdapter implements LoadMenuImagePort {
 
