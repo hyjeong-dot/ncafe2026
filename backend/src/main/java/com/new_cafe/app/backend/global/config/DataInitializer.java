@@ -3,6 +3,8 @@ package com.new_cafe.app.backend.global.config;
 import com.new_cafe.app.backend.admin.category.adapter.out.persistence.AdminCategoryJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuImageJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuJpaRepository;
+import com.new_cafe.app.backend.auth.adapter.out.persistence.MemberJpaRepository;
+import com.new_cafe.app.backend.auth.domain.model.Member;
 import com.new_cafe.app.backend.admin.category.domain.model.AdminCategory;
 import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import com.new_cafe.app.backend.admin.menu.domain.model.AdminMenuImage;
@@ -22,12 +24,23 @@ public class DataInitializer implements CommandLineRunner {
     private final AdminCategoryJpaRepository categoryRepository;
     private final AdminMenuJpaRepository menuRepository;
     private final AdminMenuImageJpaRepository menuImageRepository;
+    private final MemberJpaRepository memberRepository;
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
         if (categoryRepository.count() > 0) {
             return;
+        }
+
+        // 0. 관리자 계정 생성
+        if (memberRepository.count() == 0) {
+            memberRepository.save(Member.builder()
+                    .username("admin")
+                    .password("1234") // 임시 비밀번호
+                    .name("관리자")
+                    .role("ADMIN")
+                    .build());
         }
 
         // 1. 카테고리 데이터 생성 (ID는 자동 발급됨)
