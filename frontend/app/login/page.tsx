@@ -64,10 +64,10 @@ export default function LoginPage() {
                 <div className={styles.imageSection}>
                     <div className={styles.dittoImageWrapper}>
                         <Image
-                            src="/images/ditto/ditto-barista.png"
+                            src="/images/ditto/welcome-ditto.png"
                             alt="Welcome Ditto"
                             fill
-                            style={{ objectFit: 'contain' }}
+                            className={styles.welcomeImage}
                             priority
                         />
                     </div>
