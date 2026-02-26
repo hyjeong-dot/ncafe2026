@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 interface User {
     username: string;
@@ -55,9 +56,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
             setUser(null);
+            toast.success("로그아웃 되었습니다. 다음에 또 오세요! 💜");
             router.push('/');
         } catch (error) {
             console.error('Logout failed:', error);
+            toast.error("로그아웃 중 오류가 발생했습니다.");
         }
     };
 

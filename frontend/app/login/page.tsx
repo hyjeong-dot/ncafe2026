@@ -84,6 +84,13 @@ export default function LoginPage() {
                 <div className={styles.card}>
                     <div className={styles.header}>
                         <h1 className={styles.title}>
+                            <Image
+                                src="/images/ditto/favicon-ditto.png"
+                                alt="Ditto"
+                                width={40}
+                                height={40}
+                                className={styles.titleIcon}
+                            />
                             메타몽 카페 로그인
                         </h1>
                         <p className={styles.subtitle}>맛있는 커피가 준비되고 있어요! ☕</p>
@@ -144,7 +151,13 @@ export default function LoginPage() {
                                 disabled={isLoading}
                             >
                                 {isLoading ? (
-                                    <div className={styles.spinner} />
+                                    <Image
+                                        src="/images/ditto/ditto-activities.png"
+                                        alt="Loading..."
+                                        width={30}
+                                        height={30}
+                                        className={styles.loadingDitto}
+                                    />
                                 ) : (
                                     <>
                                         <LogIn size={20} />
