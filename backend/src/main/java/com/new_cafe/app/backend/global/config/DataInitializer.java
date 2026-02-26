@@ -33,7 +33,7 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        // 0. 관리자 계정 생성
+        // 0. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
         if (memberRepository.count() == 0) {
             memberRepository.save(Member.builder()
                     .username("admin")

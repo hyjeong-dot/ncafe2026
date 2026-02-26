@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NCafe 2026",
-  description: "Experience the future of coffee at NCafe 2026.",
+  title: "메타몽 카페 💜",
+  description: "말랑말랑한 메타몽 바리스타가 직접 내려주는 달콤한 커피 타임!",
 };
 
 import Header from "@/components/layout/Header";
