@@ -3,11 +3,13 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthContext';
 import { User, Lock, Eye, EyeOff, AlertCircle, LogIn, Sparkles } from 'lucide-react';
 import styles from './login.module.css';
 
 export default function LoginPage() {
     const router = useRouter();
+    const { login } = useAuth();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -33,15 +35,22 @@ export default function LoginPage() {
                 body: JSON.stringify({ username, password }),
             });
 
-            if (!response.ok) {
-                const data = await response.json();
-                setError(data.message || '로그인에 실패했습니다.');
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                setError(result.message || '로그인에 실패했습니다.');
                 return;
             }
 
+            // Global Auth State Update
+            login({
+                username: result.data.username,
+                role: result.data.role
+            });
+
             // 로그인 성공 → 관리자 페이지로 이동
             router.push('/admin');
-        } catch {
+        } catch (err) {
             setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
         } finally {
             setIsLoading(false);

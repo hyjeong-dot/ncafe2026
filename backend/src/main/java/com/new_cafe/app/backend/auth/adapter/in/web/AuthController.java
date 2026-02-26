@@ -5,12 +5,21 @@ import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginResponse;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
 import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
+import com.new_cafe.app.backend.config.jwt.JwtProvider;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,11 +27,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final LoginUseCase loginUseCase;
+    private final JwtProvider jwtProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         try {
             LoginResult result = loginUseCase.login(request.toCommand());
+
+            // Generate JWT Token
+            String token = jwtProvider.generateToken(result.getUsername(), result.getRole());
+
+            // Add JWT to HTTP-Only Cookie
+            Cookie cookie = new Cookie("token", token);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400); // 1 day
+            response.addCookie(cookie);
 
             return ResponseEntity.ok(
                     LoginResponse.success(
@@ -37,5 +57,38 @@ public class AuthController {
                     LoginResponse.fail(e.getMessage())
             );
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return ResponseEntity.status(401).body("Not authenticated");
+        }
+
+        String role = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // Basic user info based on JWT
+        return ResponseEntity.ok(
+                LoginResponse.success(
+                        -1L, // memberId is not kept in standard simple JWT claims by default here
+                        auth.getName(),
+                        "User", // name omitted from JWT, normally decoded from claims
+                        role
+                )
+        );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 }

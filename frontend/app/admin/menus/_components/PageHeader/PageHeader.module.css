@@ -28,7 +28,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+    background: linear-gradient(135deg, var(--ditto-500), var(--ditto-600));
     color: white;
     padding: var(--space-3) var(--space-5);
     border-radius: var(--radius-lg);
@@ -40,7 +40,7 @@
 }
 
 .addButton:hover {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+    background: linear-gradient(135deg, var(--ditto-600), var(--ditto-700));
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }

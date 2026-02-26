@@ -21,6 +21,8 @@ export const metadata: Metadata = {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+import { AuthProvider } from "@/context/AuthContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,10 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header />
-        {children}
-        <Footer />
-        <ToastProvider />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+          <ToastProvider />
+        </AuthProvider>
       </body>
     </html>
   );

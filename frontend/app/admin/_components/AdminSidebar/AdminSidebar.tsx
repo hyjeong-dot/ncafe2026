@@ -104,9 +104,9 @@ export default function AdminSidebar() {
             <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
                 {/* Logo */}
                 <div className={styles.logo}>
-                    <div className={styles.logoIcon}>☕</div>
+                    <div className={styles.logoIcon}>💜</div>
                     <div className={styles.logoText}>
-                        NCafe
+                        메타몽 카페
                         <span className={styles.logoSubtext}>Admin</span>
                     </div>
                 </div>
@@ -143,7 +143,10 @@ export default function AdminSidebar() {
                         <div className={styles.userName}>정사장님</div>
                         <div className={styles.userRole}>카페 관리자</div>
                     </div>
-                    <button className={styles.settingsButton} title="로그아웃">
+                    <button className={styles.settingsButton} title="로그아웃" onClick={async () => {
+                        await fetch('/api/auth/logout', { method: 'POST' });
+                        window.location.href = '/';
+                    }}>
                         <LogOut size={18} />
                     </button>
                 </div>

@@ -23,7 +23,7 @@
     position: absolute;
     top: var(--space-4);
     left: var(--space-4);
-    background-color: var(--color-primary-600);
+    background-color: var(--ditto-600);
     /* Slightly deeper primary */
     color: white;
     padding: 4px 12px;
@@ -44,7 +44,7 @@
     position: absolute;
     top: 2px;
     right: 2px;
-    background-color: var(--color-primary-500);
+    background-color: var(--ditto-500);
     color: white;
     width: 16px;
     height: 16px;
@@ -89,11 +89,11 @@
 }
 
 .thumbnailItem:hover {
-    border-color: var(--color-primary-300);
+    border-color: var(--ditto-300);
 }
 
 .activeThumbnail {
-    border-color: var(--color-primary-500);
+    border-color: var(--ditto-500);
     box-shadow: var(--shadow-sm);
 }
 
@@ -125,7 +125,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-primary-500);
+    color: var(--ditto-500);
 }
 
 .nutritionInfo {

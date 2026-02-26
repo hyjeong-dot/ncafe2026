@@ -36,7 +36,7 @@
 }
 
 .breadcrumbItem:hover {
-    color: var(--color-primary-600);
+    color: var(--ditto-600);
 }
 
 .breadcrumbSeparator {

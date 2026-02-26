@@ -30,7 +30,7 @@
 }
 
 .searchInput:focus {
-    border-color: var(--color-primary-400);
+    border-color: var(--ditto-400);
     box-shadow: 0 0 0 3px rgba(var(--color-primary-500-rgb, 99, 102, 241), 0.15);
 }
 

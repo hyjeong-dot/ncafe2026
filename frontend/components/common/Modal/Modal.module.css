@@ -36,10 +36,10 @@
 }
 
 .title {
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
     font-weight: var(--font-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--space-2);
+    color: var(--ditto-700);
+    margin-bottom: var(--space-3);
 }
 
 .description {
@@ -75,21 +75,34 @@
 }
 
 .confirmButton {
-    background-color: var(--color-primary-500);
+    background: linear-gradient(135deg, var(--ditto-500), var(--ditto-600));
     color: white;
+    border: none;
 }
 
 .confirmButton:hover {
-    background-color: var(--color-primary-600);
+    background: linear-gradient(135deg, var(--ditto-600), var(--ditto-700));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.dittoButton {
+    background: var(--ditto-100);
+    color: var(--ditto-700);
+    border: 1px solid var(--ditto-200);
+}
+
+.dittoButton:hover {
+    background: var(--ditto-200);
 }
 
 .dangerButton {
-    background-color: var(--color-error);
+    background-color: #fb7185;
     color: white;
 }
 
 .dangerButton:hover {
-    background-color: #dc2626;
+    background-color: #e11d48;
 }
 
 /* Animations */

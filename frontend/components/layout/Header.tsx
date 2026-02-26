@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, LogIn } from "lucide-react";
+import { Settings, LogIn, LogOut, User } from "lucide-react";
 import styles from "./layout.module.css";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
+    const { user, logout } = useAuth();
+
     return (
         <header className={styles.header}>
             <div className={`${styles.container} ${styles.headerInner}`}>
@@ -20,14 +23,29 @@ export default function Header() {
                     <Link href="/menus" className={styles.navLink}>전체 메뉴</Link>
 
                     <div className={styles.buttonGroup}>
-                        <Link href="/login" className={styles.loginButton}>
-                            <LogIn size={16} />
-                            <span>로그인</span>
-                        </Link>
-                        <Link href="/admin" className={styles.adminButton}>
-                            <Settings size={14} />
-                            <span>관리자</span>
-                        </Link>
+                        {user ? (
+                            <>
+                                <button className={styles.loginButton} onClick={() => logout()}>
+                                    <LogOut size={16} />
+                                    <span>로그아웃</span>
+                                </button>
+                                <Link href="/admin" className={styles.adminButton}>
+                                    <User size={14} />
+                                    <span>{user.username}</span>
+                                </Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login" className={styles.loginButton}>
+                                    <LogIn size={16} />
+                                    <span>로그인</span>
+                                </Link>
+                                <Link href="/admin" className={styles.adminButton}>
+                                    <Settings size={14} />
+                                    <span>관리자</span>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </nav>
             </div>

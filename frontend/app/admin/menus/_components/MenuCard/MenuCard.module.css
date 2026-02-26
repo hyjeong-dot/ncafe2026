@@ -107,7 +107,7 @@
 .price {
     font-size: var(--text-lg);
     font-weight: var(--font-bold);
-    color: var(--color-primary-600);
+    color: var(--ditto-600);
     white-space: nowrap;
 }
 

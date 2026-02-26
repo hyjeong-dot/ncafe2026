@@ -33,8 +33,8 @@
 }
 
 .dragHandle:hover {
-    background-color: var(--color-primary-50);
-    color: var(--color-primary-600);
+    background-color: var(--ditto-50);
+    color: var(--ditto-600);
 }
 
 .dragHandle:active {
@@ -112,7 +112,7 @@
 
 .loadingIcon {
     animation: spin 1s linear infinite;
-    color: var(--color-primary-500);
+    color: var(--ditto-500);
 }
 
 @keyframes spin {
@@ -159,9 +159,9 @@
 }
 
 .pageButton.active {
-    background-color: var(--color-primary-600);
+    background-color: var(--ditto-600);
     color: white;
-    border-color: var(--color-primary-600);
+    border-color: var(--ditto-600);
     font-weight: var(--font-semibold);
 }
 

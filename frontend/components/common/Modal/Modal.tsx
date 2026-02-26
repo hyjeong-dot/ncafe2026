@@ -12,7 +12,7 @@ interface ModalProps {
     confirmText?: string;
     cancelText?: string;
     onConfirm?: () => void;
-    variant?: 'default' | 'danger';
+    variant?: 'default' | 'danger' | 'ditto';
 }
 
 export default function Modal({
@@ -56,7 +56,11 @@ export default function Modal({
                     </button>
                     {onConfirm && (
                         <button
-                            className={`${styles.button} ${variant === 'danger' ? styles.dangerButton : styles.confirmButton
+                            className={`${styles.button} ${variant === 'danger'
+                                ? styles.dangerButton
+                                : variant === 'ditto'
+                                    ? styles.dittoButton
+                                    : styles.confirmButton
                                 }`}
                             onClick={() => {
                                 onConfirm();

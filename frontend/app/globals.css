@@ -21,6 +21,22 @@
   --color-primary-800: #5a3d29;
   --color-primary-900: #4a3222;
 
+  /* Ditto Theme Colors */
+  --ditto-50: #fdfcff;
+  --ditto-100: #f8f4ff;
+  --ditto-200: #f0e6ff;
+  --ditto-300: #e4d4fc;
+  --ditto-400: #d4bbf7;
+  --ditto-500: #c4a4f0;
+  --ditto-600: #a87edb;
+  --ditto-700: #8b62c0;
+  --ditto-800: #6e4a9e;
+  --ditto-900: #4a3570;
+
+  --pink-accent: #fcc8e4;
+  --yellow-accent: #fdeaa7;
+  --mint-accent: #b8f0d8;
+
   /* Neutral */
   --color-gray-50: #fafafa;
   --color-gray-100: #f5f5f5;
@@ -66,7 +82,7 @@
 
   /* Typography */
   --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  
+
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;

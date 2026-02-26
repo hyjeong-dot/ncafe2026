@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
             destination: `${apiUrl}/admin/:path*`,
           },
           {
+            // 인증 API 매핑: /api/auth/login -> /auth/login
+            source: '/api/auth/:path*',
+            destination: `${apiUrl}/auth/:path*`,
+          },
+          {
             // 기타 /api/:path* 전체에 대한 기본 매핑 (필요 시)
             source: '/api/:path*',
             destination: `${apiUrl}/api/:path*`,

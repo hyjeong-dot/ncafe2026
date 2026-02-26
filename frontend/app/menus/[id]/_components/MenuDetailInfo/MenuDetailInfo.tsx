@@ -1,8 +1,10 @@
-'use client';
-
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react';
 import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
+import { useAuth } from '@/context/AuthContext';
+import Modal from '@/components/common/Modal/Modal';
 
 interface MenuDetailInfoProps {
     id: number;
@@ -10,9 +12,20 @@ interface MenuDetailInfoProps {
 
 export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const { menu, isLoading, error } = useMenuDetail(id);
+    const { user } = useAuth();
+    const router = useRouter();
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
+    };
+
+    const handleAction = (action: () => void) => {
+        if (!user) {
+            setIsLoginModalOpen(true);
+            return;
+        }
+        action();
     };
 
     if (isLoading) return <div className={styles.loading}>정보를 불러오는 중...</div>;
@@ -56,14 +69,39 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
             </div>
 
             <div className={styles.ctaRow}>
-                <button className={styles.cartBtn} disabled={menu.isSoldOut}>
+                <button
+                    className={styles.cartBtn}
+                    disabled={menu.isSoldOut}
+                    onClick={() => handleAction(() => {
+                        // TODO: 실제 장바구니 로직
+                        alert('장바구니에 담았습니다! 💜');
+                    })}
+                >
                     <ShoppingBag size={20} />
                     <span>장바구니</span>
                 </button>
-                <button className={styles.mainCta} disabled={menu.isSoldOut}>
+                <button
+                    className={styles.mainCta}
+                    disabled={menu.isSoldOut}
+                    onClick={() => handleAction(() => {
+                        // TODO: 실제 주문 로직
+                        alert('주문 페이지로 이동합니다! 💜');
+                    })}
+                >
                     {menu.isSoldOut ? '현재 준비 중입니다' : '주문하기 💜'}
                 </button>
             </div>
+
+            <Modal
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
+                title="로그인이 필요해요 💜"
+                description="메타몽 바리스타가 사장님을 기다리고 있어요! 로그인하고 맛있는 메뉴를 주문하시겠어요?"
+                confirmText="로그인하러 가기"
+                cancelText="나중에 할게요"
+                onConfirm={() => router.push('/login')}
+                variant="ditto"
+            />
         </div>
     );
 }

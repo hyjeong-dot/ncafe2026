@@ -37,7 +37,7 @@
 
 .tab.active {
     background-color: var(--bg-primary);
-    color: var(--color-primary-700);
+    color: var(--ditto-700);
     box-shadow: var(--shadow-sm);
 }
 
@@ -55,8 +55,8 @@
 }
 
 .tab.active .tabCount {
-    background-color: var(--color-primary-100);
-    color: var(--color-primary-700);
+    background-color: var(--ditto-100);
+    color: var(--ditto-700);
 }
 
 /* 반응형 */
