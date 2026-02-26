@@ -2,7 +2,8 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, Lock, Eye, EyeOff, AlertCircle, LogIn } from 'lucide-react';
+import Image from 'next/image';
+import { User, Lock, Eye, EyeOff, AlertCircle, LogIn, Sparkles } from 'lucide-react';
 import styles from './login.module.css';
 
 export default function LoginPage() {
@@ -32,9 +33,8 @@ export default function LoginPage() {
                 body: JSON.stringify({ username, password }),
             });
 
-            const data = await response.json();
-
             if (!response.ok) {
+                const data = await response.json();
                 setError(data.message || '로그인에 실패했습니다.');
                 return;
             }
@@ -50,99 +50,104 @@ export default function LoginPage() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.card}>
-                {/* 헤더 */}
-                <div className={styles.header}>
-                    <div className={styles.logoWrapper}>
-                        <span className={styles.logoEmoji}>☕</span>
+            <div className={styles.loginWrapper}>
+                {/* 메타몽 이미지 섹션 */}
+                <div className={styles.imageSection}>
+                    <div className={styles.dittoImageWrapper}>
+                        <Image
+                            src="/images/ditto/ditto-barista.png"
+                            alt="Welcome Ditto"
+                            fill
+                            style={{ objectFit: 'contain' }}
+                            priority
+                        />
                     </div>
-                    <h1 className={styles.title}>NCafe 2026</h1>
-                    <p className={styles.subtitle}>관리자 로그인</p>
+                    <div className={styles.welcomeText}>
+                        <div className={styles.welcomeTitle}>안녕! 반가워요 💜</div>
+                        <p className={styles.welcomeDesc}>
+                            말랑한 메타몽 바리스타가 기다리고 있어요.<br />
+                            아이디와 비밀번호를 입력해 주세요! ✨
+                        </p>
+                    </div>
                 </div>
 
-                {/* 폼 영역 */}
-                <div className={styles.body}>
-                    <form className={styles.form} onSubmit={handleSubmit}>
-                        {/* 에러 메시지 */}
-                        {error && (
-                            <div className={styles.errorMessage}>
-                                <AlertCircle className={styles.errorIcon} />
-                                <span>{error}</span>
-                            </div>
-                        )}
+                {/* 로그인 카드 */}
+                <div className={styles.card}>
+                    <div className={styles.header}>
+                        <h1 className={styles.title}>
+                            메타몽 카페 로그인
+                        </h1>
+                        <p className={styles.subtitle}>맛있는 커피가 준비되고 있어요! ☕</p>
+                    </div>
 
-                        {/* 아이디 입력 */}
-                        <div className={styles.inputGroup}>
-                            <label htmlFor="username" className={styles.label}>
-                                아이디
-                            </label>
-                            <div className={styles.inputWrapper}>
-                                <input
-                                    id="username"
-                                    type="text"
-                                    className={`${styles.input} ${error ? styles.inputError : ''}`}
-                                    placeholder="아이디를 입력하세요"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    autoComplete="username"
-                                    autoFocus
-                                />
-                                <User className={styles.inputIcon} />
-                            </div>
-                        </div>
-
-                        {/* 비밀번호 입력 */}
-                        <div className={styles.inputGroup}>
-                            <label htmlFor="password" className={styles.label}>
-                                비밀번호
-                            </label>
-                            <div className={styles.inputWrapper}>
-                                <input
-                                    id="password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    className={`${styles.input} ${error ? styles.inputError : ''}`}
-                                    placeholder="비밀번호를 입력하세요"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    autoComplete="current-password"
-                                />
-                                <Lock className={styles.inputIcon} />
-                                <button
-                                    type="button"
-                                    className={styles.togglePassword}
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
-                                >
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* 로그인 버튼 */}
-                        <button
-                            type="submit"
-                            className={styles.submitButton}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? (
-                                <div className={styles.spinner} />
-                            ) : (
-                                <>
-                                    <LogIn size={18} />
-                                    로그인
-                                </>
+                    <div className={styles.body}>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            {error && (
+                                <div className={styles.errorMessage}>
+                                    <AlertCircle size={18} />
+                                    <span>{error}</span>
+                                </div>
                             )}
-                        </button>
-                    </form>
-                </div>
 
-                {/* 푸터 */}
-                <div className={styles.footer}>
-                    <p className={styles.footerText}>
-                        © 2026 NCafe. All rights reserved.
-                    </p>
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="username" className={styles.label}>아이디</label>
+                                <div className={styles.inputWrapper}>
+                                    <input
+                                        id="username"
+                                        type="text"
+                                        className={styles.input}
+                                        placeholder="아이디를 입력하세요"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        autoComplete="username"
+                                        autoFocus
+                                    />
+                                    <User size={18} className={styles.inputIcon} />
+                                </div>
+                            </div>
+
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="password" className={styles.label}>비밀번호</label>
+                                <div className={styles.inputWrapper}>
+                                    <input
+                                        id="password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        className={styles.input}
+                                        placeholder="비밀번호를 입력하세요"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        autoComplete="current-password"
+                                    />
+                                    <Lock size={18} className={styles.inputIcon} />
+                                    <button
+                                        type="button"
+                                        className={styles.togglePassword}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className={styles.submitButton}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? (
+                                    <div className={styles.spinner} />
+                                ) : (
+                                    <>
+                                        <LogIn size={20} />
+                                        로그인 할까요? 💜
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+

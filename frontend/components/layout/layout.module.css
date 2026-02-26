@@ -1,0 +1,260 @@
+/* =============================================
+   메타몽 카페 공통 레이아웃 스타일
+   ============================================= */
+
+.page {
+  /* 파스텔 라벤더 팔레트 - 전역 변수와 동기화 */
+  --ditto-50: #fdfcff;
+  --ditto-100: #f8f4ff;
+  --ditto-200: #f0e6ff;
+  --ditto-300: #e4d4fc;
+  --ditto-400: #d4bbf7;
+  --ditto-500: #c4a4f0;
+  --ditto-600: #a87edb;
+  --ditto-700: #8b62c0;
+  --ditto-800: #6e4a9e;
+  --ditto-900: #4a3570;
+
+  --pink-accent: #fcc8e4;
+  --yellow-accent: #fdeaa7;
+  --mint-accent: #b8f0d8;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--ditto-bg, #fdfcff);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+/* =============================================
+   Header
+   ============================================= */
+.header {
+  height: 68px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--ditto-200);
+  display: flex;
+  align-items: center;
+}
+
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ditto-700);
+  text-decoration: none;
+}
+
+.logoEmoji {
+  font-size: 1.5rem;
+}
+
+.nav {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+.navLink {
+  font-weight: 600;
+  color: var(--ditto-600);
+  transition: color 200ms ease;
+  position: relative;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ditto-400), var(--pink-accent));
+  border-radius: 99px;
+  transition: width 300ms ease;
+}
+
+.navLink:hover {
+  color: var(--ditto-800);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.adminButton {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--ditto-100);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ditto-700);
+  transition: all 200ms ease;
+  border: 1px solid var(--ditto-200);
+  text-decoration: none;
+}
+
+.adminButton:hover {
+  background: var(--ditto-200);
+  color: var(--ditto-800);
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, var(--ditto-400), var(--ditto-600));
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  transition: all 200ms ease;
+  border: none;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(168, 85, 247, 0.3);
+}
+
+/* =============================================
+   Footer
+   ============================================= */
+.footer {
+  background: var(--ditto-900);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 3.5rem 0 2rem;
+  margin-top: auto;
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.8rem;
+}
+
+.footerDesc {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: all 200ms ease;
+}
+
+.socialIcon:hover {
+  background: var(--ditto-500);
+  transform: translateY(-2px);
+}
+
+.footerTitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footerLink {
+  font-size: 0.82rem;
+  opacity: 0.7;
+  text-decoration: none;
+  color: inherit;
+  transition: all 200ms ease;
+}
+
+.footerLink:hover {
+  opacity: 1;
+  color: var(--ditto-300);
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.footerBottom {
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  opacity: 0.5;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+}

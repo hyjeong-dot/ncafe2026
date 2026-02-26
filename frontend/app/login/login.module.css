@@ -2,36 +2,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg,
-            var(--color-primary-50) 0%,
-            var(--color-primary-100) 50%,
-            var(--color-primary-200) 100%);
-    padding: var(--space-4);
+    min-height: 80vh;
+    /* 레이아웃 헤더/푸터 고려 */
+    padding: 2rem;
+    background: radial-gradient(circle at top left, #fdfcff, #f0e6ff);
 }
 
-/* =============================================
-   카드 (Glass Morphism)
-   ============================================= */
-.card {
+.loginWrapper {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    max-width: 1000px;
     width: 100%;
-    max-width: 440px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: var(--radius-2xl);
-    box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-    overflow: hidden;
-    animation: slideUp 0.6s ease-out;
+    animation: fadeIn 0.8s ease-out;
 }
 
-@keyframes slideUp {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
     }
 
     to {
@@ -40,72 +29,106 @@
     }
 }
 
-/* =============================================
-   헤더 영역
-   ============================================= */
-.header {
-    text-align: center;
-    padding: var(--space-10) var(--space-8) var(--space-6);
-}
-
-.logoWrapper {
-    display: inline-flex;
+.imageSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-    border-radius: var(--radius-xl);
-    margin-bottom: var(--space-5);
-    box-shadow: 0 8px 24px rgba(164, 117, 81, 0.3);
+    gap: 1.5rem;
 }
 
-.logoEmoji {
-    font-size: 2rem;
-    line-height: 1;
+.dittoImageWrapper {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    animation: dittoFloat 4s ease-in-out infinite;
 }
 
-.title {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--space-2);
+@keyframes dittoFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
 }
 
-.subtitle {
-    font-size: var(--text-sm);
-    color: var(--text-secondary);
+.welcomeText {
+    text-align: center;
+}
+
+.welcomeTitle {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #6e4a9e;
+    /* ditto-800 */
+    margin-bottom: 0.5rem;
+}
+
+.welcomeDesc {
+    color: #a87edb;
+    /* ditto-600 */
+    font-size: 1rem;
     line-height: 1.5;
 }
 
-/* =============================================
-   폼 영역
-   ============================================= */
+.card {
+    flex: 1;
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid #f0e6ff;
+    /* ditto-200 */
+    border-radius: 2rem;
+    box-shadow: 0 20px 50px rgba(168, 85, 247, 0.1);
+    overflow: hidden;
+}
+
+.header {
+    text-align: center;
+    padding: 2.5rem 2rem 1.5rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #4a3570;
+    /* ditto-900 */
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #8b62c0;
+    /* ditto-700 */
+}
+
 .body {
-    padding: var(--space-2) var(--space-8) var(--space-8);
+    padding: 0 2rem 2.5rem;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: 1.2rem;
 }
 
-/* =============================================
-   에러 메시지
-   ============================================= */
 .errorMessage {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    background: var(--color-error-light);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    border-radius: var(--radius-lg);
-    color: var(--color-error);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    animation: shake 0.4s ease-out;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: 12px;
+    color: #c53030;
+    font-size: 0.85rem;
+    animation: shake 0.4s ease-in-out;
 }
 
 @keyframes shake {
@@ -116,33 +139,25 @@
     }
 
     25% {
-        transform: translateX(-6px);
+        transform: translateX(-5px);
     }
 
     75% {
-        transform: translateX(6px);
+        transform: translateX(5px);
     }
 }
 
-.errorIcon {
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-}
-
-/* =============================================
-   입력 필드 그룹
-   ============================================= */
 .inputGroup {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0.5rem;
 }
 
 .label {
-    font-size: var(--text-sm);
-    font-weight: var(--font-semibold);
-    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6e4a9e;
+    margin-left: 0.2rem;
 }
 
 .inputWrapper {
@@ -153,100 +168,62 @@
 
 .inputIcon {
     position: absolute;
-    left: var(--space-4);
-    width: 20px;
-    height: 20px;
-    color: var(--color-gray-400);
+    left: 1rem;
+    color: #c4a4f0;
+    /* ditto-500 */
     pointer-events: none;
-    transition: color var(--transition-fast);
 }
 
 .input {
     width: 100%;
-    padding: var(--space-3) var(--space-4);
-    padding-left: 48px;
-    background: var(--bg-primary);
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    font-size: var(--text-base);
-    color: var(--text-primary);
+    padding: 0.8rem 1rem 0.8rem 2.8rem;
+    background: #fff;
+    border: 2px solid #f8f4ff;
+    /* ditto-100 */
+    border-radius: 12px;
+    font-size: 0.95rem;
     outline: none;
-    transition: all var(--transition-normal);
-}
-
-.input::placeholder {
-    color: var(--text-muted);
-}
-
-.input:hover {
-    border-color: var(--border-color-hover);
+    transition: all 0.2s ease;
 }
 
 .input:focus {
-    border-color: var(--color-primary-500);
-    box-shadow: 0 0 0 3px rgba(164, 117, 81, 0.15);
+    border-color: #d4bbf7;
+    /* ditto-400 */
+    box-shadow: 0 0 0 4px rgba(212, 187, 247, 0.2);
 }
 
-.input:focus~.inputIcon,
-.inputWrapper:focus-within .inputIcon {
-    color: var(--color-primary-500);
-}
-
-.inputError {
-    border-color: var(--color-error);
-}
-
-.inputError:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
-}
-
-/* 비밀번호 토글 버튼 */
 .togglePassword {
     position: absolute;
-    right: var(--space-3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-    color: var(--color-gray-400);
-    transition: all var(--transition-fast);
-}
-
-.togglePassword:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-}
-
-/* =============================================
-   제출 버튼
-   ============================================= */
-.submitButton {
-    width: 100%;
-    padding: var(--space-3) var(--space-4);
-    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-    color: var(--text-inverse);
-    font-size: var(--text-base);
-    font-weight: var(--font-semibold);
+    right: 0.8rem;
+    color: #c4a4f0;
+    background: none;
     border: none;
-    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all var(--transition-normal);
-    box-shadow: 0 4px 12px rgba(164, 117, 81, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.submitButton {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #a87edb, #6e4a9e);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
+    gap: 0.5rem;
+    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.2);
 }
 
 .submitButton:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(164, 117, 81, 0.4);
-}
-
-.submitButton:active:not(:disabled) {
-    transform: translateY(0);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3);
 }
 
 .submitButton:disabled {
@@ -254,14 +231,13 @@
     cursor: not-allowed;
 }
 
-/* 로딩 스피너 */
 .spinner {
     width: 20px;
     height: 20px;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
+    border-top-color: #fff;
     border-radius: 50%;
-    animation: spin 0.6s linear infinite;
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -270,37 +246,12 @@
     }
 }
 
-/* =============================================
-   푸터
-   ============================================= */
-.footer {
-    text-align: center;
-    padding: var(--space-4) var(--space-8) var(--space-6);
-    border-top: 1px solid var(--border-color);
-}
-
-.footerText {
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-}
-
-/* =============================================
-   반응형
-   ============================================= */
-@media (max-width: 480px) {
-    .card {
-        border-radius: var(--radius-xl);
+@media (max-width: 900px) {
+    .imageSection {
+        display: none;
     }
 
-    .header {
-        padding: var(--space-8) var(--space-6) var(--space-4);
-    }
-
-    .body {
-        padding: var(--space-2) var(--space-6) var(--space-6);
-    }
-
-    .footer {
-        padding: var(--space-4) var(--space-6) var(--space-5);
+    .loginWrapper {
+        justify-content: center;
     }
 }

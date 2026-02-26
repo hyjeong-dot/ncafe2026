@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   description: "Experience the future of coffee at NCafe 2026.",
 };
 
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Header />
         {children}
+        <Footer />
         <ToastProvider />
       </body>
     </html>

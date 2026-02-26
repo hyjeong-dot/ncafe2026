@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- xmlns:th="http://www.thymeleaf.org"> -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Test</title>
+</head>
+
+<body>
+    <h1>Cookie Test</h1>
+    <p th:text="${name}"></p>
+    <p th:text="${age}"></p>
+    <p th:text="${sessionName}"></p>
+    <p th:text="${sessionAge}"></p>
+    <p><a href="/cookie/create">쿠키 생성</a></p>
+    <p><a href="/cookie/read">쿠키 읽기</a></p>
+    <p><a href="/cookie/delete">쿠키 삭제</a></p>
+    <p><a href="/cookie/session/create">세션 값 저장</a></p>
+</body>
+
+</html>
