@@ -29,10 +29,6 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        if (categoryRepository.count() > 0) {
-            return;
-        }
-
         // 0. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
         if (memberRepository.count() == 0) {
             memberRepository.save(Member.builder()
@@ -41,6 +37,10 @@ public class DataInitializer implements CommandLineRunner {
                     .name("관리자")
                     .role("ADMIN")
                     .build());
+        }
+
+        if (categoryRepository.count() > 0) {
+            return;
         }
 
         // 1. 카테고리 데이터 생성 (ID는 자동 발급됨)
