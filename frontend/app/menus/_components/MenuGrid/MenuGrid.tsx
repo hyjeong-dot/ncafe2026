@@ -1,5 +1,5 @@
-'use client';
-
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './MenuGrid.module.css';
 import MenuCard from '../MenuCard/MenuCard';
 import { useMenus } from './useMenus';
@@ -9,11 +9,29 @@ interface MenuGridProps {
     searchQuery: string;
 }
 
+const ITEMS_PER_PAGE = 8;
+
 export default function MenuGrid({ selectedCategory, searchQuery }: MenuGridProps) {
-    const { menus, isLoading, error } = useMenus({
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const { menus, totalCount, isLoading, error } = useMenus({
         categoryId: selectedCategory,
-        searchQuery: searchQuery
+        searchQuery: searchQuery,
+        page: currentPage - 1,
+        size: ITEMS_PER_PAGE
     });
+
+    // 필터 변경 시 첫 페이지로 리셋
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedCategory, searchQuery]);
+
+    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     if (isLoading) {
         return (
@@ -51,6 +69,38 @@ export default function MenuGrid({ selectedCategory, searchQuery }: MenuGridProp
                     <MenuCard key={menu.id} menu={menu} />
                 ))}
             </div>
+
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button
+                        className={styles.pageButton}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label="Previous page"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                            key={page}
+                            className={`${styles.pageButton} ${currentPage === page ? styles.active : ''}`}
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        className={styles.pageButton}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label="Next page"
+                    >
+                        <ChevronRight size={16} />
+                    </button>
+                </div>
+            )}
         </section>
     );
 }

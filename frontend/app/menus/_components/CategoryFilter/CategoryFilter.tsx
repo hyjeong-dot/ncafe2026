@@ -2,21 +2,19 @@
 
 import styles from './CategoryFilter.module.css';
 import { useCategories } from './useCategories';
+import { useMenus } from '../MenuGrid/useMenus';
 
 interface CategoryFilterProps {
     selectedCategory: number | null;
     onCategoryChange: (id: number | null) => void;
-    totalCount: number;
-    menuCounts: Record<string, number>;
 }
 
 export default function CategoryFilter({
     selectedCategory,
     onCategoryChange,
-    totalCount,
-    menuCounts,
 }: CategoryFilterProps) {
     const { categories } = useCategories();
+    const { totalCount, menuCounts } = useMenus(); // No filters here for static counts
 
     return (
         <nav className={styles.filterBar} aria-label="카테고리 필터">

@@ -20,12 +20,15 @@ export interface MenuListResponse {
 interface UseMenusOptions {
     categoryId?: number | null;
     searchQuery?: string;
+    page?: number;
+    size?: number;
 }
 
 export function useMenus(options: UseMenusOptions = {}) {
-    const { categoryId, searchQuery } = options;
+    const { categoryId, searchQuery, page, size } = options;
 
     const [menus, setMenus] = useState<MenuResponse[]>([]);
+    const [totalMenuCount, setTotalMenuCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -37,6 +40,8 @@ export function useMenus(options: UseMenusOptions = {}) {
             const url = new URL('/api/menus', window.location.origin);
             if (categoryId) url.searchParams.set('categoryId', categoryId.toString());
             if (searchQuery) url.searchParams.set('searchQuery', searchQuery);
+            if (page !== undefined) url.searchParams.set('page', page.toString());
+            if (size !== undefined) url.searchParams.set('size', size.toString());
 
             try {
                 const response = await fetch(url.toString());
@@ -44,6 +49,7 @@ export function useMenus(options: UseMenusOptions = {}) {
 
                 const data: MenuListResponse = await response.json();
                 setMenus(data.menus || []);
+                setTotalMenuCount(data.menuCount || 0);
             } catch (err) {
                 console.error('Fetch menus error:', err);
                 setError(err instanceof Error ? err.message : '알 수 없는 오류');
@@ -53,8 +59,9 @@ export function useMenus(options: UseMenusOptions = {}) {
         };
 
         fetchMenus();
-    }, [categoryId, searchQuery]);
+    }, [categoryId, searchQuery, page, size]);
 
+    // 위 counts 로직은 필터링된 메뉴 기준이므로, 카테고리 필터 등에 쓸 때는 '필터 없는' useMenus를 별도로 부르는 것이 좋음 (Admin 방식)
     const menuCounts = useMemo(() => {
         const counts: Record<string, number> = {};
         menus.forEach((menu) => {
@@ -63,5 +70,11 @@ export function useMenus(options: UseMenusOptions = {}) {
         return counts;
     }, [menus]);
 
-    return { menus, isLoading, error, totalCount: menus.length, menuCounts };
+    return {
+        menus,
+        isLoading,
+        error,
+        totalCount: totalMenuCount,
+        menuCounts
+    };
 }

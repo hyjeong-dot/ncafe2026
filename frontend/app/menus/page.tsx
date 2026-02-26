@@ -11,10 +11,6 @@ import styles from './page.module.css';
 export default function MenusPage() {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const { totalCount, menuCounts } = useMenus({
-        categoryId: selectedCategory,
-        searchQuery: searchQuery
-    });
 
     return (
         <div className={styles.page}>
@@ -26,8 +22,6 @@ export default function MenusPage() {
             <CategoryFilter
                 selectedCategory={selectedCategory}
                 onCategoryChange={setSelectedCategory}
-                totalCount={totalCount}
-                menuCounts={menuCounts}
             />
             <MenuGrid
                 selectedCategory={selectedCategory}
