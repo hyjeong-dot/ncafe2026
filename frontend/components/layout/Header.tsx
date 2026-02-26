@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Settings, LogIn, LogOut, User } from "lucide-react";
+import Image from "next/image";
 import styles from "./layout.module.css";
 import { useAuth } from "@/context/AuthContext";
 
@@ -12,7 +13,13 @@ export default function Header() {
         <header className={styles.header}>
             <div className={`${styles.container} ${styles.headerInner}`}>
                 <Link href="/" className={styles.logoArea}>
-                    <span className={styles.logoEmoji}>💜</span>
+                    <Image
+                        src="/images/ditto/favicon-ditto.png"
+                        alt="Ditto Logo"
+                        width={32}
+                        height={32}
+                        className={styles.logoImage}
+                    />
                     <span>메타몽 카페</span>
                 </Link>
                 <nav className={styles.nav}>
@@ -25,10 +32,10 @@ export default function Header() {
                     <div className={styles.buttonGroup}>
                         {user ? (
                             <>
-                                <button className={styles.loginButton} onClick={() => logout()}>
+                                <Link href="/logout" className={styles.loginButton}>
                                     <LogOut size={16} />
                                     <span>로그아웃</span>
-                                </button>
+                                </Link>
                                 <Link href="/admin" className={styles.adminButton}>
                                     <User size={14} />
                                     <span>{user.username}</span>

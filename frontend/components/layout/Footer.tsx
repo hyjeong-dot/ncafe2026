@@ -1,15 +1,39 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Instagram, Gift, Heart, MapPin, Phone, Mail, Clock } from "lucide-react";
 import styles from "./layout.module.css";
 
 export default function Footer() {
+    const [showTop, setShowTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowTop(window.scrollY > 400);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     return (
         <footer className={styles.footer}>
             <div className={styles.container}>
                 <div className={styles.footerGrid}>
                     <div>
-                        <div className={styles.footerLogo}>
-                            <span>💜</span>
+                        <div className={styles.logoArea} style={{ color: '#fff', marginBottom: '1rem' }}>
+                            <Image
+                                src="/images/ditto/favicon-ditto.png"
+                                alt="Ditto Logo"
+                                width={28}
+                                height={28}
+                                className={styles.footerLogoImage}
+                            />
                             <span>메타몽 카페</span>
                         </div>
                         <p className={styles.footerDesc}>
@@ -70,9 +94,35 @@ export default function Footer() {
                 </div>
 
                 <div className={styles.footerBottom}>
-                    <p>&copy; 2026 메타몽 카페. All rights reserved. 💜</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <Image
+                            src="/images/ditto/favicon-ditto.png"
+                            alt="Ditto Icon"
+                            width={16}
+                            height={16}
+                            style={{ opacity: 0.7 }}
+                        />
+                        <p>&copy; 2026 메타몽 카페. All rights reserved.</p>
+                    </div>
                 </div>
             </div>
+
+            {/* Scroll To Top Button */}
+            {showTop && (
+                <button
+                    className={styles.scrollTopButton}
+                    onClick={scrollToTop}
+                    title="맨 위로 가기"
+                >
+                    <Image
+                        src="/images/ditto/favicon-ditto.png"
+                        alt="Top"
+                        width={40}
+                        height={40}
+                        className={styles.scrollTopImage}
+                    />
+                </button>
+            )}
         </footer>
     );
 }
