@@ -17,29 +17,38 @@
 }
 
 .ditto {
-    animation: dittoJump 0.6s ease-in-out infinite;
-    filter: drop-shadow(0 4px 6px rgba(168, 85, 247, 0.2));
+    animation: dittoWiggle 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(168, 85, 247, 0.15));
+    transform-origin: bottom center;
 }
 
 .message {
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
     color: var(--ditto-600);
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: pulse 2s ease-in-out infinite;
     text-align: center;
     letter-spacing: -0.02em;
     margin-top: 1rem;
 }
 
-@keyframes dittoJump {
+@keyframes dittoWiggle {
 
     0%,
     100% {
-        transform: translateY(0) scaleX(1) scaleY(1);
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(-4deg) scaleY(1.03) scaleX(0.98);
     }
 
     50% {
-        transform: translateY(-60px) scaleX(0.8) scaleY(1.2);
+        transform: rotate(0deg) scaleY(0.97) scaleX(1.03);
+    }
+
+    75% {
+        transform: rotate(4deg) scaleY(1.03) scaleX(0.98);
     }
 }
 
