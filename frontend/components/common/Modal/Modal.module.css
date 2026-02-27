@@ -9,7 +9,9 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,18 +23,34 @@
 /* Modal Content */
 .modal {
     background-color: var(--bg-primary);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
+    border-radius: var(--radius-2xl);
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(196, 164, 240, 0.15);
     width: 100%;
-    max-width: 400px;
-    padding: var(--space-6);
+    max-width: 420px;
+    padding: var(--space-8);
     position: relative;
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+/* 상단 장식 바 */
+.modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ditto-400), var(--ditto-600), var(--ditto-400));
+    background-size: 200% auto;
+    animation: shimmer 2s linear infinite;
 }
 
 /* Header */
 .header {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
 }
 
 .title {
@@ -40,12 +58,25 @@
     font-weight: var(--font-bold);
     color: var(--ditto-700);
     margin-bottom: var(--space-3);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
 }
 
 .description {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.6;
+    padding: var(--space-3) var(--space-4);
+    background: var(--ditto-50);
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--ditto-300);
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ditto-200), transparent);
+    margin: var(--space-4) 0;
 }
 
 /* Footer (Buttons) */
@@ -57,52 +88,75 @@
 }
 
 .button {
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-lg);
     font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-    transition: all var(--transition-fast);
+    font-weight: var(--font-semibold);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    border: none;
+    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    letter-spacing: 0.01em;
+}
+
+.button:active {
+    transform: scale(0.97);
 }
 
 .cancelButton {
     background-color: var(--bg-tertiary);
     color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
 
 .cancelButton:hover {
     background-color: var(--color-gray-200);
     color: var(--text-primary);
+    border-color: var(--border-color-hover);
 }
 
 .confirmButton {
     background: linear-gradient(135deg, var(--ditto-500), var(--ditto-600));
     color: white;
     border: none;
+    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
 }
 
 .confirmButton:hover {
     background: linear-gradient(135deg, var(--ditto-600), var(--ditto-700));
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 6px 16px rgba(139, 98, 192, 0.35);
 }
 
 .dittoButton {
-    background: var(--ditto-100);
+    background: linear-gradient(135deg, var(--ditto-100), var(--ditto-200));
     color: var(--ditto-700);
-    border: 1px solid var(--ditto-200);
+    border: 1px solid var(--ditto-300);
+    box-shadow: 0 1px 4px rgba(196, 164, 240, 0.2);
 }
 
 .dittoButton:hover {
-    background: var(--ditto-200);
+    background: linear-gradient(135deg, var(--ditto-200), var(--ditto-300));
+    border-color: var(--ditto-400);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(196, 164, 240, 0.3);
 }
 
 .dangerButton {
-    background-color: #fb7185;
+    background: linear-gradient(135deg, #fb7185, #f43f5e);
     color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(244, 63, 94, 0.3);
 }
 
 .dangerButton:hover {
-    background-color: #e11d48;
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(225, 29, 72, 0.35);
 }
 
 /* Animations */
@@ -119,11 +173,20 @@
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(24px) scale(0.94);
     }
 
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
     }
 }

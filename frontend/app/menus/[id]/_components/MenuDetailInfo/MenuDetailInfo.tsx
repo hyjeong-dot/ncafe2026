@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react';
@@ -15,6 +17,8 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const { user } = useAuth();
     const router = useRouter();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+    const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
@@ -73,8 +77,7 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                     className={styles.cartBtn}
                     disabled={menu.isSoldOut}
                     onClick={() => handleAction(() => {
-                        // TODO: 실제 장바구니 로직
-                        alert('장바구니에 담았습니다! 💜');
+                        setIsCartModalOpen(true);
                     })}
                 >
                     <ShoppingBag size={20} />
@@ -84,14 +87,14 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                     className={styles.mainCta}
                     disabled={menu.isSoldOut}
                     onClick={() => handleAction(() => {
-                        // TODO: 실제 주문 로직
-                        alert('주문 페이지로 이동합니다! 💜');
+                        setIsOrderModalOpen(true);
                     })}
                 >
                     {menu.isSoldOut ? '현재 준비 중입니다' : '주문하기 💜'}
                 </button>
             </div>
 
+            {/* 로그인 필요 모달 */}
             <Modal
                 isOpen={isLoginModalOpen}
                 onClose={() => setIsLoginModalOpen(false)}
@@ -100,6 +103,33 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 confirmText="로그인하러 가기"
                 cancelText="나중에 할게요"
                 onConfirm={() => router.push('/login')}
+                variant="ditto"
+            />
+
+            {/* 장바구니 담기 모달 */}
+            <Modal
+                isOpen={isCartModalOpen}
+                onClose={() => setIsCartModalOpen(false)}
+                title="장바구니에 담았어요! 🛍️"
+                description={`${menu.korName}이(가) 장바구니에 담겼어요 💜 메타몽이 잘 보관해 드릴게요!`}
+                confirmText="계속 쇼핑하기"
+                cancelText="닫기"
+                onConfirm={() => setIsCartModalOpen(false)}
+                variant="ditto"
+            />
+
+            {/* 주문하기 모달 */}
+            <Modal
+                isOpen={isOrderModalOpen}
+                onClose={() => setIsOrderModalOpen(false)}
+                title="주문을 진행할게요! ☕"
+                description={`${menu.korName} 주문 페이지로 이동합니다. 메타몽이 정성껏 준비해 드릴게요! 💜`}
+                confirmText="주문 페이지로 이동"
+                cancelText="취소"
+                onConfirm={() => {
+                    setIsOrderModalOpen(false);
+                    // TODO: 실제 주문 페이지 라우팅
+                }}
                 variant="ditto"
             />
         </div>
