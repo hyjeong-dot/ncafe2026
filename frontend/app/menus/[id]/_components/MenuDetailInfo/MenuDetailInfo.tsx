@@ -7,6 +7,7 @@ import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
 import { useAuth } from '@/context/AuthContext';
 import Modal from '@/components/common/Modal/Modal';
+import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 interface MenuDetailInfoProps {
     id: number;
@@ -32,7 +33,7 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
         action();
     };
 
-    if (isLoading) return <div className={styles.loading}>정보를 불러오는 중...</div>;
+    if (isLoading) return <LoadingDitto message="정보를 불러오는 중..." />;
     if (error || !menu) return null;
 
     return (

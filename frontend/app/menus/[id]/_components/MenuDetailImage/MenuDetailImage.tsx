@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import styles from './MenuDetailImage.module.css';
 import { useMenuImages } from './useMenuImages';
+import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 
 interface MenuDetailImageProps {
@@ -15,7 +16,7 @@ export default function MenuDetailImage({ menuId }: MenuDetailImageProps) {
     const { images, isLoading } = useMenuImages(menuId);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-    if (isLoading) return <div className={styles.loading}>이미지를 불러오는 중...</div>;
+    if (isLoading) return <LoadingDitto message="이미지를 불러오는 중..." />;
 
     const mainImage = images.length > 0 ? images[selectedIndex].srcUrl : (menu?.imageSrc || '/images/blank.png');
 

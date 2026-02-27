@@ -4,6 +4,7 @@ import Modal from '@/components/common/Modal/Modal';
 import MenuCard from '../MenuCard/MenuCard';
 import styles from './MenuGrid.module.css';
 import { useMenus } from './useMenus';
+import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 interface MenuGridProps {
     selectedCategory?: number | null;
@@ -57,12 +58,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
     // };
 
     if (isLoading) {
-        return (
-            <div className={styles.loadingState}>
-                <Loader2 className={styles.loadingIcon} size={40} />
-                <p>메뉴 정보를 불러오는 중...</p>
-            </div>
-        );
+        return <LoadingDitto message="메뉴 정보를 불러오는 중..." />;
     }
 
     return (

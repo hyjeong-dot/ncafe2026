@@ -277,11 +277,11 @@
 
     0%,
     100% {
-        transform: translateY(0);
+        transform: translateY(0) scaleX(1) scaleY(1);
     }
 
     50% {
-        transform: translateY(-8px);
+        transform: translateY(-8px) scaleX(0.9) scaleY(1.1);
     }
 }
 

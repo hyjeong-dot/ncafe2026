@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './MenuGrid.module.css';
 import MenuCard from '../MenuCard/MenuCard';
 import { useMenus } from './useMenus';
+import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 interface MenuGridProps {
     selectedCategory: number | null;
@@ -34,12 +35,7 @@ export default function MenuGrid({ selectedCategory, searchQuery }: MenuGridProp
     };
 
     if (isLoading) {
-        return (
-            <div className={styles.loadingWrapper}>
-                <div className={styles.spinner}></div>
-                <p className={styles.loadingText}>메타몽이 메뉴를 준비하고 있어요... 💜</p>
-            </div>
-        );
+        return <LoadingDitto message="메타몽이 메뉴를 준비하고 있어요... 💜" />;
     }
 
     if (error) {

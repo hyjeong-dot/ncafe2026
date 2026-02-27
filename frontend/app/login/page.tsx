@@ -151,13 +151,16 @@ export default function LoginPage() {
                                 disabled={isLoading}
                             >
                                 {isLoading ? (
-                                    <Image
-                                        src="/images/ditto/ditto-activities.png"
-                                        alt="Loading..."
-                                        width={30}
-                                        height={30}
-                                        className={styles.loadingDitto}
-                                    />
+                                    <>
+                                        <Image
+                                            src="/images/ditto/ditto-activities.png"
+                                            alt="Loading..."
+                                            width={24}
+                                            height={24}
+                                            className={styles.loadingDitto}
+                                        />
+                                        <span>변신중... 💜</span>
+                                    </>
                                 ) : (
                                     <>
                                         <LogIn size={20} />

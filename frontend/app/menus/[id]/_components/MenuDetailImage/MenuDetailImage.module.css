@@ -62,14 +62,3 @@
     border-color: #8b62c0;
     box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
 }
-
-.loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    background: #fdfcff;
-    border-radius: 2rem;
-    color: #a87edb;
-    font-weight: 600;
-}
