@@ -9,31 +9,6 @@ const nextConfig: NextConfig = {
       return {
         fallback: [
           {
-            // 프론트엔드의 /api/menus/... 호출을 백엔드의 /menus/...로 매핑
-            source: '/api/menus/:path*',
-            destination: `${apiUrl}/menus/:path*`,
-          },
-          {
-            // 프론트엔드의 /api/categories/... 호출을 백엔드의 /categories/...로 매핑
-            source: '/api/categories/:path*',
-            destination: `${apiUrl}/categories/:path*`,
-          },
-          {
-            // 관리자 API 매핑: /api/admin/menus -> /admin/menus
-            source: '/api/admin/:path*',
-            destination: `${apiUrl}/admin/:path*`,
-          },
-          {
-            // 인증 API 매핑: /api/auth/login -> /auth/login
-            source: '/api/auth/:path*',
-            destination: `${apiUrl}/auth/:path*`,
-          },
-          {
-            // 기타 /api/:path* 전체에 대한 기본 매핑 (필요 시)
-            source: '/api/:path*',
-            destination: `${apiUrl}/api/:path*`,
-          },
-          {
             // 이미지 경로 매핑 (/upload/images/**)
             source: '/upload/images/:path*',
             destination: `${apiUrl}/upload/images/:path*`,

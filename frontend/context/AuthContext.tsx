@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Check if user is logged in on mount
         const checkAuth = async () => {
             try {
-                const response = await fetch('/api/auth/me');
+                const response = await fetch('/api/auth/session');
                 if (response.ok) {
                     const result = await response.json();
                     // Backend returns { success: true, data: { username, role, ... } }
