@@ -1,5 +1,4 @@
-'use client';
-
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ImageIcon } from 'lucide-react';
@@ -8,9 +7,17 @@ import { MenuResponse } from '../MenuGrid/useMenus';
 
 interface MenuCardProps {
     menu: MenuResponse;
+    onLoad?: () => void;
 }
 
-export default function MenuCard({ menu }: MenuCardProps) {
+export default function MenuCard({ menu, onLoad }: MenuCardProps) {
+    useEffect(() => {
+        // 이미지가 아예 없는 경우 부모에게 완료를 즉시 알림
+        if (!menu.imageSrc || menu.imageSrc === 'blank.png') {
+            onLoad?.();
+        }
+    }, [menu.imageSrc, onLoad]);
+
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
     };
@@ -26,6 +33,8 @@ export default function MenuCard({ menu }: MenuCardProps) {
                         fill
                         className={styles.image}
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        onLoad={() => onLoad?.()}
+                        onError={() => onLoad?.()}
                     />
                 ) : (
                     <div className={styles.noImage}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './MenuDetailImage.module.css';
 import { useMenuImages } from './useMenuImages';
@@ -13,22 +13,27 @@ interface MenuDetailImageProps {
 
 export default function MenuDetailImage({ menuId }: MenuDetailImageProps) {
     const { menu } = useMenuDetail(menuId);
-    const { images, isLoading } = useMenuImages(menuId);
+    const { images, isLoading: isDataLoading } = useMenuImages(menuId);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [isImageReady, setIsImageReady] = useState(false);
 
-    if (isLoading) return <LoadingDitto message="이미지를 불러오는 중..." />;
+    // 데이터 로딩 중일 때 표시
+    if (isDataLoading) return <LoadingDitto message="이미지를 불러오는 중..." />;
 
     const mainImage = images.length > 0 ? images[selectedIndex].srcUrl : (menu?.imageSrc || '/images/blank.png');
 
     return (
         <div className={styles.gallery}>
-            <div className={styles.mainImageWrapper}>
+            {!isImageReady && <LoadingDitto message="이미지를 준비하고 있어요... 💜" />}
+            <div className={`${styles.mainImageWrapper} ${!isImageReady ? styles.hidden : styles.fadeIn}`}>
                 <Image
                     src={mainImage && mainImage !== 'blank.png' ? mainImage : '/images/blank.png'}
                     alt={menu?.korName || '메뉴 이미지'}
                     fill
                     className={styles.mainImage}
                     priority
+                    onLoad={() => setIsImageReady(true)}
+                    onError={() => setIsImageReady(true)}
                 />
                 {menu?.isSoldOut && (
                     <div className={styles.soldOutOverlay}>품절 😢</div>

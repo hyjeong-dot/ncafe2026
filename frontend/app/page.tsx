@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
+import LoadingDitto from "@/components/common/LoadingDitto/LoadingDitto";
 import {
   ArrowRight,
   Sparkles,
@@ -27,9 +29,17 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+  const [imagesLoaded, setImagesLoaded] = useState({ hero: false, about: false });
+  const isReady = imagesLoaded.hero && imagesLoaded.about;
+
   return (
     <div className={styles.page}>
-      <main>
+      {!isReady && (
+        <div className={styles.fullPageLoader}>
+          <LoadingDitto message="메타몽 카페에 오신 걸 환영해요! 💜" size={320} />
+        </div>
+      )}
+      <main className={isReady ? styles.fadeIn : styles.hidden}>
         {/* ========== Hero Section ========== */}
         <section className={styles.hero}>
           {/* Floating decorations */}
@@ -78,6 +88,8 @@ export default function Home() {
                   height={480}
                   style={{ objectFit: 'cover', borderRadius: '3rem' }}
                   priority
+                  onLoad={() => setImagesLoaded(prev => ({ ...prev, hero: true }))}
+                  onError={() => setImagesLoaded(prev => ({ ...prev, hero: true }))}
                 />
               </div>
             </div>
@@ -101,6 +113,8 @@ export default function Home() {
                     fill
                     className={styles.storyImage}
                     sizes="(max-width: 1024px) 100vw, 50vw"
+                    onLoad={() => setImagesLoaded(prev => ({ ...prev, about: true }))}
+                    onError={() => setImagesLoaded(prev => ({ ...prev, about: true }))}
                   />
                 </div>
               </div>
