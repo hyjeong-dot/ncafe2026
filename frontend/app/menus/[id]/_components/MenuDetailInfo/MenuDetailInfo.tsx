@@ -112,9 +112,12 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 onClose={() => setIsCartModalOpen(false)}
                 title="장바구니에 담았어요! 🛍️"
                 description={`${menu.korName}이(가) 장바구니에 담겼어요 💜 메타몽이 잘 보관해 드릴게요!`}
-                confirmText="계속 쇼핑하기"
-                cancelText="닫기"
-                onConfirm={() => setIsCartModalOpen(false)}
+                confirmText="장바구니로 가기"
+                cancelText="계속 쇼핑하기"
+                onConfirm={() => {
+                    setIsCartModalOpen(false);
+                    router.push('/cart');
+                }}
                 variant="ditto"
             />
 
