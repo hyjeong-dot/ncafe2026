@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
@@ -25,16 +26,25 @@ public class DataInitializer implements CommandLineRunner {
     private final AdminMenuJpaRepository menuRepository;
     private final AdminMenuImageJpaRepository menuImageRepository;
     private final MemberJpaRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
         // 0. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
         if (memberRepository.count() == 0) {
+            // 관리자 계정
             memberRepository.save(Member.builder()
                     .nickname("admin")
-                    .password("1234") // 임시 비밀번호 (암호화 필요시 Encoder 사용 권장)
+                    .password(passwordEncoder.encode("1234"))
                     .role("ROLE_ADMIN")
+                    .build());
+
+            // 테스트 유저 (heo)
+            memberRepository.save(Member.builder()
+                    .nickname("heo")
+                    .password(passwordEncoder.encode("1234"))
+                    .role("ROLE_USER")
                     .build());
         }
 
