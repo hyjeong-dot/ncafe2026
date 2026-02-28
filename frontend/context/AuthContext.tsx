@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
             setUser(null);
-            toast.success("로그아웃 되었습니다. 다음에 또 오세요! 💜");
+            toast.success("로그아웃 되었습니다. 다음에 또 오세요! 💜", { id: 'logout-toast' });
             router.push('/');
         } catch (error) {
             console.error('Logout failed:', error);
