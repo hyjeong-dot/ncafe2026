@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { User, Lock, Eye, EyeOff, AlertCircle, LogIn, Sparkles } from 'lucide-react';
+import toast from 'react-hot-toast';
 import styles from './login.module.css';
 
 export default function LoginPage() {
@@ -48,8 +49,21 @@ export default function LoginPage() {
                 role: result.data.role
             });
 
-            // 로그인 성공 → 관리자 페이지로 이동
-            router.push('/admin');
+            // 로그인 성공 → 권한에 따라 이동
+            if (result.data.role === 'ROLE_ADMIN') {
+                router.push('/admin');
+            } else {
+                const searchParams = new URLSearchParams(window.location.search);
+                let redirectTo = searchParams.get('redirect') || '/';
+
+                // 보안: 어드민 권한이 없는데 어드민 경로로 가려는 경우 홈으로 강제 수정
+                if (redirectTo.startsWith('/admin')) {
+                    toast.error("어드민 권한이 없어요! 💜");
+                    redirectTo = '/';
+                }
+
+                router.push(redirectTo);
+            }
         } catch (err) {
             setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
         } finally {

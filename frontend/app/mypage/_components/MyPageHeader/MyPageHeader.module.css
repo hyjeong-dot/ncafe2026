@@ -1,0 +1,14 @@
+.header {
+    margin-bottom: var(--space-10);
+}
+
+.title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
+}
+
+.subtitle {
+    color: var(--text-muted);
+}

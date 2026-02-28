@@ -32,10 +32,9 @@ public class DataInitializer implements CommandLineRunner {
         // 0. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
         if (memberRepository.count() == 0) {
             memberRepository.save(Member.builder()
-                    .username("admin")
-                    .password("1234") // 임시 비밀번호
-                    .name("관리자")
-                    .role("ADMIN")
+                    .nickname("admin")
+                    .password("1234") // 임시 비밀번호 (암호화 필요시 Encoder 사용 권장)
+                    .role("ROLE_ADMIN")
                     .build());
         }
 

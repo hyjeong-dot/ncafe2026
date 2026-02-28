@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import {
     LayoutDashboard,
     UtensilsCrossed,
@@ -54,9 +55,23 @@ const navItems: NavGroup[] = [
     },
 ];
 
+import toast from 'react-hot-toast';
+
 export default function AdminSidebar() {
     const pathname = usePathname();
+    const router = useRouter();
+    const { user, logout, isLoading } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+
+    // 권한 체크: admin이 아니면 홈으로 튕겨냄
+    useEffect(() => {
+        if (!isLoading && (!user || user.role !== 'ROLE_ADMIN')) {
+            if (user) {
+                toast.error("접근 권한이 없어요! 💜");
+            }
+            router.replace('/');
+        }
+    }, [user, isLoading, router]);
 
     const isActive = (href: string) => {
         if (href === '/admin') {
@@ -81,6 +96,10 @@ export default function AdminSidebar() {
             document.body.style.overflow = '';
         };
     }, [isOpen]);
+
+    if (isLoading || !user || user.role !== 'ROLE_ADMIN') {
+        return null; // 권한 없으면 렌더링 안 함
+    }
 
     return (
         <>
@@ -138,14 +157,16 @@ export default function AdminSidebar() {
 
                 {/* User Section */}
                 <div className={styles.userSection}>
-                    <div className={styles.userAvatar}>정</div>
+                    <div className={styles.userAvatar}>
+                        {user.username.charAt(0).toUpperCase()}
+                    </div>
                     <div className={styles.userInfo}>
-                        <div className={styles.userName}>정사장님</div>
-                        <div className={styles.userRole}>카페 관리자</div>
+                        <div className={styles.userName}>{user.username}님</div>
+                        <div className={styles.userRole}>관리자</div>
                     </div>
                     <button className={styles.settingsButton} title="로그아웃" onClick={async () => {
-                        await fetch('/api/auth/logout', { method: 'POST' });
-                        window.location.href = '/';
+                        await logout();
+                        router.push('/');
                     }}>
                         <LogOut size={18} />
                     </button>

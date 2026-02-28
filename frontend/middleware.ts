@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
 
     // 로그인한 사용자가 로그인 페이지에 접근하려고 할 때
     if (path === '/login' && sessionCookie) {
-        return NextResponse.redirect(new URL('/admin', request.url));
+        return NextResponse.redirect(new URL('/', request.url));
     }
 
     return NextResponse.next();

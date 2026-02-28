@@ -36,7 +36,7 @@ export default function Header() {
                                     <LogOut size={16} />
                                     <span>로그아웃</span>
                                 </Link>
-                                <Link href="/admin" className={styles.adminButton}>
+                                <Link href={user.role === 'ROLE_ADMIN' ? '/admin' : '/mypage'} className={styles.adminButton}>
                                     <User size={14} />
                                     <span>{user.username}</span>
                                 </Link>

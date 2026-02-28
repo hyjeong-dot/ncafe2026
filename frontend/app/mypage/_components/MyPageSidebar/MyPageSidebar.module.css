@@ -1,0 +1,79 @@
+.profileCard {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.avatarWrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--space-6);
+    position: relative;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.avatar {
+    object-fit: contain;
+}
+
+.userInfo {
+    text-align: center;
+}
+
+.username {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-1);
+}
+
+.roleChip {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background: var(--ditto-100);
+    color: var(--ditto-600);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+}
+
+.menuList {
+    margin-top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.menuItem:hover {
+    background: var(--bg-tertiary);
+    color: var(--ditto-600);
+}
+
+.menuItem.active {
+    background: var(--ditto-50);
+    color: var(--ditto-600);
+}

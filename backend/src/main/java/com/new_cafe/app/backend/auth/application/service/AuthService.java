@@ -7,6 +7,7 @@ import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
 import com.new_cafe.app.backend.auth.domain.model.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,20 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements LoginUseCase {
 
     private final LoadMemberPort loadMemberPort;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public LoginResult login(LoginCommand command) {
-        Member member = loadMemberPort.findByUsername(command.getUsername())
+        Member member = loadMemberPort.findByNickname(command.getUsername())
                 .orElseThrow(AuthenticationFailedException::new);
 
-        if (!member.authenticate(command.getPassword())) {
+        if (!passwordEncoder.matches(command.getPassword(), member.getPassword())) {
             throw new AuthenticationFailedException();
         }
 
         return LoginResult.builder()
                 .memberId(member.getId())
-                .username(member.getUsername())
-                .name(member.getName())
+                .username(member.getNickname())
+                .name(member.getNickname()) // 'name' 컬럼이 없으므로 'nickname' 사용
                 .role(member.getRole())
                 .build();
     }

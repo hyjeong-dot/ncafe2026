@@ -1,0 +1,25 @@
+.container {
+    max-width: var(--container-lg);
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-6);
+    min-height: 80vh;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--space-8);
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}

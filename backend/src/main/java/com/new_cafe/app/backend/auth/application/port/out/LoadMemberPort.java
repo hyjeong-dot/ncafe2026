@@ -11,9 +11,9 @@ import java.util.Optional;
 public interface LoadMemberPort {
 
     /**
-     * username으로 회원 정보를 조회합니다.
-     * @param username 로그인 아이디
+     * nickname으로 회원 정보를 조회합니다.
+     * @param nickname 로그인 아이디 (별명)
      * @return 회원 도메인 모델 (없으면 Optional.empty)
      */
-    Optional<Member> findByUsername(String username);
+    Optional<Member> findByNickname(String nickname);
 }

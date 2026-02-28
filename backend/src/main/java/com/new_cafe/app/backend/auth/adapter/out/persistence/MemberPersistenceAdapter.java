@@ -13,7 +13,7 @@ public class MemberPersistenceAdapter implements LoadMemberPort {
     private final MemberJpaRepository memberJpaRepository;
 
     @Override
-    public Optional<Member> findByUsername(String username) {
-        return memberJpaRepository.findByUsername(username);
+    public Optional<Member> findByNickname(String nickname) {
+        return memberJpaRepository.findByNickname(nickname);
     }
 }
