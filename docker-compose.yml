@@ -26,6 +26,7 @@ services:
     environment:
       - NODE_ENV=production
       - API_URL=http://hyjeong-ncafe-backend:8034
+      - API_BASE_URL=http://hyjeong-ncafe-backend:8034
       - ENABLE_PROXY=true
       - TZ=Asia/Seoul
     volumes:
