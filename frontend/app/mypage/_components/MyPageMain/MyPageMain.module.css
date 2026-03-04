@@ -12,8 +12,13 @@
 }
 
 @media (max-width: 1024px) {
+    .container {
+        padding: var(--space-6) var(--space-4);
+    }
+
     .grid {
         grid-template-columns: 1fr;
+        gap: var(--space-6);
     }
 }
 
