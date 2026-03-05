@@ -37,3 +37,23 @@ export async function fetchAPI(endpoint: string, options?: RequestInit) {
         throw error;
     }
 }
+
+/**
+ * 이미지 소스 URL을 처리하는 헬퍼 함수
+ * DB의 /upload 경로를 프론트엔드의 /api/images 프록시 경로로 매핑합니다.
+ */
+export function getImageSrc(src: string | null | undefined): string {
+    if (!src || src === 'blank.png') {
+        return '/images/blank.png'; // 기본 이미지 (퍼블릭 폴더)
+    }
+
+    // 이미 절대 경로(http/https)인 경우 그대로 반환
+    if (src.startsWith('http')) {
+        return src;
+    }
+
+    // DB에 /upload/images/xxx.jpg 식으로 들어있다면, 이를 /api/images/images/xxx.jpg로 변경
+    // (Next.js 프록시가 /api/images/* -> backend /upload/* 를 대신 처리함)
+    const cleanSrc = src.replace(/^\/?upload\//, '');
+    return `/api/images/${cleanSrc}`;
+}

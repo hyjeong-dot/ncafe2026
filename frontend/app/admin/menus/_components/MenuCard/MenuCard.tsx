@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Edit2, Trash2, ImageIcon } from 'lucide-react';
 import styles from './MenuCard.module.css';
 import { MenuResponse } from '../MenuGrid/useMenus';
+import { getImageSrc } from '@/lib/api';
 
 interface MenuCardProps {
     menu: MenuResponse | null;
@@ -18,28 +19,23 @@ export default function MenuCard({ menu, onToggleSoldOut, onDelete }: MenuCardPr
 
     if (!menu) return null;
 
-    const handleCardClick = () => {
-        router.push(`/admin/menus/${menu.id}`);
-    };
-
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
     };
 
     const menuIdStr = String(menu.id);
+    const imageSrc = getImageSrc(menu.imageSrc);
 
     return (
         <div
             className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}
-            onClick={handleCardClick}
+            onClick={() => router.push(`/admin/menus/${menu.id}`)}
         >
             {/* Image */}
             <div className={styles.imageWrapper}>
                 {menu.imageSrc ? (
                     <Image
-                        // src={menu.imageSrc.startsWith('http') ? menu.imageSrc : `/images/${menu.imageSrc}`}
-                        //src={menu.imageSrc}
-                        src={menu.imageSrc}
+                        src={imageSrc}
                         alt={menu.korName}
                         fill
                         className={styles.image}

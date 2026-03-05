@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ImageIcon } from 'lucide-react';
 import styles from './MenuCard.module.css';
 import { MenuResponse } from '../MenuGrid/useMenus';
+import { getImageSrc } from '@/lib/api';
 
 interface MenuCardProps {
     menu: MenuResponse;
@@ -11,12 +12,15 @@ interface MenuCardProps {
 }
 
 export default function MenuCard({ menu, onLoad }: MenuCardProps) {
+    const showImage = menu.imageSrc && menu.imageSrc !== 'blank.png';
+    const imageSrc = getImageSrc(menu.imageSrc);
+
     useEffect(() => {
         // 이미지가 아예 없는 경우 부모에게 완료를 즉시 알림
-        if (!menu.imageSrc || menu.imageSrc === 'blank.png') {
+        if (!showImage) {
             onLoad?.();
         }
-    }, [menu.imageSrc, onLoad]);
+    }, [showImage, onLoad]);
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
@@ -26,9 +30,9 @@ export default function MenuCard({ menu, onLoad }: MenuCardProps) {
         <Link href={`/menus/${menu.id}`} className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}>
             {/* Image */}
             <div className={styles.imageWrapper}>
-                {menu.imageSrc && menu.imageSrc !== 'blank.png' ? (
+                {showImage ? (
                     <Image
-                        src={menu.imageSrc}
+                        src={imageSrc}
                         alt={menu.korName}
                         fill
                         className={styles.image}
