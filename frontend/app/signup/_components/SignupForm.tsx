@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import styles from '@/app/login/login.module.css';
+import Modal from '@/components/common/Modal/Modal';
 
 export default function SignupForm() {
     const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ export default function SignupForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: FormEvent) => {
@@ -41,8 +43,7 @@ export default function SignupForm() {
                 return;
             }
 
-            alert('회원가입이 완료되었습니다. 로그인해주세요! 🫠');
-            router.replace('/login');
+            setIsModalOpen(true);
         } catch (err) {
             setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
             setIsLoading(false);
@@ -161,6 +162,17 @@ export default function SignupForm() {
                     </Link>
                 </div>
             </div>
+
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={() => router.replace('/login')}
+                title="회원가입 완료"
+                description="회원가입이 완료되었습니다. 로그인해주세요! 🫠"
+                confirmText="로그인"
+                cancelText="닫기"
+                variant="ditto"
+            />
         </div>
     );
 }
