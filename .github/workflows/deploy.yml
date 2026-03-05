@@ -22,6 +22,7 @@ jobs:
           echo "SESSION_SECRET=${SESSION_SECRET}" >> .env
           echo "JWT_SECRET=${JWT_SECRET}" >> .env
           echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+          echo "SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}" >> .env
           echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
