@@ -43,7 +43,7 @@ services:
     container_name: ${USER_ID}-db
     environment:
       POSTGRES_DB: ${DB_NAME:-ncafedb}
-      POSTGRES_USER: ${DB_USER:-ncafe}
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME:-ncafe}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     # ports 제거: 외부에서 DB 접근 불가 (보안 강화)
     volumes:
