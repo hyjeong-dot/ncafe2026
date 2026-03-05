@@ -40,3 +40,15 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
+
+// .env 파일을 자동으로 읽어서 환경 변수로 주입하는 설정
+tasks.named('bootRun') {
+    if (file("../.env").exists()) {
+        file("../.env").readLines().each { line ->
+            if (line.trim() && !line.startsWith("#")) {
+                def (key, value) = line.split("=", 2)
+                environment key.trim(), value.trim()
+            }
+        }
+    }
+}
