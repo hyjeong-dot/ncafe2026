@@ -36,7 +36,7 @@ export default function Home() {
     <div className={styles.page}>
       {!isReady && (
         <div className={styles.fullPageLoader}>
-          <LoadingDitto message="메타몽 카페에 오신 걸 환영해요! 💜" size={320} />
+          <LoadingDitto message="변신 준비 중... 잠깐만 기다려줄래? 💜" size={320} />
         </div>
       )}
       <main className={isReady ? styles.fadeIn : styles.hidden}>
@@ -44,36 +44,36 @@ export default function Home() {
         <section className={styles.hero}>
           {/* Floating decorations */}
           <div className={styles.floatingDeco}>
-            <span className={styles.floatItem} style={{ top: '8%', left: '6%', animationDelay: '0s' }}>✨</span>
+            <span className={styles.floatItem} style={{ top: '8%', left: '6%', animationDelay: '0s' }}>🫠</span>
             <span className={styles.floatItem} style={{ top: '15%', right: '10%', animationDelay: '1s' }}>💜</span>
             <span className={styles.floatItem} style={{ bottom: '25%', left: '8%', animationDelay: '2s' }}>☕</span>
-            <span className={styles.floatItem} style={{ top: '30%', right: '5%', animationDelay: '0.5s' }}>🍰</span>
-            <span className={styles.floatItem} style={{ bottom: '15%', right: '15%', animationDelay: '1.5s' }}>⭐</span>
-            <span className={styles.floatItem} style={{ top: '50%', left: '3%', animationDelay: '2.5s' }}>🧁</span>
+            <span className={styles.floatItem} style={{ top: '30%', right: '5%', animationDelay: '0.5s' }}>🫧</span>
+            <span className={styles.floatItem} style={{ bottom: '15%', right: '15%', animationDelay: '1.5s' }}>🪄</span>
+            <span className={styles.floatItem} style={{ top: '50%', left: '3%', animationDelay: '2.5s' }}>🍮</span>
           </div>
 
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
               <div className={styles.badge}>
                 <Sparkles size={14} />
-                메타몽이 직접 서빙하는 카페 ☕
+                오늘도 변신 완료! 바리스타 모드 ON 🪄
               </div>
               <h1 className={styles.title}>
-                메타몽이 서빙해주는
+                말랑말랑~ 한 모금에
                 <br />
-                <span className={styles.titleHighlight}>카페</span> ☕
+                <span className={styles.titleHighlight}>변신</span>하는 맛 ☕
               </h1>
               <p className={styles.subtitle}>
-                세상에서 가장 귀여운 바리스타 메타몽이 만들어주는
+                무엇이든 될 수 있는 메타몽이 오늘은 바리스타로 변신!
                 <br />
-                스페셜티 커피와 수제 디저트를 만나보세요! 💜
+                말랑한 손으로 내리는 커피, 한번 맛보실래요? 🫠💜
               </p>
               <div className={styles.buttonGroup}>
                 <Link href="#about" className={styles.primaryButton}>
-                  카페 소개 보기 🍰
+                  메타몽 이야기 보기 🫠
                 </Link>
                 <Link href="/menus" className={styles.secondaryButton}>
-                  메뉴 구경하기 <ArrowRight size={18} />
+                  오늘의 변신 메뉴 <ArrowRight size={18} />
                 </Link>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function Home() {
           </div>
 
           <div className={styles.scrollHint}>
-            <span>아래로 스크롤</span>
+            <span>슬슬 구경해볼까?</span>
             <ChevronDown size={18} />
           </div>
         </section>
@@ -119,28 +119,28 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.storyContent}>
-                <span className={styles.storyLabel}>🏠 카페 소개</span>
+                <span className={styles.storyLabel}>🫠 우리가 누구냐면요</span>
                 <h2 className={styles.storyTitle}>
-                  메타몽과 함께하는
-                  <br />특별한 카페 시간
+                  "뭐든 될 수 있지만,
+                  <br />오늘은 바리스타!"
                 </h2>
                 <p className={styles.storyText}>
-                  말랑말랑한 메타몽이 정성껏 커피를 내려주는 카페! 🎀
-                  최고급 스페셜티 원두와 정성 가득한 수제 디저트로
-                  여러분의 하루를 더 달콤하게 만들어 드려요.
+                  아무거나 변신할 수 있는 메타몽이 가장 좋아하는 변신은
+                  바로 바리스타! 🪄 말랑한 몸으로 원두를 고르고,
+                  동글동글한 손으로 라떼아트까지 척척 해낸답니다.
                 </p>
                 <div className={styles.storyFeatures}>
                   <div className={styles.storyFeature}>
                     <div className={styles.storyFeatureIcon}><Check size={14} /></div>
-                    <span>메타몽이 엄선한 최상급 원두만 사용해요 ☕</span>
+                    <span>변신해서 직접 원두 농장까지 다녀온 원두만 사용해요 ☕</span>
                   </div>
                   <div className={styles.storyFeature}>
                     <div className={styles.storyFeatureIcon}><Check size={14} /></div>
-                    <span>매일 아침 직접 만드는 신선한 디저트! 🍰</span>
+                    <span>디저트도 메타몽이 직접 반죽해요 (말랑말랑 전문가) 🍮</span>
                   </div>
                   <div className={styles.storyFeature}>
                     <div className={styles.storyFeatureIcon}><Check size={14} /></div>
-                    <span>세상에서 가장 귀여운 바리스타가 서빙해줘요 💜</span>
+                    <span>가끔 손님 닮은 라떼아트를 실수로 만들 수 있어요 🫠</span>
                   </div>
                 </div>
               </div>
@@ -152,11 +152,11 @@ export default function Home() {
         <section id="menu" className={styles.section}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionEmoji}>☕</span>
-              <span className={styles.sectionLabel}>특별 메뉴</span>
-              <h2 className={styles.sectionTitle}>메타몽이 추천하는 인기 메뉴</h2>
+              <span className={styles.sectionEmoji}>🪄</span>
+              <span className={styles.sectionLabel}>변신 메뉴</span>
+              <h2 className={styles.sectionTitle}>메타몽이 변신해서 만든 것들</h2>
               <p className={styles.sectionDesc}>
-                메타몽 바리스타가 정성껏 준비한 시그니처 메뉴를 만나보세요! 💜
+                오늘은 어떤 맛으로 변신했을까? 매일 조금씩 다른 메타몽의 손맛! 🫠
               </p>
             </div>
             <div className={styles.menuGrid}>
@@ -169,12 +169,12 @@ export default function Home() {
                     className={styles.menuImage}
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
-                  <span className={styles.menuBadge}>BEST 💜</span>
+                  <span className={styles.menuBadge}>변신완료 🪄</span>
                 </div>
                 <div className={styles.menuInfo}>
                   <span className={styles.menuCategory}>✨ 시그니처</span>
-                  <h3 className={styles.menuName}>메타몽 시그니처 라떼</h3>
-                  <p className={styles.menuDesc}>보라빛 토핑이 올라간 특별한 라떼</p>
+                  <h3 className={styles.menuName}>말랑 퍼플 라떼</h3>
+                  <p className={styles.menuDesc}>메타몽 컬러 그대로, 보라빛 한 잔</p>
                   <span className={styles.menuPrice}>₩7,000</span>
                 </div>
               </div>
@@ -192,8 +192,8 @@ export default function Home() {
                 </div>
                 <div className={styles.menuInfo}>
                   <span className={styles.menuCategory}>☕ 커피</span>
-                  <h3 className={styles.menuName}>말랑 콜드브루</h3>
-                  <p className={styles.menuDesc}>24시간 저온 추출, 깔끔한 뒷맛</p>
+                  <h3 className={styles.menuName}>꾸덕 콜드브루</h3>
+                  <p className={styles.menuDesc}>24시간 동안 천천히~ 메타몽처럼 느긋하게</p>
                   <span className={styles.menuPrice}>₩4,500</span>
                 </div>
               </div>
@@ -210,8 +210,8 @@ export default function Home() {
                 </div>
                 <div className={styles.menuInfo}>
                   <span className={styles.menuCategory}>🍰 디저트</span>
-                  <h3 className={styles.menuName}>푹신 초코 크로와상</h3>
-                  <p className={styles.menuDesc}>결이 살아있는 크로와상 속 진한 초콜릿</p>
+                  <h3 className={styles.menuName}>겹겹이 초코 크로와상</h3>
+                  <p className={styles.menuDesc}>메타몽이 겹겹이 접은 바삭 말랑 크로와상</p>
                   <span className={styles.menuPrice}>₩4,800</span>
                 </div>
               </div>
@@ -228,8 +228,8 @@ export default function Home() {
                 </div>
                 <div className={styles.menuInfo}>
                   <span className={styles.menuCategory}>🍵 음료</span>
-                  <h3 className={styles.menuName}>변신 말차 라떼</h3>
-                  <p className={styles.menuDesc}>교토산 말차와 오트밀크의 환상 조화</p>
+                  <h3 className={styles.menuName}>초록 변신 말차</h3>
+                  <p className={styles.menuDesc}>오늘은 초록색으로 변신! 녹차 향 가득</p>
                   <span className={styles.menuPrice}>₩6,500</span>
                 </div>
               </div>
@@ -241,9 +241,9 @@ export default function Home() {
         <section id="special" className={styles.specialSection}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionEmoji}>🎉</span>
-              <span className={styles.sectionLabel}>즐길거리</span>
-              <h2 className={styles.sectionTitle}>메타몽 카페에서만 할 수 있는 것들</h2>
+              <span className={styles.sectionEmoji}>🫧</span>
+              <span className={styles.sectionLabel}>변신 체험</span>
+              <h2 className={styles.sectionTitle}>메타몽이랑 놀면 이런 게 가능해요</h2>
             </div>
 
             {/* Activities Banner Image */}
@@ -262,9 +262,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <Coffee size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>☕ 시그니처 음료</h3>
+                <h3 className={styles.specialCardTitle}>☕ 변신 음료 체험</h3>
                 <p className={styles.specialCardText}>
-                  메타몽 라떼, 변신 에이드 등 포켓몬 테마 음료를 즐겨보세요!
+                  메타몽이 그날 기분에 따라 다르게 만드는 깜짝 음료!
                 </p>
               </div>
 
@@ -272,9 +272,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <Cake size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>🧁 귀여운 디저트</h3>
+                <h3 className={styles.specialCardTitle}>🍮 말랑 디저트</h3>
                 <p className={styles.specialCardText}>
-                  몬스터볼 마카롱, 메타몽 케이크 등 귀여운 수제 디저트!
+                  메타몽처럼 말랑말랑한 식감의 수제 디저트 가득!
                 </p>
               </div>
 
@@ -282,9 +282,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <Camera size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>📸 포토존</h3>
+                <h3 className={styles.specialCardTitle}>📸 변신 포토존</h3>
                 <p className={styles.specialCardText}>
-                  메타몽과 함께 찍는 인생샷! SNS에 자랑해보세요 💜
+                  메타몽이 당신 모습으로 변신! 함께 찰칵~ 📷
                 </p>
               </div>
 
@@ -292,9 +292,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <ShoppingBag size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>🛍️ 포켓몬 굿즈</h3>
+                <h3 className={styles.specialCardTitle}>🛍️ 말랑 굿즈샵</h3>
                 <p className={styles.specialCardText}>
-                  한정판 포켓몬 굿즈와 콜라보 상품을 만나보세요!
+                  메타몽 인형부터 머그컵까지, 데려가고 싶은 친구들!
                 </p>
               </div>
 
@@ -302,9 +302,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <Smile size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>🛋️ 아늑한 공간</h3>
+                <h3 className={styles.specialCardTitle}>🛋️ 낮잠 허용석</h3>
                 <p className={styles.specialCardText}>
-                  보라빛 쿠션이 가득한 편안한 카페에서 힐링 시간을 보내세요
+                  메타몽이 자주 조는 자리… 뽀송한 쿠션에서 한숨 자도 돼요
                 </p>
               </div>
 
@@ -312,9 +312,9 @@ export default function Home() {
                 <div className={styles.specialIconWrap}>
                   <Crown size={28} />
                 </div>
-                <h3 className={styles.specialCardTitle}>🎁 멤버십 혜택</h3>
+                <h3 className={styles.specialCardTitle}>🎁 단골 변신 카드</h3>
                 <p className={styles.specialCardText}>
-                  단골 트레이너에게는 특별한 할인과 시즌 한정 메뉴를 제공!
+                  10잔 마시면 메타몽이 당신 취향으로 변신한 음료를 만들어줘요!
                 </p>
               </div>
             </div>
@@ -325,11 +325,11 @@ export default function Home() {
         <section id="reviews" className={styles.section}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
-              <span className={styles.sectionEmoji}>⭐</span>
-              <span className={styles.sectionLabel}>고객 후기</span>
-              <h2 className={styles.sectionTitle}>방문객들의 이야기</h2>
+              <span className={styles.sectionEmoji}>💬</span>
+              <span className={styles.sectionLabel}>변신 후기</span>
+              <h2 className={styles.sectionTitle}>메타몽을 만나고 온 사람들</h2>
               <p className={styles.sectionDesc}>
-                메타몽 카페를 경험한 분들의 생생한 후기예요! 💬
+                한번 오면 말랑해져서 돌아가는 곳, 그게 바로 여기예요 🫠
               </p>
             </div>
             <div className={styles.testimonialGrid}>
@@ -340,14 +340,14 @@ export default function Home() {
                   ))}
                 </div>
                 <p className={styles.testimonialText}>
-                  &quot;메타몽 모양 라떼아트가 너무 귀여워서 사진 찍느라 정신없었어요!
-                  맛도 분위기도 최고, 매일 오고 싶은 카페입니다 💜&quot;
+                  &quot;라떼에 제 얼굴이 그려져 나왔어요… 메타몽이 절 보고 변신한 건가?
+                  너무 귀여워서 못 마시겠어요 ㅠㅠ 결국 마셨는데 맛도 최고 💜&quot;
                 </p>
                 <div className={styles.testimonialAuthor}>
                   <div className={styles.authorAvatar}>🧑</div>
                   <div>
                     <div className={styles.authorName}>김서연</div>
-                    <div className={styles.authorRole}>직장인 · 단골 고객</div>
+                    <div className={styles.authorRole}>말랑해져서 돌아간 직장인</div>
                   </div>
                 </div>
               </div>
@@ -359,14 +359,14 @@ export default function Home() {
                   ))}
                 </div>
                 <p className={styles.testimonialText}>
-                  &quot;아이가 메타몽을 너무 좋아해서 왔는데, 저도 반해버렸어요.
-                  디저트가 진짜 맛있고 분위기가 너무 아늑해요! 🥰&quot;
+                  &quot;아이가 메타몽 쿠션에서 잠들었는데 메타몽이 이불 덮어줬어요(?).
+                  디저트도 말랑말랑 맛있고, 우리 가족 단골 확정입니다 🥰&quot;
                 </p>
                 <div className={styles.testimonialAuthor}>
                   <div className={styles.authorAvatar}>👨</div>
                   <div>
                     <div className={styles.authorName}>박지훈</div>
-                    <div className={styles.authorRole}>가족 방문 고객</div>
+                    <div className={styles.authorRole}>온 가족이 말랑해진 아빠</div>
                   </div>
                 </div>
               </div>
@@ -378,14 +378,14 @@ export default function Home() {
                   ))}
                 </div>
                 <p className={styles.testimonialText}>
-                  &quot;인스타에서 보고 일부러 찾아왔는데, 실물이 더 예뻐요!
-                  메타몽 굿즈도 사고, 완전 힐링 그 자체였어요 ✨&quot;
+                  &quot;메타몽이 제 텀블러로 변신해서 들고 나가도 되냐고 물었더니
+                  진짜 변신해줬어요… 아, 그건 진짜 텀블러였나? 어쨌든 굿즈 최고 ✨&quot;
                 </p>
                 <div className={styles.testimonialAuthor}>
                   <div className={styles.authorAvatar}>👩</div>
                   <div>
                     <div className={styles.authorName}>이하은</div>
-                    <div className={styles.authorRole}>대학생 · 카페 투어러</div>
+                    <div className={styles.authorRole}>메타몽 덕후 카페 투어러</div>
                   </div>
                 </div>
               </div>
@@ -396,22 +396,22 @@ export default function Home() {
         {/* ========== CTA Section ========== */}
         <section className={styles.ctaSection}>
           <div className={styles.container}>
-            <span className={styles.ctaEmoji}>💜</span>
+            <span className={styles.ctaEmoji}>🫠</span>
             <h2 className={styles.ctaTitle}>
-              메타몽 카페 멤버십에 가입하고
+              메타몽이 당신을 기다리고 있어요
               <br />
-              특별한 혜택을 받아보세요!
+              (지금 슬슬 졸리대요… 빨리 와주세요!)
             </h2>
             <p className={styles.ctaDesc}>
-              멤버십 가입 시 첫 음료 무료 쿠폰과 함께
-              메타몽 미니 피규어를 선물로 드려요! 🎁
+              첫 방문 시 메타몽이 직접 골라주는 오늘의 추천 음료 한 잔 무료!
+              그리고 말랑 미니 피규어도 챙겨 가세요 🎁
             </p>
             <div className={styles.ctaButtons}>
               <Link href="/menus" className={styles.ctaPrimary}>
-                전체 메뉴 보기
+                변신 메뉴 구경하기
               </Link>
               <Link href="/admin" className={styles.ctaSecondary}>
-                관리자 페이지
+                사장님 전용 입구
               </Link>
             </div>
           </div>
