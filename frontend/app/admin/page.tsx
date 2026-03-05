@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
     UtensilsCrossed,
@@ -8,9 +10,12 @@ import {
     Settings,
     BarChart3,
 } from 'lucide-react';
+import { useMenus } from './menus/_components/MenuGrid/useMenus';
 import styles from './page.module.css';
 
 export default function AdminDashboard() {
+    const { stats } = useMenus();
+
     const today = new Date().toLocaleDateString('ko-KR', {
         year: 'numeric',
         month: 'long',
@@ -34,7 +39,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className={styles.statInfo}>
                         <p className={styles.statLabel}>등록된 메뉴</p>
-                        <p className={styles.statValue}>12개</p>
+                        <p className={styles.statValue}>{stats.total}개</p>
                     </div>
                 </div>
 

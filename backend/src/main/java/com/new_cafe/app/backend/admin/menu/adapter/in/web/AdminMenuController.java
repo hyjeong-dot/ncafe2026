@@ -48,6 +48,11 @@ public class AdminMenuController {
         updateMenuUseCase.updateMenu(request.toCommand(id));
     }
 
+    @PatchMapping("/{id}/sold-out")
+    public void toggleSoldOut(@PathVariable Long id) {
+        updateMenuUseCase.toggleSoldOut(id);
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMenu(@PathVariable Long id) {

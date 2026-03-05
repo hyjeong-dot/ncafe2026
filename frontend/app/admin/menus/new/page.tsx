@@ -15,9 +15,7 @@ import {
     ImageIcon,
     Save,
 } from 'lucide-react';
-import { useMenuStore } from '@/stores/menuStore';
-import { mockCategories } from '@/mocks/menuData';
-import { Menu, MenuOption, OptionItem, MenuImage } from '@/types/menu';
+import { useCategories } from '../_components/CategoryTabs/useCategories';
 import styles from './page.module.css';
 
 // Form data interface
@@ -42,8 +40,9 @@ interface OptionFormData {
 
 export default function NewMenuPage() {
     const router = useRouter();
-    const addMenu = useMenuStore((state) => state.addMenu);
+    const { categories } = useCategories();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState<MenuFormData>({
@@ -51,7 +50,7 @@ export default function NewMenuPage() {
         engName: '',
         description: '',
         price: '',
-        categoryId: mockCategories[0]?.id || '',
+        categoryId: '',
         isAvailable: true,
         isSoldOut: false,
     });
@@ -241,67 +240,41 @@ export default function NewMenuPage() {
     };
 
     // Handle form submit
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        // Find selected category
-        const selectedCategory = mockCategories.find((cat) => cat.id === formData.categoryId);
-        if (!selectedCategory) return;
+        setIsSubmitting(true);
 
-        // Build menu images
-        const menuImages: MenuImage[] = images.map((img, index) => ({
-            id: img.id,
-            url: img.url,
-            isPrimary: img.isPrimary,
-            sortOrder: index + 1,
-        }));
+        try {
+            const response = await fetch('/api/admin/menus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    korName: formData.korName.trim(),
+                    engName: formData.engName.trim(),
+                    description: formData.description.trim(),
+                    price: Number(formData.price),
+                    categoryId: Number(formData.categoryId),
+                    isAvailable: formData.isAvailable,
+                    sortOrder: 0,
+                }),
+            });
 
-        // Build menu options
-        const menuOptions: MenuOption[] = options
-            .filter((opt) => opt.name.trim() && opt.items.some((item) => item.name.trim()))
-            .map((opt) => ({
-                id: opt.id,
-                name: opt.name,
-                type: opt.type,
-                required: opt.required,
-                items: opt.items
-                    .filter((item) => item.name.trim())
-                    .map(
-                        (item): OptionItem => ({
-                            id: item.id,
-                            name: item.name,
-                            priceDelta: Number(item.priceDelta) || 0,
-                        })
-                    ),
-            }));
+            if (!response.ok) {
+                throw new Error('메뉴 등록에 실패했습니다.');
+            }
 
-        // Create new menu
-        const newMenu: Menu = {
-            id: `menu-${Date.now()}`,
-            korName: formData.korName.trim(),
-            engName: formData.engName.trim(),
-            description: formData.description.trim(),
-            price: Number(formData.price),
-            category: selectedCategory,
-            images: menuImages,
-            isAvailable: formData.isAvailable,
-            isSoldOut: formData.isSoldOut,
-            sortOrder: 999,
-            options: menuOptions,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        // Add to store
-        addMenu(newMenu);
-        toast.success('새 메뉴가 등록되었습니다.');
-
-        // Navigate to menu list
-        router.push('/admin/menus');
+            toast.success('새 메뉴가 등록되었습니다! 💜');
+            router.push('/admin/menus');
+        } catch (error) {
+            toast.error('메뉴 등록에 실패했습니다. 다시 시도해주세요.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -391,9 +364,10 @@ export default function NewMenuPage() {
                                 onChange={handleChange}
                                 className={`${styles.select} ${errors.categoryId ? styles.inputError : ''}`}
                             >
-                                {mockCategories.map((category) => (
+                                <option value="">카테고리를 선택해주세요</option>
+                                {categories.map((category) => (
                                     <option key={category.id} value={category.id}>
-                                        {category.icon} {category.korName}
+                                        {category.icon} {category.name}
                                     </option>
                                 ))}
                             </select>
@@ -670,9 +644,9 @@ export default function NewMenuPage() {
                     <Link href="/admin/menus" className={styles.cancelBtn}>
                         취소
                     </Link>
-                    <button type="submit" className={styles.submitBtn}>
+                    <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                         <Save size={20} />
-                        메뉴 등록
+                        {isSubmitting ? '등록 중...' : '메뉴 등록'}
                     </button>
                 </div>
             </form>

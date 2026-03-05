@@ -65,16 +65,53 @@ export function useMenus(options: UseMenusOptions = {}) {
     }, [selectedCategory, searchQuery, page, size]);
 
     // Actions
-    const toggleSoldOut = (menuId: string) => {
+    const toggleSoldOut = async (menuId: string) => {
+        // Optimistic update
         setMenus(prev => prev.map(menu =>
             String(menu.id) === menuId ? { ...menu, isSoldOut: !menu.isSoldOut } : menu
         ));
-        // TODO: Call backend API
+
+        try {
+            const response = await fetch(`/api/admin/menus/${menuId}/sold-out`, {
+                method: 'PATCH',
+            });
+
+            if (!response.ok) {
+                throw new Error('품절 상태 변경 실패');
+            }
+        } catch (error) {
+            console.error('Toggle sold out error:', error);
+            toast.error('품절 상태 변경에 실패했습니다.');
+            // Revert optimistic update
+            setMenus(prev => prev.map(menu =>
+                String(menu.id) === menuId ? { ...menu, isSoldOut: !menu.isSoldOut } : menu
+            ));
+        }
     };
 
-    const deleteMenu = (menuId: string) => {
+    const deleteMenu = async (menuId: string) => {
+        // Find menu to delete for potential rollback
+        const menuToDelete = menus.find(menu => String(menu.id) === menuId);
+        if (!menuToDelete) return;
+
+        // Optimistic update
         setMenus(prev => prev.filter(menu => String(menu.id) !== menuId));
-        // TODO: Call backend API
+
+        try {
+            const response = await fetch(`/api/admin/menus/${menuId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('메뉴 삭제 실패');
+            }
+            toast.success('메뉴가 성공적으로 삭제되었습니다.');
+        } catch (error) {
+            console.error('Delete menu error:', error);
+            toast.error('메뉴 삭제에 실패했습니다.');
+            // Revert optimistic update (insert back)
+            setMenus(prev => [...prev, menuToDelete]);
+        }
     };
 
     // Stats

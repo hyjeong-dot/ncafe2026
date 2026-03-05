@@ -2,9 +2,9 @@
 
 import { useState, use, useEffect } from 'react';
 import { notFound, useRouter } from 'next/navigation';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import styles from './page.module.css';
-// import Modal from '@/components/common/Modal/Modal';
+import Modal from '@/components/common/Modal/Modal';
 import MenuDetailHeader from './_components/MenuDetailHeader/MenuDetailHeader';
 import MenuDetailImage from './_components/MenuDetailImage/MenuDetailImage';
 import MenuDetailInfo from './_components/MenuDetailInfo/MenuDetailInfo';
@@ -21,20 +21,30 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
     const { id: idStr } = use(params);
     const id = Number(idStr);
     const router = useRouter();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    // const menu = useMenuStore((state) => state.getMenuById(id));
-    // Data Fetching Plan: Will use API fetch in the future. Currently using Mock Data.
+    const handleConfirmDelete = async () => {
+        try {
+            const response = await fetch(`/api/admin/menus/${id}`, {
+                method: 'DELETE',
+            });
 
-    // const deleteMenuFromStore = useMenuStore((state) => state.deleteMenu);
+            if (!response.ok) throw new Error('메뉴 삭제에 실패했습니다.');
 
-    // 백엔드에서 데이터 fetch (새로고침 시 store가 비어있을 수 있음)
-    // 실제 구현 시에는 react-query 등을 사용하거나 useEffect에서 fetch 로직이 필요할 수 있음
-    // 현재는 store에 없으면 notFound 처리 중 -> 이 부분은 추후 보완 필요할 수 있음.
-    // 우선 store 로직 유지.
+            toast.success('메뉴가 삭제되었습니다.');
+            router.push('/admin/menus');
+        } catch (error) {
+            console.error('Failed to delete menu:', error);
+            toast.error('메뉴 삭제에 실패했습니다.');
+            setIsDeleteModalOpen(false);
+        }
+    };
 
     return (
         <div className={styles.container}>
             <MenuDetailHeader
+                id={id}
+                onDelete={() => setIsDeleteModalOpen(true)}
             />
 
             <main className={styles.content}>
@@ -52,7 +62,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                 </div>
             </main>
 
-            {/* <Modal
+            <Modal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
                 title="메뉴 삭제"
@@ -60,7 +70,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                 confirmText="삭제"
                 variant="danger"
                 onConfirm={handleConfirmDelete}
-            /> */}
+            />
         </div>
     );
 }

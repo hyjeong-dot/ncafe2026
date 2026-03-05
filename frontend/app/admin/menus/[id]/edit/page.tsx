@@ -15,11 +15,11 @@ import {
     ImageIcon,
     Save,
 } from 'lucide-react';
-import { useMenuStore } from '@/stores/menuStore';
-import { mockCategories } from '@/mocks/menuData';
-import { Menu, MenuOption, OptionItem, MenuImage } from '@/types/menu';
+import { useCategories } from '../../_components/CategoryTabs/useCategories';
+import { useMenuDetail } from '../_components/MenuDetailInfo/useMenuDetail';
 import styles from './page.module.css';
 import { use } from 'react';
+import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 // Form data interface
 interface MenuFormData {
@@ -50,15 +50,17 @@ interface EditMenuPageProps {
 
 export default function EditMenuPage({ params }: EditMenuPageProps) {
     const { id } = use(params);
+    const menuId = Number(id);
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Store
-    const menu = useMenuStore((state) => state.getMenuById(id));
-    const updateMenu = useMenuStore((state) => state.updateMenu);
+    // API에서 메뉴 데이터, 카테고리 데이터 fetch
+    const { menu, isLoading: isMenuLoading } = useMenuDetail(menuId);
+    const { categories } = useCategories();
 
     // Loading state for redirect after not found
     const [isInitialized, setIsInitialized] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form state
     const [formData, setFormData] = useState<MenuFormData>({
@@ -81,48 +83,33 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     // Validation errors
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Initialize form with existing menu data
+    // Initialize form with existing menu data from API
     useEffect(() => {
-        if (menu && !isInitialized) {
+        if (menu && categories.length > 0 && !isInitialized) {
+            // categoryName으로 카테고리 ID 찾기
+            const matchedCategory = categories.find((cat) => cat.name === menu.categoryName);
+
             setFormData({
                 korName: menu.korName,
                 engName: menu.engName,
-                description: menu.description,
+                description: menu.description || '',
                 price: String(menu.price),
-                categoryId: menu.category.id,
+                categoryId: matchedCategory ? String(matchedCategory.id) : '',
                 isAvailable: menu.isAvailable,
-                isSoldOut: menu.isSoldOut,
+                isSoldOut: false, // MenuDetail에 isSoldOut이 없을 경우 기본값
             });
-
-            setImages(
-                menu.images.map((img) => ({
-                    id: img.id,
-                    url: img.url,
-                    isPrimary: img.isPrimary,
-                }))
-            );
-
-            setOptions(
-                menu.options.map((opt) => ({
-                    id: opt.id,
-                    name: opt.name,
-                    type: opt.type,
-                    required: opt.required,
-                    items: opt.items.map((item) => ({
-                        id: item.id,
-                        name: item.name,
-                        priceDelta: String(item.priceDelta),
-                    })),
-                }))
-            );
 
             setIsInitialized(true);
         }
-    }, [menu, isInitialized]);
+    }, [menu, categories, isInitialized]);
 
-    // Handle not found
-    if (!menu) {
-        notFound();
+    // Loading state
+    if (isMenuLoading) {
+        return (
+            <div className={styles.container}>
+                <LoadingDitto message="메뉴 정보를 불러오는 중..." />
+            </div>
+        );
     }
 
     // Handle input change
@@ -297,60 +284,42 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     };
 
     // Handle form submit
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        // Find selected category
-        const selectedCategory = mockCategories.find((cat) => cat.id === formData.categoryId);
-        if (!selectedCategory) return;
+        setIsSubmitting(true);
 
-        // Build menu images
-        const menuImages: MenuImage[] = images.map((img, index) => ({
-            id: img.id,
-            url: img.url,
-            isPrimary: img.isPrimary,
-            sortOrder: index + 1,
-        }));
+        try {
+            const response = await fetch(`/api/admin/menus/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    korName: formData.korName.trim(),
+                    engName: formData.engName.trim(),
+                    description: formData.description.trim(),
+                    price: Number(formData.price),
+                    categoryId: Number(formData.categoryId),
+                    isAvailable: formData.isAvailable,
+                    isSoldOut: formData.isSoldOut,
+                    sortOrder: 0,
+                }),
+            });
 
-        // Build menu options
-        const menuOptions: MenuOption[] = options
-            .filter((opt) => opt.name.trim() && opt.items.some((item) => item.name.trim()))
-            .map((opt) => ({
-                id: opt.id,
-                name: opt.name,
-                type: opt.type,
-                required: opt.required,
-                items: opt.items
-                    .filter((item) => item.name.trim())
-                    .map(
-                        (item): OptionItem => ({
-                            id: item.id,
-                            name: item.name,
-                            priceDelta: Number(item.priceDelta) || 0,
-                        })
-                    ),
-            }));
+            if (!response.ok) {
+                throw new Error('메뉴 수정에 실패했습니다.');
+            }
 
-        // Update menu in store
-        updateMenu(id, {
-            korName: formData.korName.trim(),
-            engName: formData.engName.trim(),
-            description: formData.description.trim(),
-            price: Number(formData.price),
-            category: selectedCategory,
-            images: menuImages,
-            isAvailable: formData.isAvailable,
-            isSoldOut: formData.isSoldOut,
-            options: menuOptions,
-        });
-        toast.success('메뉴 정보가 수정되었습니다.');
-
-        // Navigate back to menu detail
-        router.push(`/admin/menus/${id}`);
+            toast.success('메뉴 정보가 수정되었습니다! 💜');
+            router.push(`/admin/menus/${id}`);
+        } catch (error) {
+            toast.error('메뉴 수정에 실패했습니다. 다시 시도해주세요.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -362,7 +331,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
 
             <header className={styles.header}>
                 <h1 className={styles.title}>메뉴 수정</h1>
-                <p className={styles.subtitle}>{menu.korName} 메뉴 정보를 수정합니다</p>
+                <p className={styles.subtitle}>{formData.korName || '메뉴'} 정보를 수정합니다</p>
             </header>
 
             <form onSubmit={handleSubmit} className={styles.form}>
@@ -440,9 +409,10 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                                 onChange={handleChange}
                                 className={`${styles.select} ${errors.categoryId ? styles.inputError : ''}`}
                             >
-                                {mockCategories.map((category) => (
+                                <option value="">카테고리를 선택해주세요</option>
+                                {categories.map((category) => (
                                     <option key={category.id} value={category.id}>
-                                        {category.icon} {category.korName}
+                                        {category.icon} {category.name}
                                     </option>
                                 ))}
                             </select>
@@ -719,9 +689,9 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                     <Link href={`/admin/menus/${id}`} className={styles.cancelBtn}>
                         취소
                     </Link>
-                    <button type="submit" className={styles.submitBtn}>
+                    <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                         <Save size={20} />
-                        변경사항 저장
+                        {isSubmitting ? '저장 중...' : '변경사항 저장'}
                     </button>
                 </div>
             </form>

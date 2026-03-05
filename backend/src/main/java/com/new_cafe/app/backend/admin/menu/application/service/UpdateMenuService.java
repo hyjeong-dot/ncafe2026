@@ -36,4 +36,12 @@ public class UpdateMenuService implements UpdateMenuUseCase {
 
         saveMenuPort.save(menu);
     }
+
+    @Override
+    public void toggleSoldOut(Long id) {
+        Menu menu = loadMenuPort.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다. ID: " + id));
+        menu.setIsSoldOut(!menu.getIsSoldOut());
+        saveMenuPort.save(menu);
+    }
 }

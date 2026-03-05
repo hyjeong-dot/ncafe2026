@@ -5,9 +5,11 @@ import styles from './MenuDetailHeader.module.css';
 
 interface MenuDetailHeaderProps {
     title?: string;
+    id: number;
+    onDelete?: () => void;
 }
 
-export default function MenuDetailHeader({ title = "메뉴 상세" }: MenuDetailHeaderProps) {
+export default function MenuDetailHeader({ title = "메뉴 상세", id, onDelete }: MenuDetailHeaderProps) {
     return (
         <div className={styles.wrapper}>
             <Link href="/admin/menus" className={styles.backButton}>
@@ -18,7 +20,7 @@ export default function MenuDetailHeader({ title = "메뉴 상세" }: MenuDetail
             <div className={styles.headerContent}>
                 <h1 className={styles.title}>{title}</h1>
                 <div className={styles.actions}>
-                    <Link href={`/admin/menus/edit`}>
+                    <Link href={`/admin/menus/${id}/edit`}>
                         <Button variant="primary" size="sm">
                             <Edit2 size={16} />
                             메뉴 수정하기
@@ -27,6 +29,7 @@ export default function MenuDetailHeader({ title = "메뉴 상세" }: MenuDetail
                     <Button
                         variant="danger"
                         size="sm"
+                        onClick={onDelete}
                     >
                         <Trash2 size={16} />
                         삭제

@@ -24,7 +24,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
     const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { menus, toggleSoldOut, isLoading } = useMenus({
+    const { menus, toggleSoldOut, deleteMenu, isLoading } = useMenus({
         selectedCategory: selectedCategory || undefined,
         searchQuery: searchQuery || undefined,
         page: currentPage - 1,
@@ -50,12 +50,12 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
         setMenuToDelete(menuId);
     };
 
-    // const confirmDelete = () => {
-    //     if (menuToDelete) {
-    //         deleteMenu(menuToDelete);
-    //         setMenuToDelete(null);
-    //     }
-    // };
+    const confirmDelete = () => {
+        if (menuToDelete) {
+            deleteMenu(menuToDelete);
+            setMenuToDelete(null);
+        }
+    };
 
     if (isLoading) {
         return <LoadingDitto message="메뉴 정보를 불러오는 중..." />;
@@ -106,7 +106,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
                 </div>
             )}
 
-            {/* <Modal
+            <Modal
                 isOpen={!!menuToDelete}
                 onClose={() => setMenuToDelete(null)}
                 title="메뉴 삭제"
@@ -114,7 +114,7 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
                 confirmText="삭제"
                 variant="danger"
                 onConfirm={confirmDelete}
-            /> */}
+            />
         </>
     );
 }
