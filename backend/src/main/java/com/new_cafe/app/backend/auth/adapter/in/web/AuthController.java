@@ -46,7 +46,8 @@ public class AuthController {
                             result.getMemberId(),
                             result.getUsername(),
                             result.getName(),
-                            result.getRole()
+                            result.getRole(),
+                            token
                     )
             );
         } catch (AuthenticationFailedException e) {
@@ -70,10 +71,11 @@ public class AuthController {
         // Basic user info based on JWT
         return ResponseEntity.ok(
                 LoginResponse.success(
-                        UUID.fromString("00000000-0000-0000-0000-000000000000"), // JWT에 memberId가 없으므로 임시 UUID
+                        UUID.fromString("00000000-0000-0000-0000-000000000000"),
                         auth.getName(),
-                        "User", // name omitted from JWT
-                        role
+                        "User",
+                        role,
+                        null
                 )
         );
     }

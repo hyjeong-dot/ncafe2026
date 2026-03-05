@@ -64,13 +64,21 @@ export default function AdminSidebar() {
     const [isOpen, setIsOpen] = useState(false);
 
     // 권한 체크: admin이 아니면 홈으로 튕겨냄
+    // 로그인 직후 user 상태가 전파되기 전에 체크하면 오탐이 발생할 수 있으므로
+    // 짧은 대기 후 다시 확인합니다.
     useEffect(() => {
-        if (!isLoading && (!user || user.role !== 'ROLE_ADMIN')) {
-            if (user) {
-                toast.error("접근 권한이 없어요! 💜");
+        if (isLoading) return;
+
+        const timer = setTimeout(() => {
+            if (!user || user.role !== 'ROLE_ADMIN') {
+                if (user) {
+                    toast.error("접근 권한이 없어요! 💜");
+                }
+                router.replace('/');
             }
-            router.replace('/');
-        }
+        }, 300);
+
+        return () => clearTimeout(timer);
     }, [user, isLoading, router]);
 
     const isActive = (href: string) => {

@@ -22,12 +22,13 @@ public class LoginResponse {
         private String username;
         private String name;
         private String role;
+        private String token;
     }
 
-    public static LoginResponse success(UUID memberId, String username, String name, String role) {
+    public static LoginResponse success(UUID memberId, String username, String name, String role, String token) {
         return LoginResponse.builder()
                 .success(true)
-                .data(new MemberData(memberId, username, name, role))
+                .data(new MemberData(memberId, username, name, role, token))
                 .build();
     }
 

@@ -19,33 +19,25 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(error, { status: loginRes.status });
         }
 
-        // Backend returns LoginResponse with success: true, data: { memberId, username, name, role }
+        // Backend returns LoginResponse with success: true, data: { memberId, username, name, role, token }
         const result = await loginRes.json();
 
-        // In current implementation, the token is sent in the Set-Cookie header by Spring
-        // We need to extract it to put it inside our iron-session.
-        // However, if the Spring backend is already configured to set the cookie, we might have two cookies.
-        // The BFF guide suggests Next.js server handles the JWT.
+        // 1차: 응답 본문에서 토큰 추출 (가장 안정적)
+        let token = result.data?.token || '';
 
-        // Let's check how the Spring backend returns the token. 
-        // In AuthController.java, it returns LoginResponse AND adds a cookie named "token".
-        // We might need to change the backend to NOT send the cookie if we want BFF to handle it completely.
-        // But for now, let's see if we can get the token from the response or the cookie from Spring.
-
-        const setCookieHeader = loginRes.headers.get('set-cookie');
-        let token = '';
-        if (setCookieHeader) {
-            const tokenMatch = setCookieHeader.match(/token=([^;]+)/);
-            if (tokenMatch) {
-                token = tokenMatch[1];
+        // 2차 폴백: Set-Cookie 헤더에서 추출 (이전 호환성)
+        if (!token) {
+            const setCookieHeader = loginRes.headers.get('set-cookie');
+            if (setCookieHeader) {
+                const tokenMatch = setCookieHeader.match(/token=([^;]+)/);
+                if (tokenMatch) {
+                    token = tokenMatch[1];
+                }
             }
         }
 
-        if (!token && result.data && result.data.token) {
-            token = result.data.token;
-        }
-
         if (!token) {
+            console.error('Token not found in response body or Set-Cookie header');
             return NextResponse.json({ message: '인증 토큰을 찾을 수 없습니다.' }, { status: 500 });
         }
 
