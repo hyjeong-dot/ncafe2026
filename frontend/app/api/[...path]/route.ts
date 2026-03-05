@@ -7,8 +7,8 @@ async function proxyRequest(req: NextRequest) {
     const session = await getSession();
     const { pathname, search } = req.nextUrl;
 
-    // Remove /api prefix from the start of the pathname
-    const apiPath = pathname.replace(/^\/api/, '');
+    // /api로 시작하면 /api를 제거하고, /upload로 시작하면 그대로 사용
+    const apiPath = pathname.startsWith('/api') ? pathname.replace(/^\/api/, '') : pathname;
     const targetUrl = `${API_BASE}${apiPath}${search}`;
 
     const headers = new Headers();
