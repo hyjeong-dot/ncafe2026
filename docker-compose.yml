@@ -48,5 +48,9 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     # ports 제거: 외부에서 DB 접근 불가 (보안 강화)
     volumes:
-      - /home/hyjeong/dist/ncafe2026/db:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     restart: unless-stopped
+
+volumes:
+  db-data:
+    name: ${USER_ID:-hyjeong}-db-data
