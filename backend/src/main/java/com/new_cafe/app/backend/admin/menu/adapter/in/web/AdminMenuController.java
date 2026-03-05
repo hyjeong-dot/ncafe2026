@@ -8,6 +8,9 @@ import com.new_cafe.app.backend.admin.menu.application.port.in.GetMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.RegisterMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.UpdateMenuUseCase;
 import com.new_cafe.app.backend.admin.menu.application.port.in.ManageMenuImageUseCase;
+import com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.AddMenuImageRequest;
+import com.new_cafe.app.backend.admin.menu.application.result.MenuImageListResult;
+import com.new_cafe.app.backend.admin.menu.application.result.MenuResult;
 import com.new_cafe.app.backend.admin.menu.application.result.MenuListResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +36,7 @@ public class AdminMenuController {
     }
 
     @GetMapping("/{id}")
-    public com.new_cafe.app.backend.admin.menu.application.result.MenuResult getMenu(@PathVariable Long id) {
+    public MenuResult getMenu(@PathVariable Long id) {
         return getMenuUseCase.getMenu(id);
     }
 
@@ -62,13 +65,13 @@ public class AdminMenuController {
     // --- 메뉴 이미지 관리 ---
     
     @GetMapping("/{id}/menu-images")
-    public com.new_cafe.app.backend.admin.menu.application.result.MenuImageListResult getMenuImages(@PathVariable Long id) {
+    public MenuImageListResult getMenuImages(@PathVariable Long id) {
         return manageMenuImageUseCase.getImagesByMenuId(id);
     }
 
     @PostMapping("/{id}/menu-images")
     @ResponseStatus(HttpStatus.CREATED)
-    public Long addMenuImage(@PathVariable Long id, @RequestBody com.new_cafe.app.backend.admin.menu.adapter.in.web.dto.AddMenuImageRequest request) {
+    public Long addMenuImage(@PathVariable Long id, @RequestBody AddMenuImageRequest request) {
         return manageMenuImageUseCase.addImage(request.toCommand(id));
     }
 
