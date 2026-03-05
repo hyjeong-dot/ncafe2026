@@ -4,6 +4,7 @@ import { Activity, Zap, Droplet, Cpu, ImageIcon, Star } from 'lucide-react';
 import styles from './MenuDetailImage.module.css';
 import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 import { useMenuImages } from './useMenuImages';
+import { getImageSrc } from '@/lib/api';
 
 export default function MenuDetailImage({ menuId }: { menuId: number }) {
     const { menu, isLoading: isMenuLoading } = useMenuDetail(menuId);
@@ -36,7 +37,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                             </div>
                         )}
                         <Image
-                            src={currentImage.srcUrl}
+                            src={getImageSrc(currentImage.srcUrl)}
                             alt={currentImage.altText || fallbackAlt}
                             fill
                             className={styles.mainImage}
@@ -66,7 +67,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                                 </div>
                             )}
                             <Image
-                                src={image.srcUrl}
+                                src={getImageSrc(image.srcUrl)}
                                 alt={`${image.altText || fallbackAlt} ${index + 1}`}
                                 fill
                                 className={styles.thumbnailImage}
