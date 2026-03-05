@@ -4,8 +4,10 @@ import com.new_cafe.app.backend.auth.application.command.LoginCommand;
 import com.new_cafe.app.backend.auth.application.command.SignupCommand;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
 import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
+import com.new_cafe.app.backend.auth.application.port.in.DeleteAccountUseCase;
 import com.new_cafe.app.backend.auth.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.auth.application.port.out.SaveMemberPort;
+import com.new_cafe.app.backend.auth.application.port.out.DeleteMemberPort;
 import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
 import com.new_cafe.app.backend.auth.domain.model.Member;
@@ -19,10 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService implements LoginUseCase, SignupUseCase {
+public class AuthService implements LoginUseCase, SignupUseCase, DeleteAccountUseCase {
 
     private final LoadMemberPort loadMemberPort;
     private final SaveMemberPort saveMemberPort;
+    private final DeleteMemberPort deleteMemberPort;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -67,5 +70,13 @@ public class AuthService implements LoginUseCase, SignupUseCase {
         
         saveMemberPort.save(newMember);
         log.info("Signup successful for user: {}", command.getUsername());
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccount(String username) {
+        log.info("Deleting account for user: {}", username);
+        deleteMemberPort.deleteByNickname(username);
+        log.info("Account deleted successfully for user: {}", username);
     }
 }

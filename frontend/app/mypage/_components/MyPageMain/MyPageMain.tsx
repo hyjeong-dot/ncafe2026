@@ -2,6 +2,7 @@
 
 import styles from "./MyPageMain.module.css";
 import LoadingDitto from "@/components/common/LoadingDitto/LoadingDitto";
+import Modal from "@/components/common/Modal/Modal";
 import { useMyPage } from "./useMyPage";
 
 // Components
@@ -18,7 +19,10 @@ export default function MyPageMain() {
         isLoading,
         activeTab,
         setActiveTab,
-        handleLogout
+        handleLogout,
+        isDeleteModalOpen,
+        setIsDeleteModalOpen,
+        handleDeleteAccount
     } = useMyPage();
 
     if (isLoading || !user) {
@@ -41,6 +45,7 @@ export default function MyPageMain() {
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
                     onLogout={handleLogout}
+                    onDeleteAccount={() => setIsDeleteModalOpen(true)}
                 />
 
                 <main>
@@ -62,6 +67,17 @@ export default function MyPageMain() {
                     )}
                 </main>
             </div>
+
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteAccount}
+                title="정말 탈퇴하시겠어요?"
+                description="탈퇴하시면 찜한 메뉴와 주문 내역이 모두 사라져요 😢"
+                confirmText="탈퇴하기"
+                cancelText="취소"
+                variant="danger"
+            />
         </div>
     );
 }

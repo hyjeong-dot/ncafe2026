@@ -6,7 +6,8 @@ import {
     LogOut,
     History,
     Heart,
-    CreditCard
+    CreditCard,
+    UserMinus
 } from "lucide-react";
 import styles from "./MyPageSidebar.module.css";
 
@@ -20,13 +21,15 @@ interface MyPageSidebarProps {
     activeTab: string;
     onTabChange: (tab: string) => void;
     onLogout: () => void;
+    onDeleteAccount: () => void;
 }
 
 export default function MyPageSidebar({
     user,
     activeTab,
     onTabChange,
-    onLogout
+    onLogout,
+    onDeleteAccount
 }: MyPageSidebarProps) {
     return (
         <aside className={styles.profileCard}>
@@ -82,6 +85,13 @@ export default function MyPageSidebar({
                 >
                     <LogOut size={18} />
                     로그아웃
+                </button>
+                <button
+                    className={`${styles.menuItem} ${styles.dangerItem}`}
+                    onClick={onDeleteAccount}
+                >
+                    <UserMinus size={18} />
+                    회원탈퇴
                 </button>
             </nav>
         </aside>

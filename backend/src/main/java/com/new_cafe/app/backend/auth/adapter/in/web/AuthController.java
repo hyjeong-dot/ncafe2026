@@ -4,6 +4,7 @@ import com.new_cafe.app.backend.auth.adapter.in.web.dto.SignupRequest;
 import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
 import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginRequest;
 import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginResponse;
+import com.new_cafe.app.backend.auth.application.port.in.DeleteAccountUseCase;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
 import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
@@ -27,6 +28,7 @@ public class AuthController {
 
     private final LoginUseCase loginUseCase;
     private final SignupUseCase signupUseCase;
+    private final DeleteAccountUseCase deleteAccountUseCase;
     private final JwtProvider jwtProvider;
 
     @PostMapping("/login")
@@ -91,6 +93,29 @@ public class AuthController {
                         null
                 )
         );
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<?> deleteAccount(HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            return ResponseEntity.status(401).body("Not authenticated");
+        }
+
+        try {
+            deleteAccountUseCase.deleteAccount(auth.getName());
+            
+            // Clear JWT Token cookie
+            Cookie cookie = new Cookie("token", null);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+
+            return ResponseEntity.ok(java.util.Map.of("success", true, "message", "회원탈퇴 완료"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("success", false, "message", e.getMessage()));
+        }
     }
 
     @PostMapping("/logout")

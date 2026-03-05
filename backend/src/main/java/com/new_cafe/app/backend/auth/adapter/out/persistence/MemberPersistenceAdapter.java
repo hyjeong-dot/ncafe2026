@@ -2,6 +2,7 @@ package com.new_cafe.app.backend.auth.adapter.out.persistence;
 
 import com.new_cafe.app.backend.auth.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.auth.application.port.out.SaveMemberPort;
+import com.new_cafe.app.backend.auth.application.port.out.DeleteMemberPort;
 import com.new_cafe.app.backend.auth.domain.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort {
+public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort, DeleteMemberPort {
 
     private final MemberJpaRepository memberJpaRepository;
 
@@ -26,5 +27,10 @@ public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort 
     @Override
     public boolean existsByNickname(String nickname) {
         return memberJpaRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public void deleteByNickname(String nickname) {
+        memberJpaRepository.deleteByNickname(nickname);
     }
 }

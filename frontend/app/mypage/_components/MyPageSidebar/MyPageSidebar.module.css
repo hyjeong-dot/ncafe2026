@@ -78,6 +78,18 @@
     color: var(--ditto-600);
 }
 
+.dangerItem {
+    color: #ef4444;
+    /* tailwind red-500 */
+}
+
+.dangerItem:hover {
+    background: #fef2f2;
+    /* tailwind red-50 */
+    color: #dc2626;
+    /* tailwind red-600 */
+}
+
 @media (max-width: 1024px) {
     .profileCard {
         position: static;
