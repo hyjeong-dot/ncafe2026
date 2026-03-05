@@ -27,9 +27,10 @@ services:
       dockerfile: Dockerfile
     container_name: ${USER_ID}-frontend
     ports:
-      - "${FRONTEND_PORT:-3034}:3034" # 프론트엔드(BFF)만 외부 노출
+      - "${FRONTEND_PORT:-3034}:${FRONTEND_PORT:-3034}" # 프론트엔드(BFF)만 외부 노출
     environment:
       # 컨테이너 네트워크 내부 통신이므로 백엔드 컨테이너의 8080 포트 사용
+      - PORT=${FRONTEND_PORT:-3034}
       - API_BASE_URL=http://backend:8080
       - SESSION_SECRET=${SESSION_SECRET}
     depends_on:
