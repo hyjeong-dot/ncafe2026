@@ -1,8 +1,11 @@
 package com.new_cafe.app.backend.auth.application.service;
 
 import com.new_cafe.app.backend.auth.application.command.LoginCommand;
+import com.new_cafe.app.backend.auth.application.command.SignupCommand;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
+import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
 import com.new_cafe.app.backend.auth.application.port.out.LoadMemberPort;
+import com.new_cafe.app.backend.auth.application.port.out.SaveMemberPort;
 import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
 import com.new_cafe.app.backend.auth.domain.model.Member;
@@ -16,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService implements LoginUseCase {
+public class AuthService implements LoginUseCase, SignupUseCase {
 
     private final LoadMemberPort loadMemberPort;
+    private final SaveMemberPort saveMemberPort;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -46,5 +50,22 @@ public class AuthService implements LoginUseCase {
                 .name(member.getNickname()) // 'name' 컬럼이 없으므로 'nickname' 사용
                 .role(member.getRole())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void signup(SignupCommand command) {
+        if (saveMemberPort.existsByNickname(command.getUsername())) {
+             throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
+        }
+
+        Member newMember = Member.builder()
+                .nickname(command.getUsername())
+                .password(passwordEncoder.encode(command.getPassword()))
+                .role("ROLE_USER")
+                .build();
+        
+        saveMemberPort.save(newMember);
+        log.info("Signup successful for user: {}", command.getUsername());
     }
 }

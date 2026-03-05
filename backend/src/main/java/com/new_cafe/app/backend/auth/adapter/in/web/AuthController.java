@@ -1,5 +1,7 @@
 package com.new_cafe.app.backend.auth.adapter.in.web;
 
+import com.new_cafe.app.backend.auth.adapter.in.web.dto.SignupRequest;
+import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
 import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginRequest;
 import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginResponse;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final LoginUseCase loginUseCase;
+    private final SignupUseCase signupUseCase;
     private final JwtProvider jwtProvider;
 
     @PostMapping("/login")
@@ -54,6 +57,16 @@ public class AuthController {
             return ResponseEntity.status(401).body(
                     LoginResponse.fail(e.getMessage())
             );
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
+        try {
+            signupUseCase.signup(request.toCommand());
+            return ResponseEntity.ok(java.util.Map.of("success", true, "message", "회원가입 완료!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("success", false, "message", e.getMessage()));
         }
     }
 
