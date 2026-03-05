@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, LogIn, LogOut, User } from "lucide-react";
+import { Settings, LogIn, LogOut, User, UserPlus } from "lucide-react";
 import Image from "next/image";
 import styles from "./layout.module.css";
 import { useAuth } from "@/context/AuthContext";
@@ -47,9 +47,9 @@ export default function Header() {
                                     <LogIn size={16} />
                                     <span>로그인</span>
                                 </Link>
-                                <Link href="/admin" className={styles.adminButton}>
-                                    <Settings size={14} />
-                                    <span>관리자</span>
+                                <Link href="/signup" className={styles.adminButton}>
+                                    <UserPlus size={14} />
+                                    <span>회원가입</span>
                                 </Link>
                             </>
                         )}

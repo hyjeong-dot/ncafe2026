@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { User, Lock, Eye, EyeOff, AlertCircle, LogIn, Sparkles } from 'lucide-react';
@@ -184,6 +185,13 @@ export default function LoginPage() {
                                 )}
                             </button>
                         </form>
+
+                        <div className={styles.signupPrompt}>
+                            <span>아직 메타몽 친구가 아니에요? 🫠</span>
+                            <Link href="/signup" className={styles.signupLink}>
+                                변신해서 가입하기 →
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

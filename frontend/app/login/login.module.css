@@ -294,3 +294,35 @@
         justify-content: center;
     }
 }
+
+/* Signup Prompt */
+.signupPrompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0e6ff;
+}
+
+.signupPrompt span {
+    font-size: 0.88rem;
+    color: #8b62c0;
+}
+
+.signupLink {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #a87edb;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+}
+
+.signupLink:hover {
+    color: #6e4a9e;
+    background: #f8f4ff;
+    transform: translateX(4px);
+}
