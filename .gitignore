@@ -1,0 +1,14 @@
+.env
+.env.*
+node_modules/
+.next/
+out/
+build/
+.gradle/
+.project
+.settings/
+.classpath
+bin/
+*.class
+*.log
+.DS_Store

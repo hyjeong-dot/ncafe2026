@@ -1,0 +1,50 @@
+name: CI/CD Deployment
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch: # 수동 배포 트리거
+
+jobs:
+  #build: 생략
+  #test: 생략
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          echo "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-hyjeong_ncafe}" > .env
+          echo "USER_ID=${USER_ID:-hyjeong}" >> .env
+          echo "FRONTEND_PORT=${FRONTEND_PORT:-3034}" >> .env
+          echo "SESSION_SECRET=${SESSION_SECRET}" >> .env
+          echo "JWT_SECRET=${JWT_SECRET}" >> .env
+          echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+          echo "SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}" >> .env
+        env:
+          COMPOSE_PROJECT_NAME: ${{ secrets.COMPOSE_PROJECT_NAME }}
+          USER_ID: ${{ secrets.USER_ID }}
+          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+
+      - name: Build and Deploy
+        run: docker compose --profile with-db up --build -d
+
+      - name: Verify deployment
+        run: |
+          echo "=== Container Status ==="
+          docker compose ps
+          sleep 15
+          echo ""
+          echo "=== Health Check ==="
+          curl -sf --max-time 10 -o /dev/null -w "Frontend : HTTP %{http_code}\n" http://localhost:${FRONTEND_PORT:-3034} || echo "Frontend : not responding"
+        env:
+          FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
+
+      - name: Clean up old images
+        run: docker image prune -f

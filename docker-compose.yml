@@ -1,52 +1,52 @@
 services:
   backend:
-    build: 
+    image: ${BACKEND_IMAGE:-ncafe-backend:latest}
+    build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: hyjeong-ncafe-backend
-    ports:
-      - "8034:8034"
+    container_name: ${USER_ID}-backend
+    # ports 제거: 외부 노출 차단 (BFF 패턴)
     volumes:
       - /home/hyjeong/dist/ncafe2026/backend/upload:/app/upload
     environment:
-      - TZ=Asia/Seoul
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ncafedb?useSSL=false
-      - SPRING_DATASOURCE_USERNAME=ncafe
-      - SPRING_DATASOURCE_PASSWORD=1111
-      - SERVER_PORT=8034
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-ncafe}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400000}
+      - UPLOAD_LOCATION=file:/app/upload/
     restart: unless-stopped
+    depends_on:
+      - db
 
   frontend:
-    build: 
+    image: ${FRONTEND_IMAGE:-ncafe-frontend:latest}
+    build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: hyjeong-ncafe-frontend
+    container_name: ${USER_ID}-frontend
     ports:
-      - "3034:3034"
+      - "${FRONTEND_PORT:-3034}:3034" # 프론트엔드(BFF)만 외부 노출
     environment:
-      - NODE_ENV=production
-      - API_URL=http://hyjeong-ncafe-backend:8034
-      - API_BASE_URL=http://hyjeong-ncafe-backend:8034
-      - ENABLE_PROXY=true
-      - TZ=Asia/Seoul
-    volumes:
-      - /home/hyjeong/dist/ncafe2026/frontend/public/images:/app/public/images
+      # 컨테이너 네트워크 내부 통신이므로 백엔드 컨테이너의 8080 포트 사용
+      - API_BASE_URL=http://backend:8080
+      - SESSION_SECRET=${SESSION_SECRET}
     depends_on:
       - backend
     restart: unless-stopped
 
-  # DB 서비스 추가 (필요한 사람만 사용)
+  # DB 서비스
   db:
     image: postgres:17
-    profiles: [ "with-db" ] # 기존처럼 with-db 프로필을 사용합니다. 이 프로필을 지정해야만 실행됨.
-    container_name: ${USER_ID:-ncafe}-db
+    profiles: [ "with-db" ]
+    container_name: ${USER_ID}-db
     environment:
-      - POSTGRES_DB=ncafedb
-      - POSTGRES_USER=ncafe
-      - POSTGRES_PASSWORD=1111
-      - TZ=Asia/Seoul
-    ports:
-      - "${DB_PORT:-5432}:5432"
+      POSTGRES_DB: ${DB_NAME:-ncafedb}
+      POSTGRES_USER: ${DB_USER:-ncafe}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    # ports 제거: 외부에서 DB 접근 불가 (보안 강화)
     volumes:
       - /home/hyjeong/dist/ncafe2026/db:/var/lib/postgresql/data
     restart: unless-stopped
+ Simon:

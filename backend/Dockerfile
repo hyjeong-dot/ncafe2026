@@ -29,7 +29,7 @@ COPY --from=build /app/build/libs/*.jar app.jar
 RUN mkdir -p /app/upload
 
 # Expose port
-EXPOSE 8034
+EXPOSE 8080
 
 # Run the application
 ENTRYPOINT ["java","-jar","app.jar"]
