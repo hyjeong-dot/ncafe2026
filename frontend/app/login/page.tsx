@@ -49,24 +49,21 @@ export default function LoginPage() {
                 role: result.data.role
             });
 
-            // 쿠키가 완전히 설정될 때까지 잠시 대기 후 이동
-            // (세션 쿠키가 브라우저에 반영되기 전에 이동하면 middleware에서 비인증으로 판단할 수 있음)
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // 로그인 성공 → 권한에 따라 이동 (replace로 뒤로가기 방지)
+            // 로그인 성공 → 권한에 따라 이동
+            // window.location.href를 사용: router.replace는 클라이언트 라우팅이라
+            // 세션 쿠키가 브라우저에 완전히 반영되기 전에 미들웨어가 가로채서 실패할 수 있음
             if (result.data.role === 'ROLE_ADMIN') {
-                router.replace('/admin');
+                window.location.href = '/admin';
             } else {
                 const searchParams = new URLSearchParams(window.location.search);
                 let redirectTo = searchParams.get('redirect') || '/';
 
-                // 보안: 어드민 권한이 없는데 어드민 경로로 가려는 경우 홈으로 강제 수정
                 if (redirectTo.startsWith('/admin')) {
                     toast.error("어드민 권한이 없어요! 💜");
                     redirectTo = '/';
                 }
 
-                router.replace(redirectTo);
+                window.location.href = redirectTo;
             }
         } catch (err) {
             setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
