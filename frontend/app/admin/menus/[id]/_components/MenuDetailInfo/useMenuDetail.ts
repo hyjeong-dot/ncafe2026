@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
 
+export interface MenuImageDetail {
+    id: number;
+    srcUrl: string;
+    sortOrder: number;
+}
+
 export interface MenuDetail {
     id: number;
     korName: string;
@@ -8,6 +14,7 @@ export interface MenuDetail {
     price: number;
     categoryName: string;
     imageSrc: string;
+    images?: MenuImageDetail[];
     isAvailable: boolean;
     isSoldOut: boolean;
     sortOrder: number;

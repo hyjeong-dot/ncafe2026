@@ -52,8 +52,8 @@ export function getImageSrc(src: string | null | undefined): string {
         return src;
     }
 
-    // DB에 /upload/images/xxx.jpg 식으로 들어있다면, 이를 /api/images/images/xxx.jpg로 변경
-    // (Next.js 프록시가 /api/images/* -> backend /upload/* 를 대신 처리함)
-    const cleanSrc = src.replace(/^\/?upload\//, '');
-    return `/api/images/${cleanSrc}`;
+    // DB에 저장된 원래 경로(/upload/images/... 또는 /images/...)를 그대로 프록시(/api/...)를 통해 전달합니다.
+    // 백엔드의 WebConfig에서 두 경로(/upload/images/**, /images/**)를 모두 처리하도록 설정되어 있습니다.
+    const path = src.startsWith('/') ? src : `/${src}`;
+    return `/api${path}`;
 }

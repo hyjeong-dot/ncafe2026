@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useCategories } from '../../_components/CategoryTabs/useCategories';
-import { useMenuDetail } from '../_components/MenuDetailInfo/useMenuDetail';
+import { useMenuDetail, MenuImageDetail } from '../_components/MenuDetailInfo/useMenuDetail';
 import MenuForm, { MenuFormData, ImageItem, OptionFormData } from '../../_components/MenuForm/MenuForm';
 import { useMenuSubmit } from '../../_components/MenuForm/useMenuSubmit';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
@@ -45,7 +45,13 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                 isSoldOut: menu.isSoldOut,
             });
 
-            if (menu.imageSrc && menu.imageSrc !== 'blank.png') {
+            if (menu.images && menu.images.length > 0) {
+                setInitialImages(menu.images.map((img: MenuImageDetail) => ({
+                    id: String(img.id),
+                    url: getImageSrc(img.srcUrl),
+                    isPrimary: img.sortOrder === 0 // 0번만 대표 이미지로 설정
+                })));
+            } else if (menu.imageSrc && menu.imageSrc !== 'blank.png') {
                 setInitialImages([{
                     id: 'original',
                     url: getImageSrc(menu.imageSrc),
@@ -57,9 +63,9 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
         }
     }, [menu, categories, isInitialized]);
 
-    const handleSubmit = async (formData: MenuFormData, images: ImageItem[], options: OptionFormData[]) => {
+    const handleSubmit = async (formData: MenuFormData, images: ImageItem[]) => {
         try {
-            await updateMenu(menuId, formData, images, options);
+            await updateMenu(menuId, formData, images, initialImages);
             router.push(`/admin/menus/${menuId}`);
         } catch (error) {
             console.error('Update failed:', error);

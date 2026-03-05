@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AdminMenuImageJpaRepository extends JpaRepository<AdminMenuImage, Long> {
     List<AdminMenuImage> findAllByMenuIdOrderBySortOrderAsc(Long menuId);
+    void deleteByMenuId(Long menuId);
 }

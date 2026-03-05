@@ -15,6 +15,8 @@ public class MenuImageService implements ManageMenuImageUseCase {
 
     private final MenuImagePort menuImagePort;
 
+    private final com.new_cafe.app.backend.global.file.application.port.in.DeleteFileUseCase deleteFileUseCase;
+
     @Override
     public Long addImage(AddMenuImageCommand command) {
         AdminMenuImage image = AdminMenuImage.builder()
@@ -27,7 +29,15 @@ public class MenuImageService implements ManageMenuImageUseCase {
 
     @Override
     public void removeImage(Long imageId) {
+        // 1. 삭제 전 이미지 정보 조회 (URL 확보)
+        menuImagePort.findImageById(imageId).ifPresent(image -> {
+            // 2. 물리 파일 삭제
+            deleteFileUseCase.deleteFile(image.getSrcUrl());
+        });
+        
+        // 3. DB 기록 삭제
         menuImagePort.deleteImage(imageId);
+        System.out.println("DEBUG: Menu image and physical file removed for image ID: " + imageId);
     }
 
     @Override
@@ -36,6 +46,11 @@ public class MenuImageService implements ManageMenuImageUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("이미지를 찾을 수 없습니다. ID: " + imageId));
         image.updateSortOrder(newOrder);
         menuImagePort.saveImage(image);
+    }
+
+    @Override
+    public void setPrimaryImage(Long menuId, Long imageId) {
+        menuImagePort.setPrimaryImage(menuId, imageId);
     }
 
     @Override

@@ -7,5 +7,6 @@ public interface ManageMenuImageUseCase {
     Long addImage(AddMenuImageCommand command);
     void removeImage(Long imageId);
     void updateImageOrder(Long imageId, int newOrder);
+    void setPrimaryImage(Long menuId, Long imageId);
     MenuImageListResult getImagesByMenuId(Long menuId);
 }

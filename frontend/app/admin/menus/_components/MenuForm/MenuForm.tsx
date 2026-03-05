@@ -93,7 +93,7 @@ export default function MenuForm({
     const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
-        if (initialImages && initialImages.length > 0 && images.length === 0) {
+        if (initialImages && initialImages.length > 0) {
             setImages(initialImages);
         }
     }, [initialImages]);

@@ -80,6 +80,11 @@ public class AdminMenuController {
         manageMenuImageUseCase.updateImageOrder(imageId, newOrder);
     }
 
+    @PatchMapping("/{id}/menu-images/{imageId}/primary")
+    public void setPrimaryImage(@PathVariable Long id, @PathVariable Long imageId) {
+        manageMenuImageUseCase.setPrimaryImage(id, imageId);
+    }
+
     @DeleteMapping("/menu-images/{imageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeMenuImage(@PathVariable Long imageId) {

@@ -29,8 +29,16 @@ async function proxyRequest(req: NextRequest) {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
         const contentType = req.headers.get('content-type');
         if (contentType?.includes('multipart/form-data')) {
-            // Forward the stream directly for multipart data
-            body = req.body;
+            // Reconstruct FormData for reliable proxying
+            const formData = await req.formData();
+            const newFormData = new FormData();
+            formData.forEach((value, key) => {
+                newFormData.append(key, value);
+            });
+            body = newFormData;
+            // Next.js internal fetch doesn't need Content-Type manually set for FormData, 
+            // it will set it along with the appropriate boundary string.
+            headers.delete('content-type');
         } else {
             body = await req.text();
         }
@@ -41,6 +49,8 @@ async function proxyRequest(req: NextRequest) {
             method: req.method,
             headers,
             body,
+            // @ts-ignore - 'duplex' might not be in the type definition but is required for streaming bodies in some versions
+            duplex: 'half',
         });
 
         if (proxyRes.status === 401 && session.token) {

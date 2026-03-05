@@ -6,7 +6,11 @@ export function useMenuSubmit() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const uploadImages = async (menuId: number, images: ImageItem[]) => {
+        let primaryImageId: number | null = null;
+
         for (const img of images) {
+            let currentImageId: number | null = !isNaN(Number(img.id)) ? Number(img.id) : null;
+
             if (img.file) {
                 const uploadFormData = new FormData();
                 uploadFormData.append('file', img.file);
@@ -21,7 +25,7 @@ export function useMenuSubmit() {
                         const uploadData = await uploadResponse.json();
                         const srcUrl = uploadData.url;
 
-                        await fetch(`/api/admin/menus/${menuId}/menu-images`, {
+                        const registerResponse = await fetch(`/api/admin/menus/${menuId}/menu-images`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -29,11 +33,25 @@ export function useMenuSubmit() {
                                 sortOrder: img.isPrimary ? 0 : 1,
                             }),
                         });
+
+                        if (registerResponse.ok) {
+                            currentImageId = await registerResponse.json();
+                        }
                     }
                 } catch (error) {
                     console.error('Image upload failed:', error);
                 }
             }
+
+            if (img.isPrimary && currentImageId) {
+                primaryImageId = currentImageId;
+            }
+        }
+
+        if (primaryImageId) {
+            await fetch(`/api/admin/menus/${menuId}/menu-images/${primaryImageId}/primary`, {
+                method: 'PATCH',
+            });
         }
     };
 
@@ -69,7 +87,7 @@ export function useMenuSubmit() {
         }
     };
 
-    const updateMenu = async (menuId: number, formData: MenuFormData, images: ImageItem[], options: OptionFormData[]) => {
+    const updateMenu = async (menuId: number, formData: MenuFormData, images: ImageItem[], initialImages: ImageItem[]) => {
         setIsSubmitting(true);
         try {
             const response = await fetch(`/api/admin/menus/${menuId}`, {
@@ -88,6 +106,19 @@ export function useMenuSubmit() {
             });
 
             if (!response.ok) throw new Error('Failed to update menu');
+
+            // Find deleted image IDs
+            const initialIds = initialImages.map(img => img.id);
+            const currentIds = images.map(img => img.id);
+            const deletedIds = initialIds.filter(id => !currentIds.includes(id));
+
+            for (const imageId of deletedIds) {
+                if (!isNaN(Number(imageId))) {
+                    await fetch(`/api/admin/menus/menu-images/${imageId}`, {
+                        method: 'DELETE',
+                    });
+                }
+            }
 
             await uploadImages(menuId, images);
 

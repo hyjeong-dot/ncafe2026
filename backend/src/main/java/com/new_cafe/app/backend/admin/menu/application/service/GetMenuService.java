@@ -33,6 +33,15 @@ public class GetMenuService implements GetMenuUseCase {
 
         List<AdminMenuImage> images = menuImagePort.findAllByMenuId(menu.getId());
         String imageSrc = images.isEmpty() ? "blank.png" : images.get(0).getSrcUrl();
+        
+        List<com.new_cafe.app.backend.admin.menu.application.result.MenuImageResult> imageResults = images.stream()
+                .map(img -> com.new_cafe.app.backend.admin.menu.application.result.MenuImageResult.builder()
+                        .id(img.getId())
+                        .menuId(img.getMenuId())
+                        .srcUrl(img.getSrcUrl())
+                        .sortOrder(img.getSortOrder())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
 
         return MenuResult.builder()
                 .id(menu.getId())
@@ -43,6 +52,7 @@ public class GetMenuService implements GetMenuUseCase {
                 .categoryName(category != null ? category.getName() : "알 수 없음")
                 .categoryIcon(category != null ? category.getIcon() : "")
                 .imageSrc(imageSrc)
+                .images(imageResults)
                 .isAvailable(menu.getIsAvailable())
                 .isSoldOut(menu.getIsSoldOut())
                 .sortOrder(menu.getSortOrder())

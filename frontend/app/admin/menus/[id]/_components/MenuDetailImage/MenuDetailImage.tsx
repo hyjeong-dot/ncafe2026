@@ -30,7 +30,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
             <div className={styles.mainImageWrapper}>
                 {currentImage ? (
                     <>
-                        {currentImage.sortOrder === 1 && (
+                        {currentImage.sortOrder === 0 && (
                             <div className={styles.primaryBadge}>
                                 <Star size={12} fill="white" />
                                 <span>대표 이미지</span>
@@ -61,7 +61,7 @@ export default function MenuDetailImage({ menuId }: { menuId: number }) {
                             className={`${styles.thumbnailItem} ${selectedIndex === index ? styles.activeThumbnail : ''}`}
                             onClick={() => setSelectedIndex(index)}
                         >
-                            {image.sortOrder === 1 && (
+                            {image.sortOrder === 0 && (
                                 <div className={styles.thumbnailBadge}>
                                     <Star size={10} fill="white" />
                                 </div>
