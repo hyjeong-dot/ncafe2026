@@ -7,10 +7,12 @@ export interface MenuDetail {
     description: string;
     price: number;
     categoryName: string;
+    imageSrc: string;
     isAvailable: boolean;
+    isSoldOut: boolean;
+    sortOrder: number;
     createdAt: string; // ISO string from backend
     updatedAt: string; // ISO string from backend
-    // Add other fields as backend supports them
 }
 
 export function useMenuDetail(id: number) {
@@ -19,7 +21,10 @@ export function useMenuDetail(id: number) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id || isNaN(id)) {
+            setIsLoading(false);
+            return;
+        }
 
         const fetchMenu = async () => {
             try {

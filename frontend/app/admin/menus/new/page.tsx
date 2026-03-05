@@ -55,8 +55,8 @@ export default function NewMenuPage() {
         isSoldOut: false,
     });
 
-    // Image state (using URLs for mock)
-    const [images, setImages] = useState<{ id: string; url: string; isPrimary: boolean }[]>([]);
+    // Image state
+    const [images, setImages] = useState<{ id: string; url: string; file?: File; isPrimary: boolean }[]>([]);
     const [isDragging, setIsDragging] = useState(false);
 
     // Options state
@@ -92,10 +92,11 @@ export default function NewMenuPage() {
             file.type.startsWith('image/')
         );
 
-        // Create object URLs for preview (mock implementation)
+        // Create object URLs and keep file reference
         const newImages = files.map((file, index) => ({
             id: `img-${Date.now()}-${index}`,
             url: URL.createObjectURL(file),
+            file,
             isPrimary: images.length === 0 && index === 0,
         }));
 
@@ -118,6 +119,7 @@ export default function NewMenuPage() {
         const newImages = files.map((file, index) => ({
             id: `img-${Date.now()}-${index}`,
             url: URL.createObjectURL(file),
+            file,
             isPrimary: images.length === 0 && index === 0,
         }));
         setImages((prev) => [...prev, ...newImages]);
@@ -250,7 +252,8 @@ export default function NewMenuPage() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('/api/admin/menus', {
+            // 1. 메뉴 기본 정보 등록
+            const menuResponse = await fetch('/api/admin/menus', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -264,13 +267,47 @@ export default function NewMenuPage() {
                 }),
             });
 
-            if (!response.ok) {
+            if (!menuResponse.ok) {
                 throw new Error('메뉴 등록에 실패했습니다.');
+            }
+
+            const menuId = await menuResponse.json();
+
+            // 2. 이미지 업로드 및 연관 작업
+            if (images.length > 0) {
+                for (const img of images) {
+                    if (img.file) {
+                        // 실제 이미지 파일 업로드
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('file', img.file);
+
+                        const uploadResponse = await fetch('/api/upload-file', {
+                            method: 'POST',
+                            body: uploadFormData,
+                        });
+
+                        if (uploadResponse.ok) {
+                            const uploadData = await uploadResponse.json();
+                            const srcUrl = uploadData.url;
+
+                            // 메뉴 이미지 정보를 백엔드에 저장
+                            await fetch(`/api/admin/menus/${menuId}/menu-images`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    srcUrl: srcUrl,
+                                    sortOrder: 1, // 우선 1로 고정
+                                }),
+                            });
+                        }
+                    }
+                }
             }
 
             toast.success('새 메뉴가 등록되었습니다! 💜');
             router.push('/admin/menus');
         } catch (error) {
+            console.error('Error submitting form:', error);
             toast.error('메뉴 등록에 실패했습니다. 다시 시도해주세요.');
         } finally {
             setIsSubmitting(false);

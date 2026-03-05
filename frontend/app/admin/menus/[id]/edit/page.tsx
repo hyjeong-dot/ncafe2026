@@ -20,6 +20,7 @@ import { useMenuDetail } from '../_components/MenuDetailInfo/useMenuDetail';
 import styles from './page.module.css';
 import { use } from 'react';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
+import { getImageSrc } from '@/lib/api';
 
 // Form data interface
 interface MenuFormData {
@@ -74,7 +75,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
     });
 
     // Image state
-    const [images, setImages] = useState<{ id: string; url: string; isPrimary: boolean }[]>([]);
+    const [images, setImages] = useState<{ id: string; url: string; file?: File; isPrimary: boolean }[]>([]);
     const [isDragging, setIsDragging] = useState(false);
 
     // Options state
@@ -96,12 +97,35 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                 price: String(menu.price),
                 categoryId: matchedCategory ? String(matchedCategory.id) : '',
                 isAvailable: menu.isAvailable,
-                isSoldOut: false, // MenuDetail에 isSoldOut이 없을 경우 기본값
+                isSoldOut: menu.isSoldOut,
             });
+
+            // 원본 이미지가 있으면 상태에 반영
+            if (menu.imageSrc && menu.imageSrc !== 'blank.png') {
+                setImages([{
+                    id: 'original',
+                    url: getImageSrc(menu.imageSrc),
+                    isPrimary: true
+                }]);
+            }
 
             setIsInitialized(true);
         }
     }, [menu, categories, isInitialized]);
+
+    // Handle menu not found
+    if (!isMenuLoading && !menu) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.errorWrapper}>
+                    <p>메뉴를 찾을 수 없거나 불러오는 데 실패했습니다.</p>
+                    <button onClick={() => router.push('/admin/menus')} className={styles.backBtn}>
+                        목록으로 돌아가기
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     // Loading state
     if (isMenuLoading) {
@@ -141,9 +165,9 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
         const newImages = files.map((file, index) => ({
             id: `img-${Date.now()}-${index}`,
             url: URL.createObjectURL(file),
+            file,
             isPrimary: images.length === 0 && index === 0,
         }));
-
         setImages((prev) => [...prev, ...newImages]);
     }, [images.length]);
 
@@ -294,6 +318,7 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
         setIsSubmitting(true);
 
         try {
+            // 1. 메뉴 기본 정보 수정
             const response = await fetch(`/api/admin/menus/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -313,9 +338,37 @@ export default function EditMenuPage({ params }: EditMenuPageProps) {
                 throw new Error('메뉴 수정에 실패했습니다.');
             }
 
+            // 2. 새로운 이미지가 업로드된 경우 이미지 저장
+            for (const img of images) {
+                if (img.file) {
+                    const uploadFormData = new FormData();
+                    uploadFormData.append('file', img.file);
+
+                    const uploadRes = await fetch('/api/upload-file', {
+                        method: 'POST',
+                        body: uploadFormData,
+                    });
+
+                    if (uploadRes.ok) {
+                        const { url } = await uploadRes.json();
+
+                        // 연관 관계 생성 (id는 URL의 id)
+                        await fetch(`/api/admin/menus/${id}/menu-images`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                srcUrl: url,
+                                sortOrder: 1
+                            }),
+                        });
+                    }
+                }
+            }
+
             toast.success('메뉴 정보가 수정되었습니다! 💜');
             router.push(`/admin/menus/${id}`);
         } catch (error) {
+            console.error('Error updating menu:', error);
             toast.error('메뉴 수정에 실패했습니다. 다시 시도해주세요.');
         } finally {
             setIsSubmitting(false);

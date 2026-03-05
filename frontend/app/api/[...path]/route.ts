@@ -29,7 +29,8 @@ async function proxyRequest(req: NextRequest) {
     if (req.method !== 'GET' && req.method !== 'HEAD') {
         const contentType = req.headers.get('content-type');
         if (contentType?.includes('multipart/form-data')) {
-            body = await req.blob();
+            // Forward the stream directly for multipart data
+            body = req.body;
         } else {
             body = await req.text();
         }
