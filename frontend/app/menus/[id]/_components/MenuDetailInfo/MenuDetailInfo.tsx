@@ -49,8 +49,9 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
         }
 
         try {
-            const result = await fetchAPI(`/favorites/${menu?.id}`, {
-                method: 'POST'
+            const result = await fetchAPI(`/favorites`, {
+                method: 'POST',
+                body: JSON.stringify({ menuId: menu?.id })
             });
             
             const newLikedState = result.isFavorite;

@@ -1,6 +1,9 @@
 package com.new_cafe.app.backend.favorite.adapter.out.persistence;
 
-import com.new_cafe.app.backend.favorite.application.port.out.FavoritePersistencePort;
+import com.new_cafe.app.backend.favorite.application.port.out.LoadFavoritePort;
+import com.new_cafe.app.backend.favorite.application.port.out.LoadFavoriteListPort;
+import com.new_cafe.app.backend.favorite.application.port.out.SaveFavoritePort;
+import com.new_cafe.app.backend.favorite.application.port.out.DeleteFavoritePort;
 import com.new_cafe.app.backend.favorite.domain.model.Favorite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,7 +14,11 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class FavoritePersistenceAdapter implements FavoritePersistencePort {
+public class FavoritePersistenceAdapter implements 
+        LoadFavoritePort, 
+        LoadFavoriteListPort, 
+        SaveFavoritePort, 
+        DeleteFavoritePort {
 
     private final FavoriteJpaRepository repository;
 
@@ -31,7 +38,7 @@ public class FavoritePersistenceAdapter implements FavoritePersistencePort {
     }
 
     @Override
-    public List<Favorite> findByMemberId(UUID memberId) {
+    public List<Favorite> findFavoritesByMemberId(UUID memberId) {
         return repository.findByMemberId(memberId);
     }
 }

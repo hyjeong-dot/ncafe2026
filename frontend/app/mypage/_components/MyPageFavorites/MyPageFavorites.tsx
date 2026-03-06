@@ -16,7 +16,7 @@ export default function MyPageFavorites() {
         const fetchFavorites = async () => {
             try {
                 const data = await fetchAPI('/favorites');
-                setFavorites(data || []);
+                setFavorites(data?.menus || []);
             } catch (err) {
                 console.error("Failed to fetch favorites:", err);
             } finally {
