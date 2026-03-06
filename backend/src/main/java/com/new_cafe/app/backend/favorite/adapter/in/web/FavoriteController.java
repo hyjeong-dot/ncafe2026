@@ -1,8 +1,8 @@
 package com.new_cafe.app.backend.favorite.adapter.in.web;
 
 import com.new_cafe.app.backend.favorite.application.port.in.ManageFavoriteUseCase;
-import com.new_cafe.app.backend.auth.application.port.out.LoadMemberPort;
-import com.new_cafe.app.backend.auth.domain.model.Member;
+import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
+import com.new_cafe.app.backend.member.domain.model.Member;
 import com.new_cafe.app.backend.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

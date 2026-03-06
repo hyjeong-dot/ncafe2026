@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.auth.domain.model;
+package com.new_cafe.app.backend.member.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;

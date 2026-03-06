@@ -1,9 +1,9 @@
-package com.new_cafe.app.backend.auth.adapter.out.persistence;
+package com.new_cafe.app.backend.member.adapter.out.persistence;
 
-import com.new_cafe.app.backend.auth.application.port.out.LoadMemberPort;
-import com.new_cafe.app.backend.auth.application.port.out.SaveMemberPort;
-import com.new_cafe.app.backend.auth.application.port.out.DeleteMemberPort;
-import com.new_cafe.app.backend.auth.domain.model.Member;
+import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
+import com.new_cafe.app.backend.member.application.port.out.SaveMemberPort;
+import com.new_cafe.app.backend.member.application.port.out.DeleteMemberPort;
+import com.new_cafe.app.backend.member.domain.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.Optional;

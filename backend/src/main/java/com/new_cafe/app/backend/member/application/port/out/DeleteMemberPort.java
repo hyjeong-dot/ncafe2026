@@ -1,4 +1,4 @@
-package com.new_cafe.app.backend.auth.application.port.out;
+package com.new_cafe.app.backend.member.application.port.out;
 
 public interface DeleteMemberPort {
     void deleteByNickname(String nickname);

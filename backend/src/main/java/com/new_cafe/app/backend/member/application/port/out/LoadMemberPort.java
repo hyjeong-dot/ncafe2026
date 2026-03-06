@@ -1,6 +1,6 @@
-package com.new_cafe.app.backend.auth.application.port.out;
+package com.new_cafe.app.backend.member.application.port.out;
 
-import com.new_cafe.app.backend.auth.domain.model.Member;
+import com.new_cafe.app.backend.member.domain.model.Member;
 import java.util.Optional;
 
 /**
