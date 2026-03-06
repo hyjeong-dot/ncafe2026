@@ -13,11 +13,12 @@ async function proxyRequest(req: NextRequest) {
 
     const headers = new Headers();
 
-    // Copy necessary headers from the original request
-    const headerKeys = ['content-type', 'accept'];
-    headerKeys.forEach(key => {
-        const value = req.headers.get(key);
-        if (value) headers.set(key, value);
+    // Copy necessary headers from the original request (excluding sensitive or connection-related ones)
+    const skipHeaders = ['host', 'cookie', 'connection', 'keep-alive', 'transfer-encoding'];
+    req.headers.forEach((value, key) => {
+        if (!skipHeaders.includes(key.toLowerCase())) {
+            headers.set(key, value);
+        }
     });
 
     // Inject JWT if session exists
