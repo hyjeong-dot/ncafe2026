@@ -2,26 +2,17 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    const apiUrl = process.env.API_URL || 'http://localhost:8080';
-    const enableProxy = process.env.NODE_ENV === "development" || process.env.ENABLE_PROXY === "true";
-
-    if (enableProxy) {
-      return {
-        fallback: [
-          {
-            // 이미지 경로 매핑 (/upload/images/**)
-            source: '/upload/images/:path*',
-            destination: `${apiUrl}/upload/images/:path*`,
-          },
-          {
-            // 기존 /images/** 매핑 유지 (로컬 프론트엔드에 없는 이미지만 서버로 요펑)
-            source: '/images/:path*',
-            destination: `${apiUrl}/images/:path*`,
-          },
-        ]
-      };
-    }
-    return [];
+    return [
+      {
+        // 이미지 요청을 BFF 프록시(/api/images)로 전달하여 런타임 환경변수(API_BASE_URL)를 타게 함
+        source: '/upload/images/:path*',
+        destination: '/api/upload/images/:path*',
+      },
+      {
+        source: '/images/:path*',
+        destination: '/api/images/:path*',
+      },
+    ];
   },
   images: {
     unoptimized: true, // 로컬 개발용
