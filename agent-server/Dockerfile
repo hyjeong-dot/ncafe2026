@@ -13,5 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 소스 코드 복사
 COPY . .
 
+# 컨테이너 내 포트 노출 (문서화용)
+EXPOSE 8000
+
 # FastAPI 서버 실행 (컨테이너 외부에서 접근 가능하도록 0.0.0.0 지정)
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

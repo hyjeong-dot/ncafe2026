@@ -35,6 +35,7 @@ services:
       - SESSION_SECRET=${SESSION_SECRET}
     depends_on:
       - backend
+      - agent
     restart: unless-stopped
 
   agent:
@@ -42,8 +43,8 @@ services:
       context: ./agent-server
       dockerfile: Dockerfile
     container_name: ${USER_ID:-hyjeong}-agent
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     env_file:
       - ./agent-server/.env
     restart: unless-stopped
