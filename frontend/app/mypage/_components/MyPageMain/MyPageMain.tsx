@@ -10,7 +10,8 @@ import {
     MyPageHeader,
     MyPageSidebar,
     MyPageProfile,
-    MyPageOrders
+    MyPageOrders,
+    MyPageFavorites
 } from "..";
 
 export default function MyPageMain() {
@@ -51,7 +52,8 @@ export default function MyPageMain() {
                 <main>
                     {activeTab === "profile" && <MyPageProfile user={user} />}
                     {activeTab === "orders" && <MyPageOrders />}
-                    {(activeTab === "favorites" || activeTab === "payment") && (
+                    {activeTab === "favorites" && <MyPageFavorites />}
+                    {activeTab === "payment" && (
                         <div style={{
                             background: 'var(--bg-primary)',
                             padding: 'var(--space-12)',
