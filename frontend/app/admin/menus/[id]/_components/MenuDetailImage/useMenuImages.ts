@@ -24,7 +24,12 @@ export function useMenuImages(menuId: number) {
             try {
                 setIsLoading(true);
                 const response = await fetch(`/api/admin/menus/${menuId}/menu-images`);
-
+                
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
+                
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu images');
                 }

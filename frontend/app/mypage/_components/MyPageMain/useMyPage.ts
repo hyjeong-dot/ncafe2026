@@ -25,12 +25,18 @@ export function useMyPage() {
 
     const handleDeleteAccount = async () => {
         try {
-            const res = await fetch('/api/auth/me', {
+            const response = await fetch('/api/auth/me', {
                 method: 'DELETE',
             });
-            const data = await res.json();
+            
+            if (response.status === 401 && typeof window !== 'undefined') {
+                window.location.href = '/login';
+                return;
+            }
 
-            if (res.ok) {
+            const data = await response.json();
+
+            if (response.ok) {
                 toast.success('회원 탈퇴가 완료되었습니다. 다음에 다시 만나요! 💜');
                 logout();
                 router.push('/');

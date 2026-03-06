@@ -20,6 +20,12 @@ export function useCategories() {
         const fetchCategories = async () => {
             try {
                 const response = await fetch('/api/admin/categories');
+                
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
+                
                 if (!response.ok) {
                     throw new Error('Failed to fetch categories');
                 }

@@ -13,7 +13,15 @@ export function useMenuDetail(id: number) {
             setIsLoading(true);
             try {
                 const response = await fetch(`/api/menus/${id}`);
-                if (!response.ok) throw new Error('메뉴 정보를 가져오는데 실패했습니다.');
+
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('메뉴 정보를 가져오는데 실패했습니다.');
+                }
                 const data = await response.json();
                 setMenu(data);
             } catch (err) {

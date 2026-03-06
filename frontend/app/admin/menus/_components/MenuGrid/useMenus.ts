@@ -49,6 +49,12 @@ export function useMenus(options: UseMenusOptions = {}) {
 
             try {
                 const response = await fetch(url.toString());
+                
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
+                
                 if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
 
                 const data: MenuListResponse = await response.json();
@@ -72,10 +78,11 @@ export function useMenus(options: UseMenusOptions = {}) {
         ));
 
         try {
-            const response = await fetch(`/api/admin/menus/${menuId}/sold-out`, {
-                method: 'PATCH',
-            });
-
+            const response = await fetch(`/api/admin/menus/${menuId}/sold-out`, { method: 'PATCH' });
+            if (response.status === 401) {
+                if (typeof window !== 'undefined') window.location.href = '/login';
+                return;
+            }
             if (!response.ok) {
                 throw new Error('품절 상태 변경 실패');
             }
@@ -98,10 +105,11 @@ export function useMenus(options: UseMenusOptions = {}) {
         setMenus(prev => prev.filter(menu => String(menu.id) !== menuId));
 
         try {
-            const response = await fetch(`/api/admin/menus/${menuId}`, {
-                method: 'DELETE',
-            });
-
+            const response = await fetch(`/api/admin/menus/${menuId}`, { method: 'DELETE' });
+            if (response.status === 401) {
+                if (typeof window !== 'undefined') window.location.href = '/login';
+                return;
+            }
             if (!response.ok) {
                 throw new Error('메뉴 삭제 실패');
             }

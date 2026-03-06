@@ -36,8 +36,12 @@ export function useMenuDetail(id: number) {
         const fetchMenu = async () => {
             try {
                 setIsLoading(true);
-                // Adjust URL if needed (e.g., environment variable)
                 const response = await fetch(`/api/admin/menus/${id}`);
+
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
 
                 if (!response.ok) {
                     throw new Error('Failed to fetch menu details');

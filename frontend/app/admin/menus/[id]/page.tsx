@@ -28,6 +28,11 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
             const response = await fetch(`/api/admin/menus/${id}`, {
                 method: 'DELETE',
             });
+            
+            if (response.status === 401) {
+                if (typeof window !== 'undefined') window.location.href = '/login';
+                return;
+            }
 
             if (!response.ok) throw new Error('메뉴 삭제에 실패했습니다.');
 

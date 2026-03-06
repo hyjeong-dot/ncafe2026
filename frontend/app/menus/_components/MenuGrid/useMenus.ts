@@ -45,6 +45,12 @@ export function useMenus(options: UseMenusOptions = {}) {
 
             try {
                 const response = await fetch(url.toString());
+                
+                if (response.status === 401) {
+                    if (typeof window !== 'undefined') window.location.href = '/login';
+                    return;
+                }
+                
                 if (!response.ok) throw new Error('메뉴를 불러오는데 실패했습니다.');
 
                 const data: MenuListResponse = await response.json();

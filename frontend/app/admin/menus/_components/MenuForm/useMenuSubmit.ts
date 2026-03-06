@@ -20,6 +20,11 @@ export function useMenuSubmit() {
                         method: 'POST',
                         body: uploadFormData,
                     });
+                    
+                    if (uploadResponse.status === 401 && typeof window !== 'undefined') {
+                        window.location.href = '/login';
+                        return;
+                    }
 
                     if (uploadResponse.ok) {
                         const uploadData = await uploadResponse.json();
@@ -33,6 +38,11 @@ export function useMenuSubmit() {
                                 sortOrder: img.isPrimary ? 0 : 1,
                             }),
                         });
+                        
+                        if (registerResponse.status === 401 && typeof window !== 'undefined') {
+                            window.location.href = '/login';
+                            return;
+                        }
 
                         if (registerResponse.ok) {
                             currentImageId = await registerResponse.json();
@@ -49,9 +59,13 @@ export function useMenuSubmit() {
         }
 
         if (primaryImageId) {
-            await fetch(`/api/admin/menus/${menuId}/menu-images/${primaryImageId}/primary`, {
+            const pResponse = await fetch(`/api/admin/menus/${menuId}/menu-images/${primaryImageId}/primary`, {
                 method: 'PATCH',
             });
+            if (pResponse.status === 401 && typeof window !== 'undefined') {
+                window.location.href = '/login';
+                return;
+            }
         }
     };
 
@@ -71,6 +85,11 @@ export function useMenuSubmit() {
                     sortOrder: 0,
                 }),
             });
+            
+            if (response.status === 401 && typeof window !== 'undefined') {
+                window.location.href = '/login';
+                return;
+            }
 
             if (!response.ok) throw new Error('Failed to create menu');
             const menuId = await response.json();
@@ -104,6 +123,11 @@ export function useMenuSubmit() {
                     sortOrder: 0,
                 }),
             });
+            
+            if (response.status === 401 && typeof window !== 'undefined') {
+                window.location.href = '/login';
+                return;
+            }
 
             if (!response.ok) throw new Error('Failed to update menu');
 
@@ -114,9 +138,13 @@ export function useMenuSubmit() {
 
             for (const imageId of deletedIds) {
                 if (!isNaN(Number(imageId))) {
-                    await fetch(`/api/admin/menus/menu-images/${imageId}`, {
+                    const dResponse = await fetch(`/api/admin/menus/menu-images/${imageId}`, {
                         method: 'DELETE',
                     });
+                    if (dResponse.status === 401 && typeof window !== 'undefined') {
+                        window.location.href = '/login';
+                        return;
+                    }
                 }
             }
 
