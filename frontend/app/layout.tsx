@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ChatAgent from "@/components/common/ChatAgent/ChatAgent";
 
 import { AuthProvider } from "@/context/AuthContext";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <ToastProvider />
+          <ChatAgent />
         </AuthProvider>
       </body>
     </html>
