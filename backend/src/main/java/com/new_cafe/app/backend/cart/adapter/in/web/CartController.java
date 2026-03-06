@@ -1,7 +1,14 @@
 package com.new_cafe.app.backend.cart.adapter.in.web;
 
-import com.new_cafe.app.backend.cart.application.port.in.ManageCartUseCase;
+import com.new_cafe.app.backend.cart.application.port.in.AddCartItemUseCase;
+import com.new_cafe.app.backend.cart.application.port.in.ClearCartUseCase;
+import com.new_cafe.app.backend.cart.application.port.in.GetCartItemsUseCase;
+import com.new_cafe.app.backend.cart.application.port.in.RemoveCartItemUseCase;
+import com.new_cafe.app.backend.cart.application.port.in.UpdateCartItemUseCase;
+import com.new_cafe.app.backend.cart.application.command.RemoveCartItemCommand;
+import com.new_cafe.app.backend.cart.application.command.ClearCartCommand;
 import com.new_cafe.app.backend.cart.application.result.CartItemResult;
+import com.new_cafe.app.backend.cart.adapter.in.web.dto.CartItemRequest;
 import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +25,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CartController {
 
-    private final ManageCartUseCase manageCartUseCase;
+    private final GetCartItemsUseCase getCartItemsUseCase;
+    private final AddCartItemUseCase addCartItemUseCase;
+    private final UpdateCartItemUseCase updateCartItemUseCase;
+    private final RemoveCartItemUseCase removeCartItemUseCase;
+    private final ClearCartUseCase clearCartUseCase;
     private final LoadMemberPort loadMemberPort;
 
     private Member getCurrentMember() {
@@ -35,7 +46,8 @@ public class CartController {
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        List<CartItemResult> items = manageCartUseCase.getCartItems(member.getId());
+        
+        List<CartItemResult> items = getCartItemsUseCase.getCartItems(member.getId());
         return ResponseEntity.ok(items);
     }
 
@@ -45,7 +57,8 @@ public class CartController {
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        manageCartUseCase.addItem(member.getId(), request.getMenuId(), request.getQuantity());
+        
+        addCartItemUseCase.addItem(request.toAddCommand(member.getId()));
         return ResponseEntity.ok(Map.of("message", "장바구니에 추가되었습니다."));
     }
 
@@ -55,7 +68,8 @@ public class CartController {
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        manageCartUseCase.updateQuantity(member.getId(), menuId, request.getQuantity());
+        
+        updateCartItemUseCase.updateQuantity(request.toUpdateCommand(member.getId(), menuId));
         return ResponseEntity.ok(Map.of("message", "수량이 변경되었습니다."));
     }
 
@@ -65,7 +79,13 @@ public class CartController {
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        manageCartUseCase.removeItem(member.getId(), menuId);
+        
+        RemoveCartItemCommand command = RemoveCartItemCommand.builder()
+                .memberId(member.getId())
+                .menuId(menuId)
+                .build();
+                
+        removeCartItemUseCase.removeItem(command);
         return ResponseEntity.ok(Map.of("message", "상품이 삭제되었습니다."));
     }
 
@@ -75,7 +95,12 @@ public class CartController {
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        manageCartUseCase.clearCart(member.getId());
+        
+        ClearCartCommand command = ClearCartCommand.builder()
+                .memberId(member.getId())
+                .build();
+                
+        clearCartUseCase.clearCart(command);
         return ResponseEntity.ok(Map.of("message", "장바구니가 비워졌습니다."));
     }
 }

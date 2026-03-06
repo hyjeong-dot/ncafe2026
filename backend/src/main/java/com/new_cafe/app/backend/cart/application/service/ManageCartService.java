@@ -3,6 +3,10 @@ package com.new_cafe.app.backend.cart.application.service;
 import com.new_cafe.app.backend.cart.application.port.in.ManageCartUseCase;
 import com.new_cafe.app.backend.cart.application.port.out.CartPersistencePort;
 import com.new_cafe.app.backend.cart.application.result.CartItemResult;
+import com.new_cafe.app.backend.cart.application.command.AddCartItemCommand;
+import com.new_cafe.app.backend.cart.application.command.UpdateCartItemCommand;
+import com.new_cafe.app.backend.cart.application.command.RemoveCartItemCommand;
+import com.new_cafe.app.backend.cart.application.command.ClearCartCommand;
 import com.new_cafe.app.backend.cart.domain.model.Cart;
 import com.new_cafe.app.backend.cart.domain.model.CartItem;
 import com.new_cafe.app.backend.menu.application.port.out.LoadMenuImagePort;
@@ -52,21 +56,21 @@ public class ManageCartService implements ManageCartUseCase {
 
     @Override
     @Transactional
-    public void addItem(UUID memberId, Long menuId, int quantity) {
-        Cart cart = getOrCreateCart(memberId);
+    public void addItem(AddCartItemCommand command) {
+        Cart cart = getOrCreateCart(command.getMemberId());
         
         Optional<CartItem> existingItem = cart.getItems().stream()
-                .filter(item -> item.getMenuId().equals(menuId))
+                .filter(item -> item.getMenuId().equals(command.getMenuId()))
                 .findFirst();
 
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
-            item.setQuantity(item.getQuantity() + quantity);
+            item.setQuantity(item.getQuantity() + command.getQuantity());
         } else {
             CartItem newItem = CartItem.builder()
                     .cart(cart)
-                    .menuId(menuId)
-                    .quantity(quantity)
+                    .menuId(command.getMenuId())
+                    .quantity(command.getQuantity())
                     .build();
             cart.getItems().add(newItem);
         }
@@ -76,29 +80,29 @@ public class ManageCartService implements ManageCartUseCase {
 
     @Override
     @Transactional
-    public void updateQuantity(UUID memberId, Long menuId, int quantity) {
-        Cart cart = getOrCreateCart(memberId);
+    public void updateQuantity(UpdateCartItemCommand command) {
+        Cart cart = getOrCreateCart(command.getMemberId());
         
         cart.getItems().stream()
-                .filter(item -> item.getMenuId().equals(menuId))
+                .filter(item -> item.getMenuId().equals(command.getMenuId()))
                 .findFirst()
-                .ifPresent(item -> item.setQuantity(quantity));
+                .ifPresent(item -> item.setQuantity(command.getQuantity()));
                 
         cartPersistencePort.save(cart);
     }
 
     @Override
     @Transactional
-    public void removeItem(UUID memberId, Long menuId) {
-        Cart cart = getOrCreateCart(memberId);
-        cart.getItems().removeIf(item -> item.getMenuId().equals(menuId));
+    public void removeItem(RemoveCartItemCommand command) {
+        Cart cart = getOrCreateCart(command.getMemberId());
+        cart.getItems().removeIf(item -> item.getMenuId().equals(command.getMenuId()));
         cartPersistencePort.save(cart);
     }
 
     @Override
     @Transactional
-    public void clearCart(UUID memberId) {
-        Cart cart = getOrCreateCart(memberId);
+    public void clearCart(ClearCartCommand command) {
+        Cart cart = getOrCreateCart(command.getMemberId());
         cart.getItems().clear();
         cartPersistencePort.save(cart);
     }
