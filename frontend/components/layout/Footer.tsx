@@ -121,6 +121,7 @@ export default function Footer() {
                         height={40}
                         className={styles.scrollTopImage}
                     />
+                    <span className={styles.scrollTopBadge}>⇧</span>
                 </button>
             )}
         </footer>
