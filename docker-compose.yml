@@ -32,6 +32,7 @@ services:
       # 컨테이너 내부 포트를 3000으로 설정
       - PORT=3000
       - API_BASE_URL=http://backend:8080
+      - AGENT_BASE_URL=http://agent:8000
       - SESSION_SECRET=${SESSION_SECRET}
     depends_on:
       - backend

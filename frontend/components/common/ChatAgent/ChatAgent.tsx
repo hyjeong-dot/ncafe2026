@@ -121,48 +121,46 @@ export default function ChatAgent() {
         setInputValue('');
         setIsTyping(true);
 
-        // =============================================
-        // 📌 Gemini API 연동 시 아래 코드로 교체하세요
-        // =============================================
-        // try {
-        //     const res = await fetch('/api/chat', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify({
-        //             message: content.trim(),
-        //             history: messages.map(m => ({
-        //                 role: m.role === 'agent' ? 'model' : 'user',
-        //                 parts: [{ text: m.content }],
-        //             })),
-        //         }),
-        //     });
-        //     const data = await res.json();
-        //     const agentReply = data.reply;
-        // } catch (error) {
-        //     console.error('Chat API error:', error);
-        //     const agentReply = '죄송해요, 잠시 연결에 문제가 생겼어요. 다시 시도해주세요! 🫠';
-        // }
-        // =============================================
+        let agentReply = '';
+        try {
+            // Chat 메시지 내역을 Agent API 형식에 맞게 변환
+            const formattedMessages = messages.map(m => ({
+                role: m.role === 'agent' ? 'model' : 'user',
+                content: m.content
+            }));
 
-        // 더미 응답 (1~2초 딜레이로 자연스러움 연출)
-        const delay = 800 + Math.random() * 1200;
-        setTimeout(() => {
-            const agentReply = getDummyResponse(content.trim());
+            // 현재 사용자 메시지 추가
+            formattedMessages.push({ role: 'user', content: content.trim() });
 
-            const agentMessage: Message = {
-                id: `agent-${Date.now()}`,
-                role: 'agent',
-                content: agentReply,
-                timestamp: new Date(),
-            };
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: formattedMessages,
+                    stream: false
+                }),
+            });
 
-            setMessages(prev => [...prev, agentMessage]);
-            setIsTyping(false);
+            const data = await res.json();
+            agentReply = data.reply;
+        } catch (error) {
+            console.error('Chat API error:', error);
+            agentReply = '죄송해요, 잠시 연결에 문제가 생겼어요. 다시 시도해주세요! 🫠';
+        }
 
-            if (!isOpen) {
-                setUnreadCount(prev => prev + 1);
-            }
-        }, delay);
+        const agentMessage: Message = {
+            id: `agent-${Date.now()}`,
+            role: 'agent',
+            content: agentReply,
+            timestamp: new Date(),
+        };
+
+        setMessages(prev => [...prev, agentMessage]);
+        setIsTyping(false);
+
+        if (!isOpen) {
+            setUnreadCount(prev => prev + 1);
+        }
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
