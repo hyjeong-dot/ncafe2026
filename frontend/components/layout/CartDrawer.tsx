@@ -7,12 +7,13 @@ import { useCart } from '@/context/CartContext';
 import styles from './CartDrawer.module.css';
 
 export default function CartDrawer() {
-    const { 
-        items, 
-        isCartOpen, 
-        setCartOpen, 
-        updateQuantity, 
-        removeItem, 
+    const {
+        items,
+        isCartOpen,
+        setCartOpen,
+        updateQuantity,
+        removeItem,
+        totalCount,
         totalPrice,
         clearCart
     } = useCart();
@@ -36,7 +37,7 @@ export default function CartDrawer() {
                     {items.length === 0 ? (
                         <div className={styles.emptyCart}>
                             <div className={styles.emptyIcon}>🍮</div>
-                            <p>장바구니가 비어있어요.<br/>메타몽이 기다리고 있어요!</p>
+                            <p>장바구니가 비어있어요.<br />메타몽이 기다리고 있어요!</p>
                         </div>
                     ) : (
                         <div className={styles.itemList}>
@@ -44,12 +45,13 @@ export default function CartDrawer() {
                                 <div key={item.id} className={styles.cartItem}>
                                     <div className={styles.itemImage}>
                                         {item.image ? (
-                                            <Image 
-                                                src={item.image} 
-                                                alt={item.korName} 
-                                                width={60} 
-                                                height={60} 
+                                            <Image
+                                                src={item.image}
+                                                alt={item.korName}
+                                                width={60}
+                                                height={60}
                                                 className={styles.img}
+                                                unoptimized
                                             />
                                         ) : (
                                             <div className={styles.placeholderImg}>☕</div>
@@ -58,7 +60,7 @@ export default function CartDrawer() {
                                     <div className={styles.itemInfo}>
                                         <div className={styles.itemHeader}>
                                             <h3>{item.korName}</h3>
-                                            <button 
+                                            <button
                                                 className={styles.deleteBtn}
                                                 onClick={() => removeItem(item.id)}
                                             >
@@ -67,7 +69,7 @@ export default function CartDrawer() {
                                         </div>
                                         <p className={styles.price}>{(item.price * item.quantity).toLocaleString()}원</p>
                                         <div className={styles.quantityControl}>
-                                            <button 
+                                            <button
                                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                 disabled={item.quantity <= 1}
                                             >
@@ -88,7 +90,7 @@ export default function CartDrawer() {
                 {items.length > 0 && (
                     <div className={styles.footer}>
                         <div className={styles.totalRow}>
-                            <span>총 합계</span>
+                            <span>총 합계 <span className={styles.countInfo}>({totalCount}개 상품)</span></span>
                             <span className={styles.totalPrice}>{totalPrice.toLocaleString()}원</span>
                         </div>
                         <div className={styles.actionBtns}>

@@ -231,6 +231,14 @@
     color: #8b62c0;
 }
 
+.countInfo {
+    font-size: 0.85rem;
+    color: #a87edb;
+    font-weight: 500;
+    margin-left: 0.4rem;
+    opacity: 0.8;
+}
+
 .orderBtn {
     width: 100%;
     padding: 1.1rem;
