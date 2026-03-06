@@ -8,6 +8,7 @@ import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
+import { fetchAPI } from '@/lib/api';
 import Modal from '@/components/common/Modal/Modal';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
@@ -24,6 +25,16 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
 
+    // Initial check on mount or when menu/user changes
+    useEffect(() => {
+        if (user && menu) {
+            fetch(`${window.location.origin}/api/favorites/${menu.id}/check`)
+                .then(res => res.json())
+                .then(data => setIsLiked(data.isFavorite))
+                .catch(err => console.error("Error checking favorite:", err));
+        }
+    }, [user, menu]);
+
     const handleShare = () => {
         if (typeof window !== 'undefined') {
             navigator.clipboard.writeText(window.location.href);
@@ -31,16 +42,32 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
         }
     };
 
-    const handleLike = () => {
+    const handleLike = async () => {
         if (!user) {
             setIsLoginModalOpen(true);
             return;
         }
-        setIsLiked(!isLiked);
-        if (!isLiked) {
-            toast.success("찜 목록에 담았어요! 마이페이지에서 확인해 보세요 🍮", {
-                icon: '💜',
+
+        try {
+            const result = await fetchAPI(`/favorites/${menu?.id}`, {
+                method: 'POST'
             });
+            
+            const newLikedState = result.isFavorite;
+            setIsLiked(newLikedState);
+            
+            if (newLikedState) {
+                toast.success("찜 목록에 담았어요! 마이페이지에서 확인해 보세요 🍮", {
+                    icon: '💜',
+                });
+            } else {
+                toast("찜 목록에서 제외했습니다.", {
+                    icon: '🤍',
+                });
+            }
+        } catch (err) {
+            console.error("Failed to toggle interest:", err);
+            toast.error("처리 중 오류가 발생했습니다.");
         }
     };
 
