@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react';
 import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
@@ -21,6 +22,27 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const router = useRouter();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleShare = () => {
+        if (typeof window !== 'undefined') {
+            navigator.clipboard.writeText(window.location.href);
+            toast.success("주소가 복사되었어요! 💜");
+        }
+    };
+
+    const handleLike = () => {
+        if (!user) {
+            setIsLoginModalOpen(true);
+            return;
+        }
+        setIsLiked(!isLiked);
+        if (!isLiked) {
+            toast.success("찜 목록에 담았어요! 마이페이지에서 확인해 보세요 🍮", {
+                icon: '💜',
+            });
+        }
+    };
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('ko-KR').format(price);
@@ -48,8 +70,20 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
             <div className={styles.titleRow}>
                 <h1 className={styles.title}>{menu.korName}</h1>
                 <div className={styles.actionIcons}>
-                    <button className={styles.iconBtn}><Heart size={20} /></button>
-                    <button className={styles.iconBtn}><Share2 size={20} /></button>
+                    <button 
+                        className={`${styles.iconBtn} ${isLiked ? styles.liked : ''}`}
+                        onClick={handleLike}
+                        aria-label="좋아요"
+                    >
+                        <Heart size={22} fill={isLiked ? "currentColor" : "none"} />
+                    </button>
+                    <button 
+                        className={styles.iconBtn}
+                        onClick={handleShare}
+                        aria-label="공유하기"
+                    >
+                        <Share2 size={22} />
+                    </button>
                 </div>
             </div>
             <p className={styles.engTitle}>{menu.engName}</p>
