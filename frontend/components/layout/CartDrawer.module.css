@@ -263,3 +263,24 @@
         width: 100%;
     }
 }
+
+.browseBtn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #f0e6ff, #e0ccff);
+    color: #8b62c0;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 200ms ease;
+    border: 1px solid #d4bbf7;
+}
+
+.browseBtn:hover {
+    background: linear-gradient(135deg, #e0ccff, #d4bbf7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);
+}

@@ -1,8 +1,9 @@
 "use client";
 
 import React from 'react';
-import { ShoppingBag, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { ShoppingBag, X, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { getImageSrc } from '@/lib/api';
 import styles from './CartDrawer.module.css';
@@ -39,6 +40,13 @@ export default function CartDrawer() {
                         <div className={styles.emptyCart}>
                             <div className={styles.emptyIcon}>🍮</div>
                             <p>장바구니가 비어있어요.<br />메타몽이 기다리고 있어요!</p>
+                            <Link 
+                                href="/menus" 
+                                className={styles.browseBtn}
+                                onClick={() => setCartOpen(false)}
+                            >
+                                메뉴 보러가기 <ArrowRight size={16} />
+                            </Link>
                         </div>
                     ) : (
                         <div className={styles.itemList}>
