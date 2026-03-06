@@ -16,8 +16,8 @@ export async function GET(
     const { path } = await params;
     const imagePath = path.join('/');
 
-    // 유저님의 백엔드 이미지 저장 경로가 /upload/ 이므로 이를 반영합니다.
-    const targetUrl = `${API_BASE}/upload/${imagePath}`;
+    // 유저님의 백엔드 이미지 저장 경로가 /upload/images/ 이므로 이를 반영합니다.
+    const targetUrl = `${API_BASE}/upload/images/${imagePath}`;
 
     try {
         const proxyRes = await fetch(targetUrl, {
