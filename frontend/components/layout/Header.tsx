@@ -38,6 +38,13 @@ export default function Header() {
 
 
                 <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
+                    <div className={styles.infoNav}>
+                        <Link href="/#about" className={styles.navLink} onClick={closeMobileMenu}>카페 소개</Link>
+                        <Link href="/#menu" className={styles.navLink} onClick={closeMobileMenu}>특별 메뉴</Link>
+                        <Link href="/#special" className={styles.navLink} onClick={closeMobileMenu}>즐길거리</Link>
+                        <Link href="/#reviews" className={styles.navLink} onClick={closeMobileMenu}>고객 후기</Link>
+                    </div>
+
                     <div className={styles.actionNav}>
                         <button 
                             className={styles.desktopCartBtn}
