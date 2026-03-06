@@ -14,7 +14,7 @@ async function proxyRequest(req: NextRequest) {
     const headers = new Headers();
 
     // Copy necessary headers from the original request (excluding sensitive or connection-related ones)
-    const skipHeaders = ['host', 'cookie', 'connection', 'keep-alive', 'transfer-encoding'];
+    const skipHeaders = ['host', 'cookie', 'connection', 'keep-alive', 'transfer-encoding', 'content-length'];
     req.headers.forEach((value, key) => {
         if (!skipHeaders.includes(key.toLowerCase())) {
             headers.set(key, value);
