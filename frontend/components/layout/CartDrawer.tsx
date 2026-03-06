@@ -4,6 +4,7 @@ import React from 'react';
 import { ShoppingBag, X, Plus, Minus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
+import { getImageSrc } from '@/lib/api';
 import styles from './CartDrawer.module.css';
 
 export default function CartDrawer() {
@@ -46,7 +47,7 @@ export default function CartDrawer() {
                                     <div className={styles.itemImage}>
                                         {item.image ? (
                                             <Image
-                                                src={item.image}
+                                                src={getImageSrc(item.image)}
                                                 alt={item.korName}
                                                 width={60}
                                                 height={60}

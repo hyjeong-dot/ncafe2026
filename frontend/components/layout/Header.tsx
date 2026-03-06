@@ -35,33 +35,9 @@ export default function Header() {
                     <span>메타몽 카페</span>
                 </Link>
 
-                <div className={styles.mobileActions}>
-                    <button 
-                        className={styles.cartButton}
-                        onClick={() => setCartOpen(true)}
-                        aria-label="장바구니 열기"
-                    >
-                        <ShoppingBag size={24} />
-                        {totalCount > 0 && <span className={styles.cartBadge}>{totalCount}</span>}
-                    </button>
 
-                    <button 
-                        className={styles.mobileMenuBtn} 
-                        onClick={toggleMobileMenu}
-                        aria-label="메뉴 열기"
-                    >
-                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
-                </div>
 
                 <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
-                    <div className={styles.infoNav}>
-                        <Link href="/#about" className={styles.navLink} onClick={closeMobileMenu}>카페 소개</Link>
-                        <Link href="/#menu" className={styles.navLink} onClick={closeMobileMenu}>특별 메뉴</Link>
-                        <Link href="/#special" className={styles.navLink} onClick={closeMobileMenu}>즐길거리</Link>
-                        <Link href="/#reviews" className={styles.navLink} onClick={closeMobileMenu}>고객 후기</Link>
-                    </div>
-
                     <div className={styles.actionNav}>
                         <button 
                             className={styles.desktopCartBtn}
@@ -104,6 +80,25 @@ export default function Header() {
                         </div>
                     </div>
                 </nav>
+
+                <div className={styles.mobileActions}>
+                    <button 
+                        className={styles.cartButton}
+                        onClick={() => setCartOpen(true)}
+                        aria-label="장바구니 열기"
+                    >
+                        <ShoppingBag size={24} />
+                        {totalCount > 0 && <span className={styles.cartBadge}>{totalCount}</span>}
+                    </button>
+
+                    <button 
+                        className={styles.mobileMenuBtn} 
+                        onClick={toggleMobileMenu}
+                        aria-label="메뉴 열기"
+                    >
+                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                </div>
             </div>
         </header>
     );

@@ -81,9 +81,8 @@
 .nav {
   display: flex;
   flex: 1;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  margin-left: 2rem;
 }
 
 .infoNav {
@@ -268,7 +267,7 @@
 }
 
 .mobileActions {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.5rem;
 }
@@ -342,6 +341,7 @@
 @media (max-width: 768px) {
   .mobileActions {
     display: flex;
+    margin-left: auto;
   }
 
   .desktopCartBtn {
