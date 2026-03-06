@@ -126,7 +126,7 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
         menu = menuRepository.save(menu); // 실제 DB에 입력되어 생성된 메뉴를 반환 받음. menu.getId() 로 PK 획득 가능
 
-        int imgOrder = 1;
+        int imgOrder = 0;
         for (String url : imageUrls) {
             AdminMenuImage image = AdminMenuImage.builder()
                     .menuId(menu.getId())
