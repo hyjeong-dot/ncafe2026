@@ -1,0 +1,43 @@
+package com.new_cafe.app.backend.auth.application.service;
+
+import com.new_cafe.app.backend.auth.application.command.SignupCommand;
+import com.new_cafe.app.backend.auth.application.port.in.SignupUseCase;
+import com.new_cafe.app.backend.auth.application.result.SignupResult;
+import com.new_cafe.app.backend.member.application.port.out.SaveMemberPort;
+import com.new_cafe.app.backend.member.domain.model.Member;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class SignupService implements SignupUseCase {
+
+    private final SaveMemberPort saveMemberPort;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    @Transactional
+    public SignupResult signup(SignupCommand command) {
+        if (saveMemberPort.existsByNickname(command.getUsername())) {
+             throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
+        }
+
+        Member newMember = Member.builder()
+                .nickname(command.getUsername())
+                .password(passwordEncoder.encode(command.getPassword()))
+                .role("ROLE_USER")
+                .build();
+        
+        Member savedMember = saveMemberPort.save(newMember);
+        log.info("Signup successful for user: {}", command.getUsername());
+        
+        return SignupResult.builder()
+                .memberId(savedMember.getId())
+                .username(savedMember.getNickname())
+                .build();
+    }
+}

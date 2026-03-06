@@ -10,10 +10,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
+public class MeResponse {
     private UUID memberId;
     private String username;
     private String name;
     private String role;
-    private String token;
 }

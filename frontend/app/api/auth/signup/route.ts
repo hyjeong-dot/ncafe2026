@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(error, { status: signupRes.status });
         }
 
-        const result = await signupRes.json();
-        return NextResponse.json(result);
+        // The Java backend returns 201 Created with an empty body
+        return NextResponse.json({ success: true, message: '회원가입 완료!' });
     } catch (error) {
         console.error('Signup error:', error);
         return NextResponse.json({ message: '회원가입 도중 오류가 발생했습니다.' }, { status: 500 });

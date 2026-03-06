@@ -19,11 +19,11 @@ export async function POST(req: NextRequest) {
             return NextResponse.json(error, { status: loginRes.status });
         }
 
-        // Backend returns LoginResponse with success: true, data: { memberId, username, name, role, token }
+        // Backend returns LoginResponse exactly (without success wrapper)
         const result = await loginRes.json();
 
-        // 1차: 응답 본문에서 토큰 추출 (가장 안정적)
-        let token = result.data?.token || '';
+        // 1차: 응답 본문에서 바로 토큰 추출
+        let token = result.token || '';
 
         // 2차 폴백: Set-Cookie 헤더에서 추출 (이전 호환성)
         if (!token) {
@@ -45,10 +45,10 @@ export async function POST(req: NextRequest) {
         const session = await getSession();
         session.token = token;
         session.user = {
-            id: result.data.memberId,
-            username: result.data.username,
-            name: result.data.name,
-            role: result.data.role
+            id: result.memberId,
+            username: result.username,
+            name: result.name,
+            role: result.role
         };
         await session.save();
 
