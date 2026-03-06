@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { Send, X } from 'lucide-react';
+import Image from 'next/image';
 import styles from './ChatAgent.module.css';
 
 // =============================================
@@ -198,7 +199,9 @@ export default function ChatAgent() {
                     {/* Header */}
                     <div className={styles.chatHeader}>
                         <div className={styles.chatHeaderInfo}>
-                            <div className={styles.agentAvatar}>🫠</div>
+                            <div className={styles.agentAvatar}>
+                                <Image src="/images/ditto/ditto-Bot.png" alt="Ditto Bot" width={38} height={38} className={styles.agentAvatarImage} />
+                            </div>
                             <div>
                                 <div className={styles.agentName}>메타몽 AI</div>
                                 <div className={styles.agentStatus}>
@@ -220,7 +223,9 @@ export default function ChatAgent() {
                                 className={`${styles.messageRow} ${msg.role === 'user' ? styles.messageRowUser : styles.messageRowAgent}`}
                             >
                                 {msg.role === 'agent' && (
-                                    <div className={styles.messageAvatar}>🫠</div>
+                                    <div className={styles.messageAvatar}>
+                                        <Image src="/images/ditto/ditto-Bot.png" alt="Ditto Bot" width={32} height={32} className={styles.messageAvatarImage} />
+                                    </div>
                                 )}
                                 <div>
                                     <div
@@ -238,7 +243,9 @@ export default function ChatAgent() {
                         {/* Typing indicator */}
                         {isTyping && (
                             <div className={`${styles.messageRow} ${styles.messageRowAgent}`}>
-                                <div className={styles.messageAvatar}>🫠</div>
+                                <div className={styles.messageAvatar}>
+                                    <Image src="/images/ditto/ditto-Bot.png" alt="Ditto Bot" width={32} height={32} className={styles.messageAvatarImage} />
+                                </div>
                                 <div className={styles.typingIndicator}>
                                     <div className={styles.typingDots}>
                                         <span className={styles.typingDot} />
@@ -297,7 +304,11 @@ export default function ChatAgent() {
                 aria-label="AI 채팅 열기"
                 id="chat-agent-bubble"
             >
-                <span className={styles.bubbleIcon}>{isOpen ? '✕' : '🤖'}</span>
+                {isOpen ? (
+                    <X className={styles.bubbleClose} size={24} />
+                ) : (
+                    <Image src="/images/ditto/ditto-Bot.png" alt="Ditto Bot" width={62} height={62} className={styles.bubbleImage} />
+                )}
                 {!isOpen && unreadCount > 0 && (
                     <span className={styles.unreadBadge}>{unreadCount}</span>
                 )}

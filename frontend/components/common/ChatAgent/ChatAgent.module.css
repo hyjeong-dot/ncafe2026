@@ -7,27 +7,30 @@
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    width: 58px;
-    height: 58px;
+    width: 62px;
+    height: 62px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--ditto-500), var(--ditto-700));
+    background: #fff;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: none;
+    border: 3px solid var(--ditto-300);
     box-shadow:
         0 4px 15px rgba(168, 85, 247, 0.35),
         0 0 0 0 rgba(168, 85, 247, 0.4);
     z-index: 1100;
     transition: all 300ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
     animation: bubblePulse 3s ease-in-out infinite;
+    overflow: hidden;
+    padding: 0;
 }
 
 .chatBubble:hover {
-    transform: scale(1.12);
+    transform: scale(1.12) rotate(5deg);
     box-shadow: 0 6px 25px rgba(168, 85, 247, 0.5);
+    border-color: var(--ditto-500);
 }
 
 .chatBubble.shifted {
@@ -49,6 +52,21 @@
 .bubbleIcon {
     font-size: 1.6rem;
     line-height: 1;
+}
+
+.bubbleImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms ease;
+}
+
+.chatBubble:hover .bubbleImage {
+    transform: scale(1.15);
+}
+
+.bubbleClose {
+    color: var(--ditto-700);
 }
 
 /* ---- Unread Badge ---- */
@@ -141,14 +159,23 @@
 }
 
 .agentAvatar {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.agentAvatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .agentName {
@@ -253,8 +280,8 @@
 }
 
 .messageAvatar {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--ditto-200);
     display: flex;
@@ -263,10 +290,18 @@
     font-size: 0.85rem;
     flex-shrink: 0;
     margin-top: 2px;
+    overflow: hidden;
+    border: 1px solid var(--ditto-300);
+}
+
+.messageAvatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .messageBubble {
-    max-width: 75%;
+    max-width: 90%;
     padding: 0.65rem 0.9rem;
     border-radius: 1rem;
     font-size: 0.88rem;
