@@ -24,8 +24,10 @@ export const metadata: Metadata = {
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ChatAgent from "@/components/common/ChatAgent/ChatAgent";
+import CartDrawer from "@/components/layout/CartDrawer";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 
 export default function RootLayout({
   children,
@@ -36,11 +38,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>
-          <Header />
-          {children}
-          <Footer />
-          <ToastProvider />
-          <ChatAgent />
+          <CartProvider>
+            <Header />
+            {children}
+            <Footer />
+            <ToastProvider />
+            <ChatAgent />
+            <CartDrawer />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

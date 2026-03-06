@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Settings, LogIn, LogOut, User, UserPlus, Menu, X } from "lucide-react";
+import { Settings, LogIn, LogOut, User, UserPlus, Menu, X, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import styles from "./layout.module.css";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
     const { user, logout } = useAuth();
+    const { totalCount, setCartOpen } = useCart();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const toggleMobileMenu = () => {
@@ -30,16 +32,26 @@ export default function Header() {
                         height={32}
                         className={styles.logoImage}
                     />
-                    <span>메타몽 카페</span>
                 </Link>
 
-                <button 
-                    className={styles.mobileMenuBtn} 
-                    onClick={toggleMobileMenu}
-                    aria-label="메뉴 열기"
-                >
-                    {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                </button>
+                <div className={styles.headerRight}>
+                    <button 
+                        className={styles.cartButton}
+                        onClick={() => setCartOpen(true)}
+                        aria-label="장바구니 열기"
+                    >
+                        <ShoppingBag size={24} />
+                        {totalCount > 0 && <span className={styles.cartBadge}>{totalCount}</span>}
+                    </button>
+
+                    <button 
+                        className={styles.mobileMenuBtn} 
+                        onClick={toggleMobileMenu}
+                        aria-label="메뉴 열기"
+                    >
+                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                </div>
 
                 <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
                     <Link href="/#about" className={styles.navLink} onClick={closeMobileMenu}>카페 소개</Link>

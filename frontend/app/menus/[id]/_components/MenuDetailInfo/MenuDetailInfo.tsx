@@ -6,6 +6,7 @@ import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react'
 import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import Modal from '@/components/common/Modal/Modal';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
@@ -16,9 +17,9 @@ interface MenuDetailInfoProps {
 export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const { menu, isLoading, error } = useMenuDetail(id);
     const { user } = useAuth();
+    const { addItem } = useCart();
     const router = useRouter();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-    const [isCartModalOpen, setIsCartModalOpen] = useState(false);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
     const formatPrice = (price: number) => {
@@ -77,9 +78,15 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 <button
                     className={styles.cartBtn}
                     disabled={menu.isSoldOut}
-                    onClick={() => handleAction(() => {
-                        setIsCartModalOpen(true);
-                    })}
+                    onClick={() => {
+                        addItem({
+                            id: menu.id.toString(),
+                            korName: menu.korName,
+                            engName: menu.engName,
+                            price: menu.price,
+                            image: menu.imageSrc
+                        });
+                    }}
                 >
                     <ShoppingBag size={20} />
                     <span>장바구니</span>
@@ -107,20 +114,7 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 variant="ditto"
             />
 
-            {/* 장바구니 담기 모달 */}
-            <Modal
-                isOpen={isCartModalOpen}
-                onClose={() => setIsCartModalOpen(false)}
-                title="장바구니에 담았어요! 🛍️"
-                description={`${menu.korName}이(가) 장바구니에 담겼어요 💜 메타몽이 잘 보관해 드릴게요!`}
-                confirmText="장바구니로 가기"
-                cancelText="계속 쇼핑하기"
-                onConfirm={() => {
-                    setIsCartModalOpen(false);
-                    router.push('/cart');
-                }}
-                variant="ditto"
-            />
+
 
             {/* 주문하기 모달 */}
             <Modal

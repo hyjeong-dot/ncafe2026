@@ -245,6 +245,47 @@
   text-align: center;
 }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cartButton {
+  background: none;
+  border: none;
+  color: var(--ditto-600);
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 200ms ease;
+}
+
+.cartButton:hover {
+  color: var(--ditto-800);
+}
+
+.cartBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--ditto-600);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(168, 85, 247, 0.2);
+}
+
 .mobileMenuBtn {
   display: none;
   background: none;
