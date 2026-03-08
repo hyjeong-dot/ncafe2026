@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.favorite.application.service;
 
+import com.new_cafe.app.backend.favorite.application.port.in.CheckFavoriteUseCase;
 import com.new_cafe.app.backend.favorite.application.command.CheckFavoriteCommand;
 import com.new_cafe.app.backend.favorite.application.result.CheckFavoriteResult;
 import com.new_cafe.app.backend.favorite.application.port.out.LoadFavoritePort;

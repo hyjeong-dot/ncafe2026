@@ -13,7 +13,6 @@ import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
 import com.new_cafe.app.backend.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
