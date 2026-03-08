@@ -11,41 +11,25 @@ interface MenuCardProps {
     onLoad?: () => void;
 }
 
+/**
+ * 표준 메뉴 카드 컴포넌트
+ * 백엔드 DTO(MenuResult, FavoriteMenuResult 등)가 통일되어 이제 매우 단순한 구조를 유지합니다.
+ */
 export default function MenuCard({ menu, onLoad }: MenuCardProps) {
-    const showImage = menu.imageSrc && menu.imageSrc !== 'blank.png';
     const imageSrc = getImageSrc(menu.imageSrc);
-
-    useEffect(() => {
-        // 이미지가 아예 없는 경우 부모에게 완료를 즉시 알림
-        if (!showImage) {
-            onLoad?.();
-        }
-    }, [showImage, onLoad]);
-
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('ko-KR').format(price);
-    };
 
     return (
         <Link href={`/menus/${menu.id}`} className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}>
-            {/* Image */}
             <div className={styles.imageWrapper}>
-                {showImage ? (
-                    <Image
-                        src={imageSrc}
-                        alt={menu.korName}
-                        fill
-                        className={styles.image}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        onLoad={() => onLoad?.()}
-                        onError={() => onLoad?.()}
-                    />
-                ) : (
-                    <div className={styles.noImage}>
-                        <ImageIcon size={40} />
-                        <span>준비 중</span>
-                    </div>
-                )}
+                <Image
+                    src={imageSrc}
+                    alt={menu.korName}
+                    fill
+                    className={styles.image}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    onLoad={() => onLoad?.()}
+                    onError={() => onLoad?.()}
+                />
 
                 {menu.isSoldOut && (
                     <div className={styles.soldOutOverlay}>
@@ -58,7 +42,6 @@ export default function MenuCard({ menu, onLoad }: MenuCardProps) {
                 </span>
             </div>
 
-            {/* Content */}
             <div className={styles.content}>
                 <h3 className={styles.korName}>{menu.korName}</h3>
                 <p className={styles.engName}>{menu.engName}</p>
@@ -66,7 +49,7 @@ export default function MenuCard({ menu, onLoad }: MenuCardProps) {
                     <p className={styles.description}>{menu.description}</p>
                 )}
                 <div className={styles.priceRow}>
-                    <span className={styles.price}>₩{formatPrice(menu.price)}</span>
+                    <span className={styles.price}>₩{menu.price?.toLocaleString()}</span>
                 </div>
             </div>
         </Link>

@@ -30,7 +30,11 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
         if (user && menu) {
             fetch(`${window.location.origin}/api/favorites/${menu.id}/check`)
                 .then(res => res.json())
-                .then(data => setIsLiked(data.isFavorite))
+                .then(data => {
+                    // API가 { isFavorite: true } 또는 직접 true/false를 줄 수 있음을 대비
+                    const liked = typeof data === 'boolean' ? data : !!data.isFavorite;
+                    setIsLiked(liked);
+                })
                 .catch(err => console.error("Error checking favorite:", err));
         }
     }, [user, menu]);
@@ -54,7 +58,8 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 body: JSON.stringify({ menuId: menu?.id })
             });
             
-            const newLikedState = result.isFavorite;
+            // 결과값 체크 (isFavorite 필드 혹은 불리언)
+            const newLikedState = typeof result === 'boolean' ? result : !!result.isFavorite;
             setIsLiked(newLikedState);
             
             if (newLikedState) {
@@ -146,7 +151,8 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                             korName: menu.korName,
                             engName: menu.engName,
                             price: menu.price,
-                            image: menu.imageSrc
+                            image: menu.imageSrc,    // 로컬용
+                            imageSrc: menu.imageSrc  // 서버 동기화용 호환성
                         });
                     }}
                 >

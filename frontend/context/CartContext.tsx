@@ -12,6 +12,7 @@ export interface CartItem {
     price: number;
     quantity: number;
     image?: string;
+    imageSrc?: string; // For backward compatibility with server response
 }
 
 interface CartContextType {

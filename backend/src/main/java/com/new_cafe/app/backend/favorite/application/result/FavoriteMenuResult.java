@@ -12,4 +12,8 @@ public class FavoriteMenuResult {
     private final int price;
     private final String description;
     private final Long categoryId;
+    private final String categoryName;
+    private final String categoryIcon;
+    private final String imageSrc;
+    private final boolean isSoldOut;
 }

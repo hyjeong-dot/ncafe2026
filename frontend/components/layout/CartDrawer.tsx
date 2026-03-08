@@ -11,6 +11,10 @@ import Modal from '@/components/common/Modal/Modal';
 import { getImageSrc } from '@/lib/api';
 import styles from './CartDrawer.module.css';
 
+/**
+ * 장바구니 드로어
+ * 백엔드 데이터와 프론트엔드 상태가 imageSrc로 통일되어 구조가 간결해졌습니다.
+ */
 export default function CartDrawer() {
     const router = useRouter();
     const { user } = useAuth();
@@ -23,7 +27,6 @@ export default function CartDrawer() {
         removeItem,
         totalCount,
         totalPrice,
-        clearCart
     } = useCart();
 
     const handleOrder = () => {
@@ -31,7 +34,6 @@ export default function CartDrawer() {
             setLoginModalOpen(true);
             return;
         }
-        // TODO: Proceed with order logic (redirect to order page or process order)
         console.log('Order processed for user:', user.username);
     };
 
@@ -69,18 +71,13 @@ export default function CartDrawer() {
                                 {items.map((item) => (
                                     <div key={item.id} className={styles.cartItem}>
                                         <div className={styles.itemImage}>
-                                            {item.image ? (
-                                                <Image
-                                                    src={getImageSrc(item.image)}
-                                                    alt={item.korName}
-                                                    width={60}
-                                                    height={60}
-                                                    className={styles.img}
-                                                    unoptimized
-                                                />
-                                            ) : (
-                                                <div className={styles.placeholderImg}>☕</div>
-                                            )}
+                                            <Image
+                                                src={getImageSrc(item.imageSrc || item.image)}
+                                                alt={item.korName}
+                                                fill
+                                                className={styles.img}
+                                                sizes="60px"
+                                            />
                                         </div>
                                         <div className={styles.itemInfo}>
                                             <div className={styles.itemHeader}>
