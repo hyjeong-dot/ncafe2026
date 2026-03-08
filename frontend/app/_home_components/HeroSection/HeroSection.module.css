@@ -1,0 +1,212 @@
+/* Hero Section Styles */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  background: linear-gradient(180deg,
+      #f0e6ff 0%,
+      #f8f4ff 35%,
+      #fff5fd 65%,
+      #fdfcff 100%);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Floating decorations */
+.floatingDeco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floatItem {
+  position: absolute;
+  font-size: 1.8rem;
+  animation: floatSlow 6s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  text-align: left;
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.heroText {
+  flex: 1;
+}
+
+.heroImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, #f0e6ff, #fcc8e4);
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6e4a9e;
+  margin-bottom: 1.2rem;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.12);
+}
+
+.title {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.25;
+  color: #6e4a9e;
+  letter-spacing: -0.02em;
+}
+
+.titleHighlight {
+  background: linear-gradient(135deg, #c4a4f0, #fcc8e4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: #a87edb;
+  margin-bottom: 2rem;
+  line-height: 1.8;
+  max-width: 500px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  padding: 0.9rem 2rem;
+  background: linear-gradient(135deg, #d4bbf7, #a87edb);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 99px;
+  transition: all 300ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 35px rgba(168, 85, 247, 0.3);
+}
+
+.secondaryButton {
+  padding: 0.9rem 2rem;
+  background: transparent;
+  color: #8b62c0;
+  font-weight: 700;
+  border-radius: 99px;
+  border: 2px solid #e4d4fc;
+  transition: all 300ms ease;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secondaryButton:hover {
+  background: #f8f4ff;
+  border-color: #d4bbf7;
+  transform: translateY(-3px);
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 3rem;
+}
+
+/* === Ditto Character Image Wrapper === */
+.dittoCharacter {
+  position: relative;
+  width: 480px;
+  height: 480px;
+  margin: 0;
+  animation: dittoFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 15px 30px rgba(168, 85, 247, 0.12));
+}
+
+.scrollHint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #d4bbf7;
+  animation: bounce 2.5s infinite;
+}
+
+/* Animations */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+@keyframes dittoFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.02); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+  40% { transform: translate(-50%, -10px); }
+  60% { transform: translate(-50%, -5px); }
+}
+
+@media (max-width: 1024px) {
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 2.5rem;
+  }
+  .heroText {
+    order: 2;
+  }
+  .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .buttonGroup {
+    justify-content: center;
+  }
+  .dittoCharacter {
+    width: 320px;
+    height: 320px;
+  }
+}

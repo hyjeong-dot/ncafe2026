@@ -1,0 +1,90 @@
+/* CTA Section Styles */
+.ctaSection {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #a87edb, #6e4a9e);
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.ctaEmoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.ctaTitle {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.ctaDesc {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.ctaButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  padding: 0.9rem 2.5rem;
+  background: #fff;
+  color: #6e4a9e;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-radius: 99px;
+  transition: all 300ms ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.2);
+}
+
+.ctaSecondary {
+  padding: 0.9rem 2.5rem;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-radius: 99px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 300ms ease;
+}
+
+.ctaSecondary:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+}

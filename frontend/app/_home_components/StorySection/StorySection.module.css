@@ -1,0 +1,105 @@
+/* Story Section Styles */
+.aboutSection {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #fdfcff, #f8f4ff, #fdfcff);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.storyLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .storyLayout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+}
+
+.storyImageArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.storyImageWrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2rem;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 20px 40px rgba(168, 85, 247, 0.1);
+}
+
+.storyImage {
+  object-fit: cover;
+}
+
+.storyContent {
+  padding: 1rem 0;
+}
+
+.storyLabel {
+  color: #a87edb;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.storyTitle {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #6e4a9e;
+  margin-bottom: 1.5rem;
+  line-height: 1.35;
+}
+
+.storyText {
+  color: #a87edb;
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+  font-size: 1.02rem;
+}
+
+.storyFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.storyFeature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: #8b62c0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1024px) {
+  .storyFeature {
+    justify-content: center;
+  }
+}
+
+.storyFeatureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: #b8f0d8;
+  color: #16a34a;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
