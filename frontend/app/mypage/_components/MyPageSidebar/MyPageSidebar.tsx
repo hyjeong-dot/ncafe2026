@@ -78,9 +78,11 @@ export default function MyPageSidebar({
                     <CreditCard size={18} />
                     결제 수단
                 </button>
-                <hr style={{ margin: 'var(--space-2) 0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
+            </nav>
+            <hr className={styles.divider} />
+            <div className={styles.bottomActions}>
                 <button
-                    className={styles.menuItem}
+                    className={`${styles.menuItem} ${styles.dangerItem}`}
                     onClick={onLogout}
                 >
                     <LogOut size={18} />
@@ -93,7 +95,7 @@ export default function MyPageSidebar({
                     <UserMinus size={18} />
                     회원탈퇴
                 </button>
-            </nav>
+            </div>
         </aside>
     );
 }

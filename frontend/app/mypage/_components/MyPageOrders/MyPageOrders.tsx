@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "./MyPageOrders.module.css";
 import { fetchAPI } from "@/lib/api";
 import LoadingDitto from "@/components/common/LoadingDitto/LoadingDitto";
+import Modal from "@/components/common/Modal/Modal";
 import toast from 'react-hot-toast';
 
 interface OrderResult {
@@ -35,6 +36,8 @@ const getStatusBadge = (status: string) => {
 export default function MyPageOrders() {
     const [orders, setOrders] = useState<OrderResult[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+    const [orderToCancel, setOrderToCancel] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -51,20 +54,27 @@ export default function MyPageOrders() {
         fetchOrders();
     }, []);
 
-    const handleCancelOrder = async (orderId: number) => {
-        if (!confirm('정말 주문을 취소하시겠습니까?')) return;
+    const handleCancelOrderClick = (orderId: number) => {
+        setOrderToCancel(orderId);
+        setIsCancelModalOpen(true);
+    };
+
+    const handleConfirmCancel = async () => {
+        if (orderToCancel === null) return;
         
         try {
-            await fetchAPI(`/orders/${orderId}/cancel`, {
+            await fetchAPI(`/orders/${orderToCancel}/cancel`, {
                 method: 'PATCH'
             });
             toast.success('주문이 취소되었습니다.');
-            // 상태 업데이트
             setOrders(orders.map(o => 
-                o.orderId === orderId ? { ...o, status: 'CANCELLED' } : o
+                o.orderId === orderToCancel ? { ...o, status: 'CANCELLED' } : o
             ));
         } catch (error: any) {
             toast.error(error.message || '주문 취소 중 오류가 발생했습니다.');
+        } finally {
+            setIsCancelModalOpen(false);
+            setOrderToCancel(null);
         }
     };
 
@@ -112,15 +122,14 @@ export default function MyPageOrders() {
                                 </div>
                                 {(order.status === 'PENDING' || order.status === 'PAID') && (
                                     <button 
-                                        onClick={() => handleCancelOrder(order.orderId)}
+                                        onClick={() => handleCancelOrderClick(order.orderId)}
                                         style={{
-                                            padding: '0.4rem 0.8rem',
-                                            backgroundColor: 'var(--color-error-light)',
-                                            color: 'var(--color-error)',
-                                            border: '1px solid var(--color-error)',
-                                            borderRadius: '6px',
+                                            padding: 0,
+                                            background: 'none',
+                                            border: 'none',
+                                            color: 'var(--color-text-light)',
                                             fontSize: '0.85rem',
-                                            fontWeight: 'bold',
+                                            textDecoration: 'underline',
                                             cursor: 'pointer'
                                         }}
                                     >
@@ -132,6 +141,20 @@ export default function MyPageOrders() {
                     ))}
                 </div>
             )}
+
+            <Modal
+                isOpen={isCancelModalOpen}
+                onClose={() => {
+                    setIsCancelModalOpen(false);
+                    setOrderToCancel(null);
+                }}
+                title="주문을 취소할까요? 🥺"
+                description={`메타몽 바리스타가 준비를 멈추고 주문을 취소합니다.\n정말 취소하시겠어요?`}
+                confirmText="네, 취소할래요"
+                cancelText="아니요 (유지)"
+                onConfirm={handleConfirmCancel}
+                variant="ditto"
+            />
         </div>
     );
 }
