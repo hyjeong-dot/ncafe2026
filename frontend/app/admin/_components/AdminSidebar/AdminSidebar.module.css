@@ -24,9 +24,10 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-5) var(--space-5);
+    gap: var(--space-2);
+    padding: var(--space-5) var(--space-4);
     border-bottom: 1px solid var(--border-color);
+    min-height: 80px;
 }
 
 .logoIcon {
@@ -41,9 +42,11 @@
 }
 
 .logoText {
-    font-size: var(--text-xl);
+    flex: 1;
+    font-size: var(--text-lg);
     font-weight: var(--font-bold);
     color: var(--text-primary);
+    line-height: 1.2;
 }
 
 .logoSubtext {
