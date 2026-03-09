@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCart } from '@/context/CartContext';
+import { CartItem, useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { fetchAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -10,7 +10,11 @@ import toast from 'react-hot-toast';
 export function useOrder() {
     const router = useRouter();
     const { user, isLoading: authLoading } = useAuth();
-    const { items, totalPrice, clearCart, setCartOpen } = useCart();
+    const { items: cartItems, clearCart, setCartOpen } = useCart();
+
+    const [items, setItems] = useState<CartItem[]>([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [isDirectOrder, setIsDirectOrder] = useState(false);
 
     const [orderType, setOrderType] = useState<'DINE_IN' | 'TAKEOUT' | null>(null);
     const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'KAKAOPAY'>('CARD');
@@ -24,13 +28,31 @@ export function useOrder() {
             if (!user) {
                 toast.error('로그인이 필요합니다.');
                 router.replace('/login?redirect=/order');
-            } else if (items.length === 0 && !isSuccessModalOpen) {
+            } else if (items.length === 0 && !isSuccessModalOpen && cartItems.length === 0 && !sessionStorage.getItem('directOrder')) {
                 // Not in success state and cart is empty
-                toast.error('장바구니가 비어 있습니다.');
+                toast.error('주문할 상품이 없습니다.');
                 router.replace('/menus');
             }
         }
-    }, [user, authLoading, items, router, isSuccessModalOpen]);
+    }, [user, authLoading, items, cartItems, router, isSuccessModalOpen]);
+
+    useEffect(() => {
+        const directOrderStr = sessionStorage.getItem('directOrder');
+        if (directOrderStr) {
+            try {
+                const directItems = JSON.parse(directOrderStr);
+                setItems(directItems);
+                setTotalPrice(directItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0));
+                setIsDirectOrder(true);
+            } catch (e) {
+                console.error("Failed to parse direct order", e);
+            }
+        } else {
+            setItems(cartItems);
+            setTotalPrice(cartItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0));
+            setIsDirectOrder(false);
+        }
+    }, [cartItems]);
 
     useEffect(() => {
         // Ensure cart is closed when arriving
@@ -61,7 +83,11 @@ export function useOrder() {
             });
 
             // On success
-            await clearCart();
+            if (isDirectOrder) {
+                sessionStorage.removeItem('directOrder');
+            } else {
+                await clearCart();
+            }
             setSuccessModalOpen(true);
         } catch (error: any) {
             toast.error(error.message || '주문 처리 중 오류가 발생했습니다.');

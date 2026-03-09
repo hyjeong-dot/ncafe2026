@@ -190,13 +190,23 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
             <Modal
                 isOpen={isOrderModalOpen}
                 onClose={() => setIsOrderModalOpen(false)}
-                title="주문을 진행할게요! ☕"
-                description={`${menu.korName} 주문 페이지로 이동합니다. 메타몽이 정성껏 준비해 드릴게요! 💜`}
+                title="단일 상품 주문! ☕"
+                description={`${menu.korName} 상품만 바로 결제하시겠어요?\n(기존 장바구니 내용은 그대로 보존됩니다.)`}
                 confirmText="주문 페이지로 이동"
                 cancelText="취소"
                 onConfirm={() => {
                     setIsOrderModalOpen(false);
-                    // TODO: 실제 주문 페이지 라우팅
+                    // 옵션: 장바구니에 담지 않고 SessionStorage를 활용하여 단건 결제 데이터만 넘김
+                    sessionStorage.setItem('directOrder', JSON.stringify([{
+                        id: menu.id.toString(),
+                        korName: menu.korName,
+                        engName: menu.engName,
+                        price: menu.price,
+                        quantity: 1, // 개수는 기본 1개로 설정
+                        image: menu.imageSrc,
+                        imageSrc: menu.imageSrc
+                    }]));
+                    router.push('/order');
                 }}
                 variant="ditto"
             />
