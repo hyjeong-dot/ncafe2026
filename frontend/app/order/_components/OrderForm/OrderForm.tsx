@@ -5,6 +5,8 @@ import styles from './OrderForm.module.css';
 interface OrderFormProps {
     orderType: 'DINE_IN' | 'TAKEOUT' | null;
     setOrderType: (type: 'DINE_IN' | 'TAKEOUT') => void;
+    paymentMethod: 'CARD' | 'KAKAOPAY';
+    setPaymentMethod: (type: 'CARD' | 'KAKAOPAY') => void;
     requestMemo: string;
     setRequestMemo: (memo: string) => void;
 }
@@ -12,11 +14,39 @@ interface OrderFormProps {
 export default function OrderForm({
     orderType,
     setOrderType,
+    paymentMethod,
+    setPaymentMethod,
     requestMemo,
     setRequestMemo
 }: OrderFormProps) {
     return (
         <div className={styles.formSection}>
+            <div className={styles.formGroup}>
+                <h3>결제 수단 💳</h3>
+                <div className={styles.radioGroup}>
+                    <label className={`${styles.radioLabel} ${paymentMethod === 'CARD' ? styles.active : ''}`}>
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="CARD"
+                            checked={paymentMethod === 'CARD'}
+                            onChange={() => setPaymentMethod('CARD')}
+                        />
+                        신용/체크카드
+                    </label>
+                    <label className={`${styles.radioLabel} ${paymentMethod === 'KAKAOPAY' ? styles.active : ''}`}>
+                        <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="KAKAOPAY"
+                            checked={paymentMethod === 'KAKAOPAY'}
+                            onChange={() => setPaymentMethod('KAKAOPAY')}
+                        />
+                        카카오페이
+                    </label>
+                </div>
+            </div>
+
             <div className={styles.formGroup}>
                 <h3>매장 이용 방법 ✨</h3>
                 <div className={styles.radioGroup}>
