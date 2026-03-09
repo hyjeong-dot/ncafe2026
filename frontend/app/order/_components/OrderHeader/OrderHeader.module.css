@@ -4,11 +4,11 @@
 
 .header h1 {
     font-size: 2rem;
-    color: var(--color-text);
+    color: var(--text-primary);
     font-weight: 700;
 }
 
 .header p {
-    color: var(--color-text-light);
+    color: var(--text-muted);
     margin-top: 0.5rem;
 }

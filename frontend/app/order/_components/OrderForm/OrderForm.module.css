@@ -1,5 +1,5 @@
 .formSection {
-    background-color: var(--color-surface);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-lg);
     padding: 2rem;
     box-shadow: var(--shadow-sm);
@@ -16,7 +16,7 @@
 
 .formGroup h3 {
     font-size: 1.25rem;
-    color: var(--color-text);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -35,7 +35,7 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 1.5rem;
-    border: 2px solid var(--color-border);
+    border: 2px solid var(--border-color);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.2s;
@@ -43,14 +43,14 @@
 }
 
 .radioLabel:hover {
-    border-color: var(--color-primary-light);
-    background-color: var(--color-primary-light);
+    border-color: var(--ditto-400);
+    background-color: var(--ditto-50);
 }
 
 .radioLabel.active {
-    border-color: var(--color-primary);
-    background-color: var(--color-primary-light);
-    color: var(--color-primary);
+    border-color: var(--ditto-600);
+    background-color: var(--ditto-100);
+    color: var(--ditto-600);
 }
 
 .radioLabel input {
@@ -61,7 +61,7 @@
     width: 100%;
     min-height: 120px;
     padding: 1rem;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     font-family: inherit;
     font-size: 1rem;
@@ -71,5 +71,5 @@
 }
 
 .textarea:focus {
-    border-color: var(--color-primary);
+    border-color: var(--ditto-600);
 }

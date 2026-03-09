@@ -1,5 +1,5 @@
 .summarySection {
-    background-color: var(--color-surface);
+    background-color: var(--bg-primary);
     border-radius: var(--radius-lg);
     padding: 2rem;
     box-shadow: var(--shadow-sm);
@@ -11,7 +11,8 @@
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
 }
 
 .itemList {
@@ -31,19 +32,20 @@
 }
 
 .itemName {
-    color: var(--color-text);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .itemQty {
-    color: var(--color-text-light);
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 
 .itemPrice {
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 .totalRow {
@@ -51,26 +53,26 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-color);
     margin-bottom: 2rem;
 }
 
 .totalLabel {
     font-size: 1.1rem;
-    color: var(--color-text);
+    color: var(--text-primary);
 }
 
 .totalPrice {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--ditto-600);
 }
 
 .submitBtn {
     width: 100%;
     padding: 1rem;
-    background-color: var(--color-primary);
-    color: white;
+    background-color: var(--ditto-600);
+    color: var(--text-inverse);
     border: none;
     border-radius: var(--radius-md);
     font-size: 1.1rem;
@@ -84,7 +86,7 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-    background-color: var(--color-primary-dark);
+    background-color: var(--ditto-700);
 }
 
 .submitBtn:disabled {

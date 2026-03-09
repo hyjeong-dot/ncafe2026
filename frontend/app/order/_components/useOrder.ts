@@ -11,8 +11,9 @@ export function useOrder() {
     const router = useRouter();
     const { user, isLoading: authLoading } = useAuth();
     const { items, totalPrice, clearCart, setCartOpen } = useCart();
-    
-    const [orderType, setOrderType] = useState<'DINE_IN' | 'TAKEOUT'>('TAKEOUT');
+
+    const [orderType, setOrderType] = useState<'DINE_IN' | 'TAKEOUT' | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'KAKAOPAY'>('CARD');
     const [requestMemo, setRequestMemo] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
@@ -38,6 +39,10 @@ export function useOrder() {
 
     const handleSubmitOrder = async () => {
         if (items.length === 0) return;
+        if (!orderType) {
+            toast.error('매장 이용 방법을 선택해 주세요.');
+            return;
+        }
 
         setIsSubmitting(true);
         try {
@@ -77,6 +82,8 @@ export function useOrder() {
         totalPrice,
         orderType,
         setOrderType,
+        paymentMethod,
+        setPaymentMethod,
         requestMemo,
         setRequestMemo,
         isSubmitting,

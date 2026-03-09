@@ -12,6 +12,8 @@ export default function OrderPage() {
         totalPrice,
         orderType,
         setOrderType,
+        paymentMethod,
+        setPaymentMethod,
         requestMemo,
         setRequestMemo,
         isSubmitting,
@@ -30,9 +32,11 @@ export default function OrderPage() {
 
             <div className={styles.content}>
                 {/* 왼쪽 폼 영역 */}
-                <OrderForm 
+                <OrderForm
                     orderType={orderType}
                     setOrderType={setOrderType}
+                    paymentMethod={paymentMethod}
+                    setPaymentMethod={setPaymentMethod}
                     requestMemo={requestMemo}
                     setRequestMemo={setRequestMemo}
                 />

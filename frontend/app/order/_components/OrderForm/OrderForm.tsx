@@ -3,7 +3,7 @@
 import styles from './OrderForm.module.css';
 
 interface OrderFormProps {
-    orderType: 'DINE_IN' | 'TAKEOUT';
+    orderType: 'DINE_IN' | 'TAKEOUT' | null;
     setOrderType: (type: 'DINE_IN' | 'TAKEOUT') => void;
     requestMemo: string;
     setRequestMemo: (memo: string) => void;
