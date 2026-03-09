@@ -12,6 +12,8 @@ import {
     LogOut,
     Menu,
     X,
+    Home,
+    Coffee,
     LucideIcon,
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
@@ -111,14 +113,15 @@ export default function AdminSidebar() {
 
     return (
         <>
-            {/* 모바일 햄버거 버튼 */}
-            <button
-                className={styles.hamburger}
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
-            >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {!isOpen && (
+                <button
+                    className={styles.hamburger}
+                    onClick={() => setIsOpen(true)}
+                    aria-label="메뉴 열기"
+                >
+                    <Menu size={24} />
+                </button>
+            )}
 
             {/* 배경 오버레이 (모바일에서 사이드바 열리면 표시) */}
             {isOpen && (
@@ -129,13 +132,20 @@ export default function AdminSidebar() {
             )}
 
             <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
-                {/* Logo */}
                 <div className={styles.logo}>
                     <div className={styles.logoIcon}>💜</div>
                     <div className={styles.logoText}>
                         메타몽 카페
                         <span className={styles.logoSubtext}>Admin</span>
                     </div>
+                    {/* 모바일 닫기 버튼 (옵션 A) */}
+                    <button 
+                        className={styles.closeButton} 
+                        onClick={() => setIsOpen(false)}
+                        aria-label="메뉴 닫기"
+                    >
+                        <X size={24} />
+                    </button>
                 </div>
 
                 {/* Navigation */}
@@ -162,6 +172,18 @@ export default function AdminSidebar() {
                         </div>
                     ))}
                 </nav>
+
+                {/* 일반 카페로 돌아가기 섹션 */}
+                <div className={styles.serviceSwitch}>
+                    <Link href="/" className={styles.switchButton}>
+                        <Home size={18} />
+                        <span>홈 화면으로</span>
+                    </Link>
+                    <Link href="/menus" className={styles.switchButton}>
+                        <Coffee size={18} />
+                        <span>메뉴 주문하기</span>
+                    </Link>
+                </div>
 
                 {/* User Section */}
                 <div className={styles.userSection}>

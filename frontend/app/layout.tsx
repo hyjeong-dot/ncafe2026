@@ -21,10 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import ChatAgent from "@/components/common/ChatAgent/ChatAgent";
-import CartDrawer from "@/components/layout/CartDrawer";
+import GlobalUIWrapper from "@/components/layout/GlobalUIWrapper";
 
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
@@ -39,12 +36,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>
           <CartProvider>
-            <Header />
+            <GlobalUIWrapper />
             {children}
-            <Footer />
             <ToastProvider />
-            <ChatAgent />
-            <CartDrawer />
           </CartProvider>
         </AuthProvider>
       </body>

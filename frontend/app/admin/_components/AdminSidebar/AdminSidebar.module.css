@@ -11,6 +11,16 @@
     z-index: 100;
 }
 
+.closeButton {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    margin-left: auto;
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -47,6 +57,33 @@
     flex: 1;
     padding: var(--space-4) var(--space-3);
     overflow-y: auto;
+}
+
+.serviceSwitch {
+    padding: var(--space-4) var(--space-3);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.switchButton {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    color: var(--ditto-600);
+    background-color: var(--ditto-50);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.switchButton:hover {
+    background-color: var(--ditto-100);
+    color: var(--ditto-700);
 }
 
 .navGroup {
@@ -203,6 +240,12 @@
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: none;
+    }
+
+    .closeButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .sidebar.open {
