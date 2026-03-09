@@ -79,10 +79,10 @@ export default function MyPageSidebar({
                     결제 수단
                 </button>
             </nav>
-            <hr className={styles.divider} />
+            <hr style={{ margin: 'var(--space-2) 0', border: 'none', borderTop: '1px solid var(--border-color)' }} />
             <div className={styles.bottomActions}>
                 <button
-                    className={`${styles.menuItem} ${styles.dangerItem}`}
+                    className={styles.menuItem}
                     onClick={onLogout}
                 >
                     <LogOut size={18} />
