@@ -75,7 +75,10 @@ function getDummyResponse(userMessage: string): string {
     return '위잉... 🤔 앗, 그 명령어는 내가 아직 변신할 수 없는 형태당... (._.)\n\n내 몸을 다른 도구로 변신할 수 있게 아래 키워드로 다시 알려주면 안 될까몽?\n• **메뉴** / **추천** / **영업시간** / **위치** / **예약** / **이벤트**';
 }
 
+import { useCart } from '@/context/CartContext';
+
 export default function ChatAgent() {
+    const { isCartOpen } = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
     const [inputValue, setInputValue] = useState('');
@@ -188,6 +191,8 @@ export default function ChatAgent() {
             return <span key={i}>{part}</span>;
         });
     };
+
+    if (isCartOpen) return null;
 
     return (
         <>

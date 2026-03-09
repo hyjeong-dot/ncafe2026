@@ -19,10 +19,11 @@ interface MenuDetailInfoProps {
 export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
     const { menu, isLoading, error } = useMenuDetail(id);
     const { user } = useAuth();
-    const { addItem } = useCart();
+    const { addItem, setCartOpen } = useCart();
     const router = useRouter();
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+    const [isCartConfirmModalOpen, setIsCartConfirmModalOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
 
     // Initial check on mount or when menu/user changes
@@ -154,6 +155,7 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                             image: menu.imageSrc,    // 로컬용
                             imageSrc: menu.imageSrc  // 서버 동기화용 호환성
                         });
+                        setIsCartConfirmModalOpen(true);
                     }}
                 >
                     <ShoppingBag size={20} />
@@ -195,6 +197,21 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                 onConfirm={() => {
                     setIsOrderModalOpen(false);
                     // TODO: 실제 주문 페이지 라우팅
+                }}
+                variant="ditto"
+            />
+
+            {/* 장바구니 확인 모달 */}
+            <Modal
+                isOpen={isCartConfirmModalOpen}
+                onClose={() => setIsCartConfirmModalOpen(false)}
+                title="장바구니에 담았어요! 💜"
+                description={`${menu.korName}을(를) 장바구니에 담았습니다. 바로 확인해 보시겠어요?`}
+                confirmText="장바구니 가기"
+                cancelText="계속 쇼핑하기"
+                onConfirm={() => {
+                    setIsCartConfirmModalOpen(false);
+                    setCartOpen(true);
                 }}
                 variant="ditto"
             />

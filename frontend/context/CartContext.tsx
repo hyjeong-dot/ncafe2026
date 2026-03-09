@@ -100,7 +100,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
 
         toast.success(`${newItem.korName}을(를) 담았어요! 💜`);
-        setCartOpen(true);
     };
 
     const removeItem = async (id: string) => {
