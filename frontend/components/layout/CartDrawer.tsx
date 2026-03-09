@@ -34,7 +34,8 @@ export default function CartDrawer() {
             setLoginModalOpen(true);
             return;
         }
-        console.log('Order processed for user:', user.username);
+        setCartOpen(false);
+        router.push('/order');
     };
 
     if (!isCartOpen) return null;

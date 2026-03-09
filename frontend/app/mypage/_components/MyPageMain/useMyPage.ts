@@ -5,10 +5,25 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import { useSearchParams } from "next/navigation";
+
 export function useMyPage() {
     const { user, logout, isLoading } = useAuth();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState("profile");
+    const searchParams = useSearchParams();
+    
+    // Check if there is a 'tab' param in URL, else default to 'profile'
+    const initialTab = searchParams.get('tab') || 'profile';
+    const [activeTab, setActiveTab] = useState(initialTab);
+
+    // Update state if URL query changes
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab) {
+            setActiveTab(tab);
+        }
+    }, [searchParams]);
+
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {

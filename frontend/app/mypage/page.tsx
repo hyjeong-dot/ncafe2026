@@ -1,7 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { MyPageMain } from "./_components";
 
 export default function MyPage() {
-    return <MyPageMain />;
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <MyPageMain />
+        </Suspense>
+    );
 }
