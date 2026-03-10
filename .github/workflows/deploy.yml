@@ -39,8 +39,12 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Build and Deploy
-        run: docker compose up --build -d
+      - name: Build Services Sequentially
+        run: |
+          docker compose build backend
+          docker compose build agent
+          docker compose build frontend
+          docker compose up -d
 
       - name: Verify deployment
         run: |

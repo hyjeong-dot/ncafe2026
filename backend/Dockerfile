@@ -13,7 +13,7 @@ RUN chmod +x ./gradlew
 COPY src ./src
 
 # Build the application
-RUN gradle clean bootJar --no-daemon -x test
+RUN ./gradlew clean bootJar --no-daemon -x test
 
 # Create upload folder for build context if it doesn't exist
 RUN mkdir -p upload

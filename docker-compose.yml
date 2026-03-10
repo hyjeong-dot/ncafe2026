@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ${BACKEND_IMAGE:-ncafe-backend:latest}
+    image: ${BACKEND_IMAGE:-${USER_ID}-backend:latest}
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
       - db
 
   frontend:
-    image: ${FRONTEND_IMAGE:-ncafe-frontend:latest}
+    image: ${FRONTEND_IMAGE:-${USER_ID}-frontend:latest}
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -40,6 +40,7 @@ services:
     restart: unless-stopped
 
   agent:
+    image: ${AGENT_IMAGE:-${USER_ID}-agent:latest}
     build:
       context: ./agent-server
       dockerfile: Dockerfile
