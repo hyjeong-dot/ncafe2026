@@ -40,7 +40,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Build and Deploy
-        run: docker compose --profile with-db up --build -d
+        run: docker compose up --build -d
 
       - name: Verify deployment
         run: |

@@ -61,7 +61,7 @@
         ▼
 ┌──────────────────┐
 │  db              │  PostgreSQL 17
-│  포트: 5432(내부) │  profile "with-db"로 선택적 실행
+│  포트: 5432(내부) │  기본 실행 (backend 의존성)     │
 └──────────────────┘
 ```
 
@@ -129,7 +129,7 @@ jobs:
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
 
       - name: Build and Deploy
-        run: docker compose --profile with-db up --build -d
+        run: docker compose up --build -d
 
       - name: Verify deployment
         run: |
@@ -190,7 +190,6 @@ services:
 
   db:
     image: postgres:17
-    profiles: [ "with-db" ]
     container_name: ${USER_ID:-<기본_USER_ID>}-db
     environment:
       POSTGRES_DB: ncafedb
