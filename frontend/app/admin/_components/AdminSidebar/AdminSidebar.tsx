@@ -14,6 +14,7 @@ import {
     X,
     Home,
     Coffee,
+    Database,
     LucideIcon,
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
@@ -53,6 +54,7 @@ const navItems: NavGroup[] = [
         group: '설정',
         items: [
             { href: '/admin/settings', label: '카페 설정', icon: Settings },
+            { href: '/admin/rag', label: 'RAG 지식 관리', icon: Database },
         ],
     },
 ];

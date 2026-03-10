@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, UtensilsCrossed, ShoppingBag, Settings } from 'lucide-react';
+import { Plus, UtensilsCrossed, ShoppingBag, Settings, Database } from 'lucide-react';
 import styles from '../page.module.css';
 
 export default function DashboardActions() {
@@ -39,13 +39,13 @@ export default function DashboardActions() {
                     </div>
                 </Link>
 
-                <Link href="/admin/settings" className={styles.actionCard}>
+                <Link href="/admin/rag" className={styles.actionCard}>
                     <div className={styles.actionIcon}>
-                        <Settings size={22} />
+                        <Database size={22} color="#8e44ad" />
                     </div>
                     <div className={styles.actionText}>
-                        <p className={styles.actionTitle}>카페 설정</p>
-                        <p className={styles.actionDesc}>정보 수정</p>
+                        <p className={styles.actionTitle}>RAG 지식 관리</p>
+                        <p className={styles.actionDesc}>AI의 공부 데이터 관리</p>
                     </div>
                 </Link>
             </div>
