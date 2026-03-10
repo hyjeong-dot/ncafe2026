@@ -9,7 +9,7 @@ const SIGNATURE_MENUS = [
     name: "말랑 퍼플 라떼",
     desc: "메타몽 컬러 그대로, 보라빛 한 잔",
     price: "₩7,000",
-    image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=600&auto=format&fit=crop",
+    image: "/upload/images/purple-latte.png",
     badge: "변신완료 🪄"
   },
   {
@@ -17,7 +17,7 @@ const SIGNATURE_MENUS = [
     name: "꾸덕 콜드브루",
     desc: "24시간 동안 천천히~ 메타몽처럼 느긋하게",
     price: "₩4,500",
-    image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=600&auto=format&fit=crop",
+    image: "/upload/images/cold-brew.png",
     badge: "NEW 🆕"
   },
   {
@@ -25,14 +25,14 @@ const SIGNATURE_MENUS = [
     name: "겹겹이 초코 크로와상",
     desc: "메타몽이 겹겹이 접은 바삭 말랑 크로와상",
     price: "₩4,800",
-    image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=600&auto=format&fit=crop"
+    image: "/upload/images/chocolate-croissant.png"
   },
   {
     category: "🍵 음료",
     name: "초록 변신 말차",
     desc: "오늘은 초록색으로 변신! 녹차 향 가득",
     price: "₩6,500",
-    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=600&auto=format&fit=crop"
+    image: "/upload/images/matcha-latte.png"
   }
 ];
 

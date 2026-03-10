@@ -18,7 +18,7 @@ def get_db_connection():
     return psycopg2.connect(
         dbname=os.getenv("DB_NAME", "ncafedb"),
         user=os.getenv("SPRING_DATASOURCE_USERNAME", "ncafe"),
-        password=os.getenv("DB_PASSWORD", "1111"),
+        password=os.getenv("DB_PASSWORD", ""),
         host=os.getenv("DB_HOST", "db"),
         port=os.getenv("DB_PORT", "5432")
     )
