@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { Send, X } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import styles from './ChatAgent.module.css';
 import MenuChatCard from './MenuChatCard';
 
@@ -79,7 +80,8 @@ function getDummyResponse(userMessage: string): string {
 import { useCart } from '@/context/CartContext';
 
 export default function ChatAgent() {
-    const { isCartOpen } = useCart();
+    const router = useRouter();
+    const { isCartOpen, setCartOpen } = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
     const [inputValue, setInputValue] = useState('');
@@ -165,6 +167,29 @@ export default function ChatAgent() {
         if (!isOpen) {
             setUnreadCount(prev => prev + 1);
         }
+
+        // 화면 이동 처리 ([NAV:target])
+        const navMatch = agentReply.match(/\[NAV:(\w+)\]/);
+        if (navMatch) {
+            const target = navMatch[1];
+            switch (target) {
+                case 'home':
+                    router.push('/');
+                    break;
+                case 'menus':
+                    router.push('/menus');
+                    break;
+                case 'cart':
+                    setCartOpen(true);
+                    break;
+                case 'mypage':
+                    router.push('/mypage');
+                    break;
+                case 'login':
+                    router.push('/login');
+                    break;
+            }
+        }
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -182,10 +207,10 @@ export default function ChatAgent() {
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1] 형태)
+    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1], [NAV:target] 형태)
     const renderContent = (text: string) => {
-        // [ID:숫자] 태그를 먼저 분리
-        const segments = text.split(/(\[ID:\d+\])/g);
+        // [ID:숫자] 및 [NAV:대상] 태그를 분리
+        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\])/g);
         
         return segments.map((segment, i) => {
             // 메뉴 ID 태그인 경우
@@ -194,6 +219,11 @@ export default function ChatAgent() {
                 if (menuId > 0) {
                     return <MenuChatCard key={`menu-${i}`} id={menuId} />;
                 }
+            }
+            
+            // 네비게이션 태그인 경우 화면엔 그리지 않음
+            if (segment.startsWith('[NAV:') && segment.endsWith(']')) {
+                return null;
             }
             
             // 일반 텍스트거나 볼드(**)가 포함된 텍스트인 경우
