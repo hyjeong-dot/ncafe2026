@@ -16,20 +16,26 @@ export default function CafeSettingsPage() {
             <h1 className={styles.title}>카페 설정 ⚙️</h1>
 
             <div className={styles.settingsGrid}>
-                {/* 현재 영업 상태 제어 카드 */}
-                <CafeStatusCard 
-                    settings={settings}
-                    isSaving={isSaving}
-                    onUpdateSettings={updateSettings}
-                />
-
-                {/* 상세 정보 설정 폼 */}
-                {settings && (
-                    <CafeSettingsForm 
-                        settings={settings}
-                        isSaving={isSaving}
-                        onUpdateSettings={updateSettings}
-                    />
+                {settings ? (
+                    <>
+                        <CafeStatusCard 
+                            settings={settings}
+                            isSaving={isSaving}
+                            onUpdateSettings={updateSettings}
+                        />
+                        <CafeSettingsForm 
+                            settings={settings}
+                            isSaving={isSaving}
+                            onUpdateSettings={updateSettings}
+                        />
+                    </>
+                ) : (
+                    <div className={styles.errorContainer}>
+                        <p>카페 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+                        <button onClick={() => window.location.reload()} className={styles.refreshBtn}>
+                            새로고침
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

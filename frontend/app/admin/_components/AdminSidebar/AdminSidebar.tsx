@@ -17,6 +17,8 @@ import {
     Database,
     LucideIcon,
 } from 'lucide-react';
+import { useDashboardStats } from '../useDashboardStats';
+import toast from 'react-hot-toast';
 import styles from './AdminSidebar.module.css';
 
 interface NavItem {
@@ -31,45 +33,42 @@ interface NavGroup {
     items: NavItem[];
 }
 
-const navItems: NavGroup[] = [
-    {
-        group: '메인',
-        items: [
-            { href: '/admin', label: '대시보드', icon: LayoutDashboard },
-        ],
-    },
-    {
-        group: '메뉴 관리',
-        items: [
-            { href: '/admin/menus', label: '메뉴 목록', icon: UtensilsCrossed },
-        ],
-    },
-    {
-        group: '주문',
-        items: [
-            { href: '/admin/orders', label: '주문 관리', icon: ShoppingBag, badge: 3 },
-        ],
-    },
-    {
-        group: '설정',
-        items: [
-            { href: '/admin/settings', label: '카페 설정', icon: Settings },
-            { href: '/admin/rag', label: 'RAG 지식 관리', icon: Database },
-        ],
-    },
-];
-
-import toast from 'react-hot-toast';
-
 export default function AdminSidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const { user, logout, isLoading } = useAuth();
+    const { stats } = useDashboardStats();
     const [isOpen, setIsOpen] = useState(false);
 
+    const navItems: NavGroup[] = [
+        {
+            group: '메인',
+            items: [
+                { href: '/admin', label: '대시보드', icon: LayoutDashboard },
+            ],
+        },
+        {
+            group: '메뉴 관리',
+            items: [
+                { href: '/admin/menus', label: '메뉴 목록', icon: UtensilsCrossed },
+            ],
+        },
+        {
+            group: '주문',
+            items: [
+                { href: '/admin/orders', label: '주문 관리', icon: ShoppingBag, badge: stats.todayOrders > 0 ? stats.todayOrders : undefined },
+            ],
+        },
+        {
+            group: '설정',
+            items: [
+                { href: '/admin/settings', label: '카페 설정', icon: Settings },
+                { href: '/admin/rag', label: 'RAG 지식 관리', icon: Database },
+            ],
+        },
+    ];
+
     // 권한 체크: admin이 아니면 홈으로 튕겨냄
-    // 로그인 직후 user 상태가 전파되기 전에 체크하면 오탐이 발생할 수 있으므로
-    // 짧은 대기 후 다시 확인합니다.
     useEffect(() => {
         if (isLoading) return;
 
@@ -92,12 +91,10 @@ export default function AdminSidebar() {
         return pathname.startsWith(href);
     };
 
-    // 페이지 이동 시 사이드바 닫기
     useEffect(() => {
         setIsOpen(false);
     }, [pathname]);
 
-    // 사이드바 열려있을 때 스크롤 방지
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -110,7 +107,7 @@ export default function AdminSidebar() {
     }, [isOpen]);
 
     if (isLoading || !user || user.role !== 'ROLE_ADMIN') {
-        return null; // 권한 없으면 렌더링 안 함
+        return null; 
     }
 
     return (
@@ -125,7 +122,6 @@ export default function AdminSidebar() {
                 </button>
             )}
 
-            {/* 배경 오버레이 (모바일에서 사이드바 열리면 표시) */}
             {isOpen && (
                 <div
                     className={styles.backdrop}
@@ -140,7 +136,6 @@ export default function AdminSidebar() {
                         메타몽 카페
                         <span className={styles.logoSubtext}>Admin</span>
                     </div>
-                    {/* 모바일 닫기 버튼 (옵션 A) */}
                     <button 
                         className={styles.closeButton} 
                         onClick={() => setIsOpen(false)}
@@ -150,7 +145,6 @@ export default function AdminSidebar() {
                     </button>
                 </div>
 
-                {/* Navigation */}
                 <nav className={styles.nav}>
                     {navItems.map((group) => (
                         <div key={group.group} className={styles.navGroup}>
@@ -175,7 +169,6 @@ export default function AdminSidebar() {
                     ))}
                 </nav>
 
-                {/* 일반 카페로 돌아가기 섹션 */}
                 <div className={styles.serviceSwitch}>
                     <Link href="/" className={styles.switchButton}>
                         <Home size={18} />
@@ -187,7 +180,6 @@ export default function AdminSidebar() {
                     </Link>
                 </div>
 
-                {/* User Section */}
                 <div className={styles.userSection}>
                     <div className={styles.userAvatar}>
                         {user.username.charAt(0).toUpperCase()}
