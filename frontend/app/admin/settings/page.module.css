@@ -1,0 +1,147 @@
+.container {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.settingsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.statusCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.statusIndicator {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.statusTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.statusBadge {
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.openBadge { background: #e8f5e9; color: #2e7d32; }
+.closedBadge { background: #ffebee; color: #c62828; }
+
+.toggleBtn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnOpen { background: #1abc9c; color: white; }
+.btnOpen:hover { background: #16a085; }
+.btnClose { background: #e74c3c; color: white; }
+.btnClose:hover { background: #c0392b; }
+
+.formCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+}
+
+.input, .textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.8rem;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus, .textarea:focus {
+    outline: none;
+    border-color: #9b59b6;
+}
+
+.textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.timeRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.saveBtn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1.2rem;
+    background: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.saveBtn:hover {
+    background: #8e44ad;
+    transform: translateY(-2px);
+}
+
+.saveBtn:active {
+    transform: translateY(0);
+}
+
+.saveBtn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .settingsGrid {
+        grid-template-columns: 1fr;
+    }
+}

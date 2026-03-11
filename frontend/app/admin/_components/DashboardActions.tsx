@@ -51,6 +51,16 @@ export default function DashboardActions() {
                         <p className={styles.actionDesc}>AI의 공부 데이터 관리</p>
                     </div>
                 </Link>
+
+                <Link href="/admin/settings" className={styles.actionCard}>
+                    <div className={styles.actionIcon}>
+                        <Settings size={22} color="#607d8b" />
+                    </div>
+                    <div className={styles.actionText}>
+                        <p className={styles.actionTitle}>카페 설정</p>
+                        <p className={styles.actionDesc}>영업시간 및 카페 정보</p>
+                    </div>
+                </Link>
             </div>
         </div>
     );

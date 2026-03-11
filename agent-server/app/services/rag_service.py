@@ -39,6 +39,9 @@ def init_db():
                 embedding vector({EMBEDDING_DIMENSION})
             );
         """)
+
+        # 3. Ensure cafe_settings table exists (Spring Boot usually handles this, but for tools we ensures it)
+        # We don't need to create it here as JPA will do it, but we can verify it.
         
         conn.commit()
         cur.close()
@@ -157,3 +160,34 @@ def search_menu_by_name(menu_name: str):
     except Exception as e:
         logger.error(f"Error searching menu by name: {e}")
         return None
+
+def get_cafe_settings():
+    """DB에서 카페의 현재 설정(영업시간, 상태 등)을 가져옵니다."""
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT * FROM cafe_settings LIMIT 1;")
+        result = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        if result:
+            # 시간 포맷팅 및 정보 조합
+            info = f"카페명: {result['cafe_name']}, "
+            info += f"영업시간: {result['open_time']} ~ {result['close_time']}, "
+            if result['is_manual_closed']:
+                info += "현재 상태: 강제 영업 종료 중 (품절/공사 등), "
+            else:
+                info += "현재 상태: 정상 운영 스케줄 정용 중, "
+            
+            if result['description']:
+                info += f"공지: {result['description']}, "
+            if result['phone_number']:
+                info += f"연락처: {result['phone_number']}, "
+            if result['address']:
+                info += f"위치: {result['address']}"
+            return info
+        return "카페 설정 정보를 찾을 수 없습니다."
+    except Exception as e:
+        logger.error(f"Error fetching cafe settings: {e}")
+        return "카페 정보를 불러오는 중 오류가 발생했습니다."

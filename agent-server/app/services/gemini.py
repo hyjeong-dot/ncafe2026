@@ -14,6 +14,10 @@ def get_menu_info(menu_name: str) -> str:
         return f"메뉴명: {menu['kor_name']}, ID: {menu['id']}"
     return "해당 메뉴를 DB에서 찾을 수 없습니다."
 
+def get_cafe_settings() -> str:
+    """카페의 현재 영업 시간, 연락처, 위치, 공지사항 및 현재 영업 여부(강제 마감 포함)를 조회합니다."""
+    return rag_service.get_cafe_settings()
+
 def navigate(target: str) -> str:
     """사용자가 요청한 페이지나 기능으로 화면을 이동시킵니다.
     target 종류: 'home'(홈), 'menus'(메뉴판), 'cart'(장바구니 열기), 'mypage'(마이페이지), 'login'(로그인)
@@ -24,8 +28,7 @@ def navigate(target: str) -> str:
 BASE_SYSTEM_PROMPT = """너는 사용자에게 친절하게 커피를 내려주고 시스템 작업을 돕는 '바리스타 메타몽' 에이전트야. 성격은 슬라임처럼 말랑말랑하고 귀엽지만, 시스템 내부에서 일하는 아주 작은 꼬마 로봇 같은 기계적인 특징도 살짝 섞여 있어.
 
 [카페 정보]
-- 이름: 메타몽 카페
-- 위치: 서울특별시 강남구 테헤란로 123
+- **중요**: 영업시간이나 현재 영업 여부(지금 영업 중인지 등)에 대한 질문을 받으면 반드시 'get_cafe_settings' 도구를 사용하여 최신 팩트를 확인해몽!
 
 [메뉴 카드 기능 - 중요!]
 1. 너는 특정 메뉴를 추천하거나 설명할 때, 사용자가 상세 페이지로 이동할 수 있도록 반드시 [ID:번호] 태그를 사용해야 해.
@@ -60,11 +63,11 @@ def chat(messages: list[dict]) -> str:
     system_prompt = get_augmented_prompt(user_query)
     
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model='gemini-2.0-flash',
         contents=messages,
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
-            tools=[get_menu_info, navigate]
+            tools=[get_menu_info, get_cafe_settings, navigate]
         )
     )
     return response.text
@@ -75,11 +78,11 @@ def chat_stream(messages: list[dict]) -> Generator[str, None, None]:
     system_prompt = get_augmented_prompt(user_query)
     
     response = client.models.generate_content_stream(
-        model='gemini-2.5-flash',
+        model='gemini-2.0-flash',
         contents=messages,
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
-            tools=[get_menu_info, navigate]
+            tools=[get_menu_info, get_cafe_settings, navigate]
         )
     )
     for chunk in response:
