@@ -22,7 +22,7 @@ export function useCafeSettings() {
 
     const fetchSettings = async () => {
         try {
-            const response = await fetch('/api/admin/store-info');
+            const response = await fetch('/api/admin/settings');
             if (response.status === 401) {
                 if (typeof window !== 'undefined') window.location.href = '/login';
                 return;
@@ -41,7 +41,7 @@ export function useCafeSettings() {
     const updateSettings = async (newSettings: Partial<CafeSettings>) => {
         setIsSaving(true);
         try {
-            const response = await fetch('/api/admin/store-info', {
+            const response = await fetch('/api/admin/settings', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...settings, ...newSettings }),
