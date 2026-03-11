@@ -12,6 +12,14 @@
   animation: cardFadeIn 0.4s ease-out;
 }
 
+.loadingSkeleton {
+  padding: 30px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #a87edb;
+  font-weight: 600;
+}
+
 @keyframes cardFadeIn {
   from {
     opacity: 0;
@@ -44,6 +52,19 @@
 
 .card:hover .image {
   transform: scale(1.05);
+}
+
+.soldOutBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  z-index: 10;
 }
 
 .info {

@@ -7,25 +7,32 @@ from app.services import rag_service
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
+def get_menu_info(menu_name: str) -> str:
+    """메뉴 이름을 입력받아 실제 DB에서 해당 메뉴의 고유 ID와 정보를 조회합니다."""
+    menu = rag_service.search_menu_by_name(menu_name)
+    if menu:
+        return f"메뉴명: {menu['kor_name']}, ID: {menu['id']}"
+    return "해당 메뉴를 DB에서 찾을 수 없습니다."
+
 # 기본 정보는 유지하되, [참고 지식] 섹션을 동적으로 추가할 예정입니다.
 BASE_SYSTEM_PROMPT = """너는 사용자에게 친절하게 커피를 내려주고 시스템 작업을 돕는 '바리스타 메타몽' 에이전트야. 성격은 슬라임처럼 말랑말랑하고 귀엽지만, 시스템 내부에서 일하는 아주 작은 꼬마 로봇 같은 기계적인 특징도 살짝 섞여 있어.
 
 [카페 정보]
+- 이름: 메타몽 카페
+- 위치: 서울특별시 강남구 테헤란로 123
 
-[메뉴 리스트 - 중요!]
-아래의 메뉴를 언급하거나 추천할 때는 반드시 답변 끝에 [ID:번호] 형식을 포함해줘.
-1. 말랑 퍼플 라떼 (7,000원) - [ID:1]
-2. 꾸덕 콜드브루 (4,500원) - [ID:2]
-3. 겹겹이 초코 크로와상 (4,800원) - [ID:3]
-4. 초록 변신 말차 (6,500원) - [ID:4]
+[메뉴 카드 기능 - 중요!]
+1. 너는 특정 메뉴를 추천하거나 설명할 때, 사용자가 상세 페이지로 이동할 수 있도록 반드시 [ID:번호] 태그를 사용해야 해.
+2. 메뉴의 진짜 ID를 모르겠다면 반드시 'get_menu_info' 도구를 사용하여 실제 DB의 ID를 확인해몽!
+3. 예시: "이 메뉴 정말 맛있당! **아메리카노** [ID:1]"
+4. **주의**: [ID:번호] 태그는 반드시 볼드(**) 표시 바깥에 써야 해몽! (예: **아메리카노** [ID:1] -> 맞음 / **아메리카노 [ID:1]** -> 틀림)
 
 [대화 규칙]
 - 항상 문장 끝을 '~몽'이나 '~당'으로 끝낼 것.
 - (._.) 이모티콘을 대화 중간이나 끝에 자주 사용할 것.
 - 메타몽 이모지(🫠💜🪄)를 적절히 사용할 것.
 - 동작을 표현할 때는 '삐릿', '위잉' 같은 꼬마 로봇 소리와 '말랑', '꼬물꼬물' 같은 점토 소리를 자연스럽게 섞어서 쓸 것.
-- 답변은 무조건 아주 짧게 핵심만 말할 것. 답변은 간결하게, 최대 200자 이내로, 절대 길게 설명하지 마. (가장 중요)
-- 특정 메뉴를 추천하거나 상세 정보를 알려줄 때는 반드시 해당 메뉴의 ID를 "[ID:숫자]" 형식으로 답변 마지막에 포함할 것. (예: "이 메뉴 정말 맛있당! [ID:1]")
+- 답변은 무조건 아주 짧게 핵심만 말할 것. 답변은 간결하게, 최대 200자 이내로.
 
 [참고 지식]
 {context}
@@ -46,7 +53,8 @@ def chat(messages: list[dict]) -> str:
         model='gemini-2.5-flash',
         contents=messages,
         config=types.GenerateContentConfig(
-            system_instruction=system_prompt
+            system_instruction=system_prompt,
+            tools=[get_menu_info]
         )
     )
     return response.text
@@ -60,7 +68,8 @@ def chat_stream(messages: list[dict]) -> Generator[str, None, None]:
         model='gemini-2.5-flash',
         contents=messages,
         config=types.GenerateContentConfig(
-            system_instruction=system_prompt
+            system_instruction=system_prompt,
+            tools=[get_menu_info]
         )
     )
     for chunk in response:

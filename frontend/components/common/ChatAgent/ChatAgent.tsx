@@ -184,25 +184,26 @@ export default function ChatAgent() {
 
     // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1] 형태)
     const renderContent = (text: string) => {
-        // 볼드(**text**)와 메뉴태그([ID:num])를 모두 분리하기 위한 정규표현식
-        const parts = text.split(/(\*\*.*?\*\*|\[ID:\d+\])/g);
+        // [ID:숫자] 태그를 먼저 분리
+        const segments = text.split(/(\[ID:\d+\])/g);
         
-        return parts.map((part, i) => {
-            // 볼드 텍스트 처리
-            if (part.startsWith('**') && part.endsWith('**')) {
-                return <strong key={i}>{part.slice(2, -2)}</strong>;
-            }
-            
-            // 메뉴 ID 태그 처리 ([ID:1])
-            if (part.startsWith('[ID:') && part.endsWith(']')) {
-                const menuId = parseInt(part.match(/\d+/)?.[0] || '0', 10);
+        return segments.map((segment, i) => {
+            // 메뉴 ID 태그인 경우
+            if (segment.startsWith('[ID:') && segment.endsWith(']')) {
+                const menuId = parseInt(segment.match(/\d+/)?.[0] || '0', 10);
                 if (menuId > 0) {
-                    return <MenuChatCard key={i} id={menuId} />;
+                    return <MenuChatCard key={`menu-${i}`} id={menuId} />;
                 }
             }
             
-            // 일반 텍스트
-            return <span key={i}>{part}</span>;
+            // 일반 텍스트거나 볼드(**)가 포함된 텍스트인 경우
+            const parts = segment.split(/(\*\*.*?\*\*)/g);
+            return parts.map((part, j) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                    return <strong key={`bold-${i}-${j}`}>{part.slice(2, -2)}</strong>;
+                }
+                return <span key={`text-${i}-${j}`}>{part}</span>;
+            });
         });
     };
 

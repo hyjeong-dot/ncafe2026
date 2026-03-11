@@ -1,50 +1,48 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './MenuChatCard.module.css';
 
-interface MenuData {
+interface MenuDetail {
   id: number;
-  name: string;
-  price: string;
-  image: string;
+  korName: string;
+  engName: string;
   description: string;
+  price: number;
+  imageSrc: string;
+  isSoldOut: boolean;
 }
 
-const MENU_DATA: Record<number, MenuData> = {
-  1: {
-    id: 1,
-    name: '말랑 퍼플 라떼',
-    price: '₩7,000',
-    image: '/upload/images/purple-latte.png',
-    description: '메타몽 시그니처! 보라빛 말랑한 라떼몽 💜',
-  },
-  2: {
-    id: 2,
-    name: '꾸덕 콜드브루',
-    price: '₩4,500',
-    image: '/upload/images/cold-brew.png',
-    description: '메타몽처럼 느긋하게 내린 꾸덕한 커피 ☕',
-  },
-  3: {
-    id: 3,
-    name: '겹겹이 초코 크로와상',
-    price: '₩4,800',
-    image: '/upload/images/chocolate-croissant.png',
-    description: '바삭하고 달콤한 메타몽의 간식 🍰',
-  },
-  4: {
-    id: 4,
-    name: '초록 변신 말차',
-    price: '₩6,500',
-    image: '/upload/images/matcha-latte.png',
-    description: '싱그러운 초록색으로 변신한 말차 라떼몽 🍵',
-  },
-};
-
 export default function MenuChatCard({ id }: { id: number }) {
-  const menu = MENU_DATA[id];
+  const [menu, setMenu] = useState<MenuDetail | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(`/api/menus/${id}`);
+        if (!response.ok) throw new Error('Menu fetch failed');
+        const data = await response.json();
+        setMenu(data);
+      } catch (err) {
+        console.error('Failed to fetch menu info:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) fetchMenu();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.card}>
+        <div className={styles.loadingSkeleton}>이삿짐 나르는 중... 꼬물꼬물 📦</div>
+      </div>
+    );
+  }
 
   if (!menu) return null;
 
@@ -52,16 +50,17 @@ export default function MenuChatCard({ id }: { id: number }) {
     <div className={styles.card}>
       <div className={styles.imageWrapper}>
         <Image
-          src={menu.image}
-          alt={menu.name}
+          src={menu.imageSrc || '/images/ditto/blank.png'}
+          alt={menu.korName}
           fill
           className={styles.image}
-          sizes="200px"
+          sizes="250px"
         />
+        {menu.isSoldOut && <span className={styles.soldOutBadge}>품절몽 🫠</span>}
       </div>
       <div className={styles.info}>
-        <h4 className={styles.name}>{menu.name}</h4>
-        <p className={styles.price}>{menu.price}</p>
+        <h4 className={styles.name}>{menu.korName}</h4>
+        <p className={styles.price}>₩{menu.price.toLocaleString()}</p>
         <p className={styles.desc}>{menu.description}</p>
         <Link href={`/menus/${menu.id}`} className={styles.link}>
           상세보기
