@@ -42,10 +42,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const loadCart = async () => {
             if (user) {
                 try {
+                    // 1. 로그인 직후라면 로컬스토리지의 비회원 장바구니 데이터를 서버와 합칩니다 (Migration)
+                    const savedCart = localStorage.getItem('ncafe-cart');
+                    if (savedCart) {
+                        const guestItems: CartItem[] = JSON.parse(savedCart);
+                        if (guestItems.length > 0) {
+                            // 비회원 장바구니 아이템들을 순차적으로 서버에 추가
+                            for (const item of guestItems) {
+                                await fetchAPI('/cart/items', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ 
+                                        menuId: parseInt(item.id), 
+                                        quantity: item.quantity 
+                                    })
+                                });
+                            }
+                        }
+                        // 합치기 완료 후 비회원 장바구니 데이터 삭제
+                        localStorage.removeItem('ncafe-cart');
+                        toast.success('비회원님이 담으셨던 메뉴를 장바구니에 합쳤어몽! 💜');
+                    }
+
+                    // 2. 최종적으로 서버의 장바구니 데이터를 가져와 상태를 동기화합니다.
                     const data = await fetchAPI('/cart');
                     setItems(data || []);
                 } catch (error) {
-                    console.error("Failed to fetch cart from server:", error);
+                    console.error("Failed to sync/fetch cart from server:", error);
                 }
             } else {
                 const savedCart = localStorage.getItem('ncafe-cart');
