@@ -37,6 +37,12 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Sync Upload Images
+        run: |
+          mkdir -p /home/hyjeong/dist/ncafe2026/backend/upload/images
+          cp -r backend/upload/images/* /home/hyjeong/dist/ncafe2026/backend/upload/images/
+          chmod -R 755 /home/hyjeong/dist/ncafe2026/backend/upload/images
+
       - name: Build Services Sequentially
         run: |
           docker compose build backend
