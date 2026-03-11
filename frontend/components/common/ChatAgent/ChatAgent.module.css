@@ -303,7 +303,8 @@
 .messageContent {
     display: flex;
     flex-direction: column;
-    max-width: 82%; /* 말풍선 영역 전체 너비 제한 */
+    max-width: 82%;
+    /* 말풍선 영역 전체 너비 제한 */
 }
 
 .messageRowUser .messageContent {
@@ -315,27 +316,28 @@
 }
 
 .messageBubble {
-    padding: 0.8rem 1.1rem; /* 고라파덕 느낌의 좀 더 넉넉한 패딩 */
+    padding: 0.8rem 1.1rem;
+    /*좀 더 넉넉한 패딩 */
     border-radius: 1.2rem;
     font-size: 0.95rem;
     line-height: 1.5;
-    word-break: break-word; /* break-all에서 break-word로 변경하여 단어 끊김 완화 */
+    word-break: break-word;
+    /* break-all에서 break-word로 변경하여 단어 끊김 완화 */
     position: relative;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .messageBubbleUser {
-    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    background: linear-gradient(135deg, var(--ditto-500), var(--ditto-600));
     color: #fff;
-    border-top-right-radius: 0.2rem; /* 꼬리 모양 디테일 */
-    text-align: left; /* 긴 문장일 때를 대비해 왼쪽 정렬 유지 */
+    border-bottom-right-radius: 0.3rem;
 }
 
 .messageBubbleAgent {
-    background: #ffffff; /* 좀 더 깨끗한 흰색 바탕 */
-    color: #374151;
-    border: 1px solid #e5e7eb;
-    border-top-left-radius: 0.2rem;
+    background: var(--ditto-100);
+    color: var(--ditto-900);
+    border: 1px solid var(--ditto-200);
+    border-bottom-left-radius: 0.3rem;
 }
 
 .messageTime {
