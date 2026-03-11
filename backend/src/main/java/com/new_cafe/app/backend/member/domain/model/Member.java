@@ -28,6 +28,14 @@ public class Member {
 
     private String role; // "ROLE_ADMIN", "ROLE_USER"
 
+    @Column(name = "created_at", updatable = false)
+    private java.time.LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = java.time.LocalDateTime.now();
+    }
+
     // --- 비즈니스 로직 ---
 
     public boolean isAdmin() {

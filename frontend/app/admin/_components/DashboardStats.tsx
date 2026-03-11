@@ -1,12 +1,11 @@
 'use client';
 
 import { UtensilsCrossed, ShoppingBag, TrendingUp, Users } from 'lucide-react';
+import { DashboardStatsData } from './useDashboardStats';
 import styles from '../page.module.css';
 
 interface DashboardStatsProps {
-    stats: {
-        total: number;
-    };
+    stats: DashboardStatsData;
 }
 
 export default function DashboardStats({ stats }: DashboardStatsProps) {
@@ -18,7 +17,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
                 </div>
                 <div className={styles.statInfo}>
                     <p className={styles.statLabel}>등록된 메뉴</p>
-                    <p className={styles.statValue}>{stats.total}개</p>
+                    <p className={styles.statValue}>{stats.totalMenus}개</p>
                 </div>
             </div>
 
@@ -28,7 +27,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
                 </div>
                 <div className={styles.statInfo}>
                     <p className={styles.statLabel}>오늘 주문</p>
-                    <p className={styles.statValue}>28건</p>
+                    <p className={styles.statValue}>{stats.todayOrders}건</p>
                 </div>
             </div>
 
@@ -38,7 +37,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
                 </div>
                 <div className={styles.statInfo}>
                     <p className={styles.statLabel}>오늘 매출</p>
-                    <p className={styles.statValue}>₩385,000</p>
+                    <p className={styles.statValue}>₩{stats.todaySales.toLocaleString()}</p>
                 </div>
             </div>
 
@@ -48,7 +47,7 @@ export default function DashboardStats({ stats }: DashboardStatsProps) {
                 </div>
                 <div className={styles.statInfo}>
                     <p className={styles.statLabel}>오늘 방문</p>
-                    <p className={styles.statValue}>45명</p>
+                    <p className={styles.statValue}>{stats.todayVisits}명</p>
                 </div>
             </div>
         </div>

@@ -9,4 +9,6 @@ public interface MemberJpaRepository extends JpaRepository<Member, UUID> {
     Optional<Member> findByNickname(String nickname);
     boolean existsByNickname(String nickname);
     void deleteByNickname(String nickname);
+    
+    long countByCreatedAtAfter(java.time.LocalDateTime date);
 }

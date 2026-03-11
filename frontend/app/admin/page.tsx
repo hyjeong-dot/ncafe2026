@@ -1,19 +1,24 @@
 'use client';
 
-import { useMenus } from './menus/_components/MenuGrid/useMenus';
+import { useDashboardStats } from './_components/useDashboardStats';
 import styles from './page.module.css';
 
 // Dashboard Components
 import DashboardHeader from './_components/DashboardHeader';
 import DashboardStats from './_components/DashboardStats';
 import DashboardActions from './_components/DashboardActions';
+import DashboardLoading from './_components/DashboardLoading';
 
 /**
  * 어드민 대시보드 메인
  * 헤더, 통계, 빠른 작업 섹션으로 컴포넌트화되었습니다.
  */
 export default function AdminDashboard() {
-    const { stats } = useMenus();
+    const { stats, isLoading } = useDashboardStats();
+
+    if (isLoading) {
+        return <DashboardLoading />;
+    }
 
     return (
         <div className={styles.container}>

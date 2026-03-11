@@ -26,11 +26,11 @@ public class MenuPersistenceAdapter implements SaveMenuPort, LoadMenuPort, Delet
         boolean hasSearch = searchQuery != null && !searchQuery.isBlank();
 
         if (hasCategory && hasSearch) {
-            return menuJpaRepository.findAllByCategoryIdAndQuery(categoryId, searchQuery);
+            return menuJpaRepository.findAllByCategoryIdAndKorNameContainingIgnoreCaseOrCategoryIdAndEngNameContainingIgnoreCaseOrderBySortOrderAsc(categoryId, searchQuery, categoryId, searchQuery);
         } else if (hasCategory) {
             return menuJpaRepository.findAllByCategoryIdOrderBySortOrderAsc(categoryId);
         } else if (hasSearch) {
-            return menuJpaRepository.findAllByQuery(searchQuery);
+            return menuJpaRepository.findAllByKorNameContainingIgnoreCaseOrEngNameContainingIgnoreCaseOrderBySortOrderAsc(searchQuery, searchQuery);
         } else {
             return menuJpaRepository.findAllByOrderBySortOrderAsc();
         }
