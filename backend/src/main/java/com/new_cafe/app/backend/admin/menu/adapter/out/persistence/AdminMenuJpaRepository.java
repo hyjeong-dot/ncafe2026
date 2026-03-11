@@ -25,4 +25,6 @@ public interface AdminMenuJpaRepository extends JpaRepository<Menu, Long> {
            "ORDER BY m.sortOrder ASC")
     List<Menu> findAllByCategoryIdAndQuery(@Param("categoryId") Long categoryId,
                                            @Param("query") String query);
+
+    boolean existsByKorName(String korName);
 }

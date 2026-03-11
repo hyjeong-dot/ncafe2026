@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { Send, X } from 'lucide-react';
 import Image from 'next/image';
 import styles from './ChatAgent.module.css';
+import MenuChatCard from './MenuChatCard';
 
 // =============================================
 // 📌 Gemini API 연동 시 아래 주석을 해제하세요
@@ -181,13 +182,26 @@ export default function ChatAgent() {
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // 간단한 마크다운 볼드 처리
+    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1] 형태)
     const renderContent = (text: string) => {
-        const parts = text.split(/(\*\*.*?\*\*)/g);
+        // 볼드(**text**)와 메뉴태그([ID:num])를 모두 분리하기 위한 정규표현식
+        const parts = text.split(/(\*\*.*?\*\*|\[ID:\d+\])/g);
+        
         return parts.map((part, i) => {
+            // 볼드 텍스트 처리
             if (part.startsWith('**') && part.endsWith('**')) {
                 return <strong key={i}>{part.slice(2, -2)}</strong>;
             }
+            
+            // 메뉴 ID 태그 처리 ([ID:1])
+            if (part.startsWith('[ID:') && part.endsWith(']')) {
+                const menuId = parseInt(part.match(/\d+/)?.[0] || '0', 10);
+                if (menuId > 0) {
+                    return <MenuChatCard key={i} id={menuId} />;
+                }
+            }
+            
+            // 일반 텍스트
             return <span key={i}>{part}</span>;
         });
     };
@@ -230,7 +244,7 @@ export default function ChatAgent() {
                                         <Image src="/images/ditto/ditto-Bot.png" alt="Ditto Bot" width={32} height={32} className={styles.messageAvatarImage} />
                                     </div>
                                 )}
-                                <div>
+                                <div className={styles.messageContent}>
                                     <div
                                         className={`${styles.messageBubble} ${msg.role === 'user' ? styles.messageBubbleUser : styles.messageBubbleAgent}`}
                                     >

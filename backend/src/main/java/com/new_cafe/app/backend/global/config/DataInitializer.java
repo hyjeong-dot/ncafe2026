@@ -48,15 +48,11 @@ public class DataInitializer implements CommandLineRunner {
                     .build());
         }
 
-        if (categoryRepository.count() > 0) {
-            return;
-        }
-
         // 1. 카테고리 데이터 생성 (ID는 자동 발급됨)
-        AdminCategory signature = categoryRepository.save(createCategory("Signature", "✨", 1));
-        AdminCategory coffee = categoryRepository.save(createCategory("Coffee", "☕", 2));
-        AdminCategory sandwich = categoryRepository.save(createCategory("Sandwich & Bagel", "🥪", 3));
-        AdminCategory dessert = categoryRepository.save(createCategory("Dessert", "🍰", 4));
+        AdminCategory signature = findOrCreateCategory("Signature", "✨", 1);
+        AdminCategory coffee = findOrCreateCategory("Coffee", "☕", 2);
+        AdminCategory sandwich = findOrCreateCategory("Sandwich & Bagel", "🥪", 3);
+        AdminCategory dessert = findOrCreateCategory("Dessert", "🍰", 4);
 
         // 2. 메뉴 및 이미지 데이터 생성
         saveMenu("말랑 퍼플 라떼", "Malrang Purple Latte", "보랏빛 마법 가루가 들어간 메타몽 카페의 시그니처 라떼", 7000, signature.getId(), 1,
@@ -108,16 +104,22 @@ public class DataInitializer implements CommandLineRunner {
                 "/upload/images/strawberry-cake.png", "/upload/images/strawberry-cake1.png");
     }
 
-    private AdminCategory createCategory(String name, String icon, int sortOrder) {
-        return AdminCategory.builder()
-                .name(name)
-                .icon(icon)
-                .sortOrder(sortOrder)
-                .isActive(true)
-                .build();
+    private AdminCategory findOrCreateCategory(String name, String icon, int sortOrder) {
+        return categoryRepository.findByName(name)
+                .orElseGet(() -> categoryRepository.save(AdminCategory.builder()
+                        .name(name)
+                        .icon(icon)
+                        .sortOrder(sortOrder)
+                        .isActive(true)
+                        .build()));
     }
 
     private void saveMenu(String korName, String engName, String desc, int price, Long categoryId, int sortOrder, String... imageUrls) {
+        // 이미 존재하는 이름의 메뉴인 경우 건너뛰어 중복 방지 (사용자가 직접 수정한 데이터 보호)
+        if (menuRepository.existsByKorName(korName)) {
+            return;
+        }
+
         Menu menu = Menu.builder()
                 .korName(korName)
                 .engName(engName)
