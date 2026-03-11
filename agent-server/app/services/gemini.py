@@ -63,7 +63,7 @@ def chat(messages: list[dict]) -> str:
     system_prompt = get_augmented_prompt(user_query)
     
     response = client.models.generate_content(
-        model='gemini-2.0-flash',
+        model='gemini-2.5-flash',
         contents=messages,
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
@@ -78,7 +78,7 @@ def chat_stream(messages: list[dict]) -> Generator[str, None, None]:
     system_prompt = get_augmented_prompt(user_query)
     
     response = client.models.generate_content_stream(
-        model='gemini-2.0-flash',
+        model='gemini-2.5-flash',
         contents=messages,
         config=types.GenerateContentConfig(
             system_instruction=system_prompt,
