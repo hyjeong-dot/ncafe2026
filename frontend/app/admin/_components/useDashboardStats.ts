@@ -19,29 +19,32 @@ export function useDashboardStats() {
     });
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const response = await fetch('/api/admin/dashboard/stats');
-                
-                if (response.status === 401) {
-                    if (typeof window !== 'undefined') window.location.href = '/login';
-                    return;
-                }
-                
-                if (!response.ok) throw new Error('대시보드 데이터를 불러오는데 실패했습니다.');
-
-                const data = await response.json();
-                setStats(data);
-            } catch (error) {
-                console.error('Dashboard Fetch error:', error);
-                toast.error('통계 데이터를 가져오는 중 오류가 발생했습니다.');
-            } finally {
-                setIsLoading(false);
+    const fetchStats = async () => {
+        try {
+            const response = await fetch('/api/admin/dashboard/stats');
+            
+            if (response.status === 401) {
+                if (typeof window !== 'undefined') window.location.href = '/login';
+                return;
             }
-        };
+            
+            if (!response.ok) throw new Error('대시보드 데이터를 불러오는데 실패했습니다.');
 
+            const data = await response.json();
+            setStats(data);
+        } catch (error) {
+            console.error('Dashboard Fetch error:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchStats();
+
+        // 30초마다 실시간으로 오늘의 주문 건수 등을 업데이트해몽! (._.)✨
+        const interval = setInterval(fetchStats, 30000);
+        return () => clearInterval(interval);
     }, []);
 
     return {
