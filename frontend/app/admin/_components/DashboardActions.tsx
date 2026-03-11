@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { Plus, UtensilsCrossed, ShoppingBag, Settings, Database } from 'lucide-react';
+import { useDashboardStats } from './useDashboardStats';
 import styles from '../page.module.css';
 
 export default function DashboardActions() {
+    const { stats } = useDashboardStats();
+
     return (
         <div className={styles.quickActions}>
             <h2 className={styles.sectionTitle}>빠른 작업</h2>
@@ -34,8 +37,8 @@ export default function DashboardActions() {
                         <ShoppingBag size={22} />
                     </div>
                     <div className={styles.actionText}>
-                        <p className={styles.actionTitle}>주문 확인</p>
-                        <p className={styles.actionDesc}>새 주문 3건</p>
+                        <p className={styles.actionTitle}>주문 관리</p>
+                        <p className={styles.actionDesc}>오늘 {stats.todayOrders || 0}건의 주문</p>
                     </div>
                 </Link>
 
