@@ -20,7 +20,18 @@ public class AdminCafeController {
     }
 
     @PutMapping
-    public CafeSettingsResult updateSettings(@RequestBody UpdateCafeSettingsUseCase.UpdateSettingsCommand command) {
-        return updateCafeSettingsUseCase.updateSettings(command);
+    public Object updateSettings(@RequestBody UpdateCafeSettingsUseCase.UpdateSettingsCommand command) {
+        try {
+            return updateCafeSettingsUseCase.updateSettings(command);
+        } catch (Exception e) {
+            java.io.StringWriter sw = new java.io.StringWriter();
+            java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+            e.printStackTrace(pw);
+            return java.util.Map.of(
+                "error", e.getMessage() != null ? e.getMessage() : "null",
+                "type", e.getClass().getName(),
+                "stackTrace", sw.toString()
+            );
+        }
     }
 }

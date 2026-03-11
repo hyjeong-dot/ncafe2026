@@ -10,6 +10,8 @@ public interface UpdateCafeSettingsUseCase {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     class UpdateSettingsCommand {
         private String cafeName;
         private String description;
