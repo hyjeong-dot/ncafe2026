@@ -15,8 +15,19 @@ public class AdminCafeController {
     private final UpdateCafeSettingsUseCase updateCafeSettingsUseCase;
 
     @GetMapping
-    public CafeSettingsResult getSettings() {
-        return getCafeSettingsUseCase.getSettings();
+    public Object getSettings() {
+        try {
+            return getCafeSettingsUseCase.getSettings();
+        } catch (Exception e) {
+            java.io.StringWriter sw = new java.io.StringWriter();
+            java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+            e.printStackTrace(pw);
+            return java.util.Map.of(
+                "error", e.getMessage() != null ? e.getMessage() : "null",
+                "type", e.getClass().getName(),
+                "stackTrace", sw.toString()
+            );
+        }
     }
 
     @PutMapping
