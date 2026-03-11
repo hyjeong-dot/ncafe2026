@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/settings")
+@RequestMapping("/admin/store-info")
 @RequiredArgsConstructor
 public class AdminCafeController {
 
