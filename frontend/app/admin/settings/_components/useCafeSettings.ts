@@ -10,9 +10,9 @@ export interface CafeSettings {
     address: string;
     openTime: string; // "HH:mm:ss"
     closeTime: string; // "HH:mm:ss"
-    isManualClosed: boolean;
+    manualClosed: boolean;
     instagramUrl: string;
-    isOpen: boolean;
+    open: boolean;
 }
 
 export function useCafeSettings() {

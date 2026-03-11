@@ -28,16 +28,16 @@ public class CafeSettingsService implements GetCafeSettingsUseCase, UpdateCafeSe
     @Override
     public CafeSettingsResult updateSettings(UpdateSettingsCommand command) {
         CafeSettings settings = getOrCreateSettings();
-        
-        settings.setCafeName(command.getCafeName());
-        settings.setDescription(command.getDescription());
-        settings.setPhoneNumber(command.getPhoneNumber());
-        settings.setAddress(command.getAddress());
-        settings.setOpenTime(command.getOpenTime());
-        settings.setCloseTime(command.getCloseTime());
+
+        if (command.getCafeName() != null) settings.setCafeName(command.getCafeName());
+        if (command.getDescription() != null) settings.setDescription(command.getDescription());
+        if (command.getPhoneNumber() != null) settings.setPhoneNumber(command.getPhoneNumber());
+        if (command.getAddress() != null) settings.setAddress(command.getAddress());
+        if (command.getOpenTime() != null) settings.setOpenTime(command.getOpenTime());
+        if (command.getCloseTime() != null) settings.setCloseTime(command.getCloseTime());
+        if (command.getInstagramUrl() != null) settings.setInstagramUrl(command.getInstagramUrl());
         settings.setManualClosed(command.isManualClosed());
-        settings.setInstagramUrl(command.getInstagramUrl());
-        
+
         return toResult(repository.save(settings));
     }
 
@@ -45,10 +45,10 @@ public class CafeSettingsService implements GetCafeSettingsUseCase, UpdateCafeSe
         return repository.findAll().stream().findFirst()
                 .orElseGet(() -> repository.save(CafeSettings.builder()
                         .cafeName("Meta Cafe")
-                        .description("메타몽이 운영하는 힐링 카페에 오신 걸 환영해몽! (._.)")
+                        .description("메타몽이 운영하는 힐링 카페에 오신 걸 환영해몽! (._.)") 
                         .openTime(LocalTime.of(9, 0))
                         .closeTime(LocalTime.of(22, 0))
-                        .isManualClosed(false)
+                        .manualClosed(false)
                         .build()));
     }
 
@@ -60,9 +60,9 @@ public class CafeSettingsService implements GetCafeSettingsUseCase, UpdateCafeSe
                 .address(settings.getAddress())
                 .openTime(settings.getOpenTime())
                 .closeTime(settings.getCloseTime())
-                .isManualClosed(settings.isManualClosed())
+                .manualClosed(settings.isManualClosed())
                 .instagramUrl(settings.getInstagramUrl())
-                .isOpen(settings.isOpen())
+                .open(settings.isOpen())
                 .build();
     }
 }

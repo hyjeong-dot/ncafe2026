@@ -6,7 +6,8 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "cafe_settings")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class CafeSettings {
     @Column(name = "cafe_name", nullable = false)
     private String cafeName;
 
-    private String description; // 사장님 한마디/공지
+    private String description;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -33,18 +34,18 @@ public class CafeSettings {
     private LocalTime closeTime;
 
     @Column(name = "is_manual_closed")
-    private boolean isManualClosed; // 강제 마감 여부
+    private boolean manualClosed; // "is" 접두사 제거 → Lombok이 isManualClosed() 생성
 
     @Column(name = "instagram_url")
     private String instagramUrl;
 
     // 비즈니스 로직: 현재 영업 중인지 확인
     public boolean isOpen() {
-        if (isManualClosed) return false;
-        
+        if (manualClosed) return false;
+
         LocalTime now = LocalTime.now();
-        if (openTime == null || closeTime == null) return true; // 설정 없으면 일단 오픈
-        
+        if (openTime == null || closeTime == null) return true;
+
         return !now.isBefore(openTime) && !now.isAfter(closeTime);
     }
 }

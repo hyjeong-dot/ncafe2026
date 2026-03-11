@@ -1,7 +1,6 @@
 package com.new_cafe.app.backend.admin.cafe.application.port.in;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.new_cafe.app.backend.admin.cafe.application.result.CafeSettingsResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,21 +15,15 @@ public interface UpdateCafeSettingsUseCase {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     class UpdateSettingsCommand {
         private String cafeName;
         private String description;
         private String phoneNumber;
         private String address;
-        
-        @JsonFormat(pattern = "HH:mm:ss")
         private LocalTime openTime;
-        
-        @JsonFormat(pattern = "HH:mm:ss")
         private LocalTime closeTime;
-        
-        @JsonProperty("isManualClosed")
-        private boolean isManualClosed;
-        
+        private boolean manualClosed;
         private String instagramUrl;
     }
 }

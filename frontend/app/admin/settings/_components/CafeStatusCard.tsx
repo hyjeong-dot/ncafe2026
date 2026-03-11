@@ -12,35 +12,35 @@ interface CafeStatusCardProps {
 
 export default function CafeStatusCard({ settings, isSaving, onUpdateSettings }: CafeStatusCardProps) {
     const handleToggleManualClose = async () => {
-        const newStatus = !settings?.isManualClosed;
+        const newStatus = !settings?.manualClosed;
         const confirmMsg = newStatus 
             ? "영업을 강제로 마감하시겠몽? (._.)" 
             : "다시 영업을 시작하시겠몽? 🪄";
         
         if (confirm(confirmMsg)) {
-            await onUpdateSettings({ isManualClosed: newStatus });
+            await onUpdateSettings({ manualClosed: newStatus });
         }
     };
 
     return (
         <div className={styles.statusCard}>
             <div className={styles.statusIndicator}>
-                {settings?.isOpen ? '☕' : '💤'}
+                {settings?.open ? '☕' : '💤'}
             </div>
             <h2 className={styles.statusTitle}>현재 카페 상태</h2>
-            <div className={`${styles.statusBadge} ${settings?.isOpen ? styles.openBadge : styles.closedBadge}`}>
-                {settings?.isOpen ? '영업 중' : '영업 종료'}
+            <div className={`${styles.statusBadge} ${settings?.open ? styles.openBadge : styles.closedBadge}`}>
+                {settings?.open ? '영업 중' : '영업 종료'}
             </div>
             
             <button 
-                className={`${styles.toggleBtn} ${settings?.isManualClosed ? styles.btnOpen : styles.btnClose}`}
+                className={`${styles.toggleBtn} ${settings?.manualClosed ? styles.btnOpen : styles.btnClose}`}
                 onClick={handleToggleManualClose}
                 disabled={isSaving}
             >
-                {settings?.isManualClosed ? '지금 영업 시작하기 🪄' : '지금 강제 마감하기 ❌'}
+                {settings?.manualClosed ? '지금 영업 시작하기 🪄' : '지금 강제 마감하기 ❌'}
             </button>
             
-            {settings?.isManualClosed && (
+            {settings?.manualClosed && (
                 <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#e74c3c' }}>
                     <AlertCircle size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
                     현재 강제 마감 상태입니다.
