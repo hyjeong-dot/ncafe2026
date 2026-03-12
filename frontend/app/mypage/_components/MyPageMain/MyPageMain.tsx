@@ -50,7 +50,7 @@ export default function MyPageMain() {
                 />
 
                 <main>
-                    {activeTab === "profile" && <MyPageProfile user={user} />}
+                    {activeTab === "profile" && <MyPageProfile />}
                     {activeTab === "orders" && <MyPageOrders />}
                     {activeTab === "favorites" && <MyPageFavorites />}
                     {activeTab === "payment" && (

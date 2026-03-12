@@ -9,12 +9,15 @@ interface User {
     username: string;
     name: string;
     role: string;
+    email?: string;
+    phoneNumber?: string;
 }
 
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
     login: (userData: User) => void;
+    updateUser: (userData: User) => void;
     logout: () => Promise<void>;
 }
 
@@ -51,6 +54,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userData);
     };
 
+    const updateUser = (userData: User) => {
+        setUser(userData);
+    };
+
     const logout = async () => {
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
@@ -64,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+        <AuthContext.Provider value={{ user, isLoading, login, updateUser, logout }}>
             {children}
         </AuthContext.Provider>
     );

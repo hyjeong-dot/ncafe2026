@@ -22,6 +22,22 @@ export default function SignupForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
 
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // 숫자만 남김
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        let formattedValue = '';
+        
+        if (value.length < 4) {
+            formattedValue = value;
+        } else if (value.length < 8) {
+            formattedValue = `${value.slice(0, 3)}-${value.slice(3)}`;
+        } else {
+            formattedValue = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
+        }
+        
+        setPhoneNumber(formattedValue);
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
@@ -185,9 +201,10 @@ export default function SignupForm() {
                                 type="tel"
                                 id="phoneNumber"
                                 value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                onChange={handlePhoneChange}
                                 className={styles.input}
                                 placeholder="010-0000-0000"
+                                maxLength={13}
                                 required
                             />
                         </div>

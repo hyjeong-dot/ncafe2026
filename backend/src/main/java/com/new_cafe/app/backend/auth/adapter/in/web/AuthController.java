@@ -7,9 +7,13 @@ import com.new_cafe.app.backend.auth.adapter.in.web.dto.LoginResponse;
 import com.new_cafe.app.backend.auth.adapter.in.web.dto.MeResponse;
 import com.new_cafe.app.backend.auth.application.port.in.DeleteAccountUseCase;
 import com.new_cafe.app.backend.auth.application.port.in.LoginUseCase;
+import com.new_cafe.app.backend.auth.application.port.in.UpdateProfileUseCase;
+import com.new_cafe.app.backend.auth.adapter.in.web.dto.UpdateProfileRequest;
 import com.new_cafe.app.backend.auth.application.result.LoginResult;
 import com.new_cafe.app.backend.auth.domain.exception.AuthenticationFailedException;
 import com.new_cafe.app.backend.config.jwt.JwtProvider;
+import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
+import com.new_cafe.app.backend.member.domain.model.Member;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +34,9 @@ public class AuthController {
     private final LoginUseCase loginUseCase;
     private final SignupUseCase signupUseCase;
     private final DeleteAccountUseCase deleteAccountUseCase;
+    private final UpdateProfileUseCase updateProfileUseCase;
     private final JwtProvider jwtProvider;
+    private final LoadMemberPort loadMemberPort;
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
@@ -72,13 +78,32 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // Basic user info based on JWT
+        String username = auth.getName();
+        Member member = loadMemberPort.findByUsername(username)
+                .orElseThrow(AuthenticationFailedException::new);
+
+        // Basic user info based on JWT + DB
         return MeResponse.builder()
-                .memberId(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-                .username(auth.getName())
-                .name("User")
+                .memberId(member.getId())
+                .username(member.getUsername())
+                .name(member.getNickname())
                 .role(role)
+                .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
                 .build();
+    }
+
+    @PutMapping("/me")
+    public MeResponse updateProfile(@RequestBody UpdateProfileRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+            throw new AuthenticationFailedException();
+        }
+
+        String username = auth.getName();
+        updateProfileUseCase.updateProfile(request.toCommand(username));
+
+        return getMe();
     }
 
     @DeleteMapping("/me")
