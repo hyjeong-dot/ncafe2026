@@ -143,16 +143,20 @@ def search_similar_documents(query: str, limit: int = 3):
         return []
 
 def search_menu_by_name(menu_name: str):
-    """실제 DB에서 메뉴 이름으로 ID를 검색합니다."""
+    """실제 DB에서 메뉴 이름으로 ID를 검색합니다. 공백에 상관없이 검색 가능하게 처리합니다."""
     try:
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        # 한글 이름 또는 영어 이름으로 검색
+        # 공백을 제거하고 대소문자 구분 없이 검색
+        clean_name = menu_name.replace(" ", "").lower()
+        search_pattern = f"%{clean_name}%"
+        
         cur.execute("""
             SELECT id, kor_name FROM menus 
-            WHERE kor_name LIKE %s OR eng_name LIKE %s
+            WHERE REPLACE(LOWER(kor_name), ' ', '') LIKE %s 
+               OR REPLACE(LOWER(eng_name), ' ', '') LIKE %s
             LIMIT 1;
-        """, (f"%{menu_name}%", f"%{menu_name}%"))
+        """, (search_pattern, search_pattern))
         result = cur.fetchone()
         cur.close()
         conn.close()

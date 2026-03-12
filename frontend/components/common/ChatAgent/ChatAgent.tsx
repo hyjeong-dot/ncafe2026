@@ -48,10 +48,10 @@ const WELCOME_MESSAGE: Message = {
 };
 
 const QUICK_ACTIONS = [
-    { label: '☕ 메뉴 추천', keyword: '추천' },
-    { label: '🕐 영업시간', keyword: '영업시간' },
-    { label: '📍 위치', keyword: '위치' },
-    { label: '🎉 이벤트', keyword: '이벤트' },
+    { label: '☕ 메뉴 추천', keyword: '인기 메뉴 추천' },
+    { label: '🕐 영업시간', keyword: '영업시간 확인' },
+    { label: '📍 위치', keyword: '카페 위치 안내' },
+    { label: '🎉 이벤트', keyword: '이벤트 정보' },
 ];
 
 function getDummyResponse(userMessage: string): string {
@@ -81,7 +81,7 @@ import { useCart } from '@/context/CartContext';
 
 export default function ChatAgent() {
     const router = useRouter();
-    const { isCartOpen, setCartOpen } = useCart();
+    const { isCartOpen, setCartOpen, addItem } = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
     const [inputValue, setInputValue] = useState('');
@@ -190,6 +190,34 @@ export default function ChatAgent() {
                     break;
             }
         }
+
+        // 장바구니 추가 처리 ([CART_ADD:ID:QTY])
+        const cartMatch = agentReply.match(/\[CART_ADD:(\d+):(\d+)\]/);
+        if (cartMatch) {
+            const menuId = cartMatch[1];
+            const quantity = parseInt(cartMatch[2], 10);
+            
+            try {
+                // 메뉴 정보를 가져와서 장바구니에 추가
+                const res = await fetch(`/api/menus/${menuId}`);
+                if (res.ok) {
+                    const menu = await res.json();
+                    for (let i = 0; i < quantity; i++) {
+                        await addItem({
+                            id: menu.id.toString(),
+                            korName: menu.korName,
+                            engName: menu.engName,
+                            price: menu.price,
+                            imageSrc: menu.imageSrc
+                        });
+                    }
+                    // 담은 후 장바구니 열어주기
+                    setTimeout(() => setCartOpen(true), 500);
+                }
+            } catch (error) {
+                console.error('Failed to add to cart via chat:', error);
+            }
+        }
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -207,10 +235,10 @@ export default function ChatAgent() {
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1], [NAV:target] 형태)
+    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1], [NAV:target], [CART_ADD:ID:QTY] 형태)
     const renderContent = (text: string) => {
-        // [ID:숫자] 및 [NAV:대상] 태그를 분리
-        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\])/g);
+        // [ID:숫자], [NAV:대상], [CART_ADD:ID:QTY] 태그를 분리
+        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\]|\[CART_ADD:\d+:\d+\])/g);
         
         return segments.map((segment, i) => {
             // 메뉴 ID 태그인 경우
@@ -221,8 +249,8 @@ export default function ChatAgent() {
                 }
             }
             
-            // 네비게이션 태그인 경우 화면엔 그리지 않음
-            if (segment.startsWith('[NAV:') && segment.endsWith(']')) {
+            // 특수 태그인 경우 화면엔 그리지 않음
+            if ((segment.startsWith('[NAV:') || segment.startsWith('[CART_ADD:')) && segment.endsWith(']')) {
                 return null;
             }
             
