@@ -2,7 +2,7 @@ import { getIronSession, SessionOptions } from 'iron-session';
 import { cookies } from 'next/headers';
 
 export interface SessionUser {
-    id: number;
+    id: string;      // UUID 지원을 위해 string으로 변경
     username: string;
     name: string;
     role: string;

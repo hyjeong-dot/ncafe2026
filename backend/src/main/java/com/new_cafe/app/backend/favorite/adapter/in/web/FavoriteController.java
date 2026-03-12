@@ -36,7 +36,7 @@ public class FavoriteController {
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
             return Optional.empty();
         }
-        return loadMemberPort.findByNickname(auth.getName())
+        return loadMemberPort.findByUsername(auth.getName())
                 .map(Member::getId);
     }
 

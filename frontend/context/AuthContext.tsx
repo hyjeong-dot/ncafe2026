@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
 interface User {
+    id: string;
     username: string;
+    name: string;
     role: string;
 }
 
@@ -32,10 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     const result = await response.json();
                     // Backend returns { success: true, data: { username, role, ... } }
                     if (result.success && result.data) {
-                        setUser({
-                            username: result.data.username,
-                            role: result.data.role
-                        });
+                        setUser(result.data); // result.data contains id, username, name, role
                     }
                 }
             } catch (error) {

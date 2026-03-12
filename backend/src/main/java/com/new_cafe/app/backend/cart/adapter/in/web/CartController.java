@@ -37,7 +37,7 @@ public class CartController {
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
             return null;
         }
-        return loadMemberPort.findByNickname(auth.getName()).orElse(null);
+        return loadMemberPort.findByUsername(auth.getName()).orElse(null);
     }
 
     @GetMapping

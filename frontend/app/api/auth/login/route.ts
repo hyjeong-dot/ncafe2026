@@ -44,13 +44,18 @@ export async function POST(req: NextRequest) {
         // 2. 세션에 저장 (httpOnly 쿠키로 암호화되어 저장됨)
         const session = await getSession();
         session.token = token;
+
+        // 데이터가 누락되지 않도록 확실하게 매핑 (UUID를 문자열로 강제 변환)
         session.user = {
-            id: result.memberId,
-            username: result.username,
-            name: result.name,
-            role: result.role
+            id: String(result.memberId || result.id || ''),
+            username: String(result.username || ''),
+            name: String(result.name || result.nickname || ''),
+            role: String(result.role || 'ROLE_USER')
         };
+
+        console.log(`[BFF] Session saving user: ${JSON.stringify(session.user)}`);
         await session.save();
+        console.log('[BFF] Session saved successfully');
 
         // 3. 클라이언트에 user 정보만 반환 (JWT는 제외)
         return NextResponse.json({ success: true, data: session.user });

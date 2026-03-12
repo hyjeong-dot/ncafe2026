@@ -42,10 +42,7 @@ export default function LoginForm() {
             }
 
             // Global Auth State Update
-            login({
-                username: result.data.username,
-                role: result.data.role
-            });
+            login(result.data);
 
             // Redirect based on role
             if (result.data.role === 'ROLE_ADMIN') {
