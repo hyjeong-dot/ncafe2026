@@ -326,3 +326,41 @@
     background: #f8f4ff;
     transform: translateX(4px);
 }
+/* Terms Agreement Styles */
+.termsGroup {
+    margin-top: 0.5rem;
+}
+
+.termsLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hiddenCheckbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.customCheckbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.termsLabel:hover .customCheckbox {
+    transform: scale(1.1);
+}
+
+.termsText {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6e4a9e;
+    line-height: 1.4;
+}

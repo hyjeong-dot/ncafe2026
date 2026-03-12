@@ -11,8 +11,11 @@ import com.new_cafe.app.backend.auth.application.command.SignupCommand;
 public class SignupRequest {
     private String username;
     private String password;
+    private String nickname;
+    private String email;
+    private String phoneNumber;
 
     public SignupCommand toCommand() {
-        return new SignupCommand(username, password);
+        return new SignupCommand(username, password, nickname, email, phoneNumber);
     }
 }

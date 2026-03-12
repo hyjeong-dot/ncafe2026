@@ -25,13 +25,13 @@ public class LoginService implements LoginUseCase {
     public LoginResult login(LoginCommand command) {
         log.info("Login attempt for username: {}", command.getUsername());
         
-        Member member = loadMemberPort.findByNickname(command.getUsername())
+        Member member = loadMemberPort.findByUsername(command.getUsername())
                 .orElseThrow(() -> {
                     log.warn("Member not found: {}", command.getUsername());
                     return new AuthenticationFailedException();
                 });
 
-        log.info("Member found, checking password for user: {}", member.getNickname());
+        log.info("Member found, checking password for user: {}", member.getUsername());
 
         if (!passwordEncoder.matches(command.getPassword(), member.getPassword())) {
             log.warn("Password mismatch for user: {}", command.getUsername());
@@ -42,8 +42,8 @@ public class LoginService implements LoginUseCase {
 
         return LoginResult.builder()
                 .memberId(member.getId())
-                .username(member.getNickname())
-                .name(member.getNickname()) // 'name' 컬럼이 없으므로 'nickname' 사용
+                .username(member.getUsername())
+                .name(member.getNickname())
                 .role(member.getRole())
                 .build();
     }

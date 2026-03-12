@@ -22,13 +22,16 @@ public class SignupService implements SignupUseCase {
     @Override
     @Transactional
     public SignupResult signup(SignupCommand command) {
-        if (saveMemberPort.existsByNickname(command.getUsername())) {
+        if (saveMemberPort.existsByUsername(command.getUsername())) {
              throw new IllegalArgumentException("이미 사용중인 아이디입니다.");
         }
 
         Member newMember = Member.builder()
-                .nickname(command.getUsername())
+                .username(command.getUsername())
                 .password(passwordEncoder.encode(command.getPassword()))
+                .nickname(command.getNickname())
+                .email(command.getEmail())
+                .phoneNumber(command.getPhoneNumber())
                 .role("ROLE_USER")
                 .build();
         
@@ -37,7 +40,7 @@ public class SignupService implements SignupUseCase {
         
         return SignupResult.builder()
                 .memberId(savedMember.getId())
-                .username(savedMember.getNickname())
+                .username(savedMember.getUsername())
                 .build();
     }
 }

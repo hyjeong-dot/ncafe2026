@@ -35,15 +35,21 @@ public class DataInitializer implements CommandLineRunner {
         if (memberRepository.count() == 0) {
             // 관리자 계정
             memberRepository.save(Member.builder()
-                    .nickname("admin")
+                    .username("admin")
+                    .nickname("관리자")
                     .password(passwordEncoder.encode("1234"))
+                    .email("admin@ncafe.com")
+                    .phoneNumber("010-0000-0000")
                     .role("ROLE_ADMIN")
                     .build());
 
             // 테스트 유저 (heo)
             memberRepository.save(Member.builder()
-                    .nickname("heo")
+                    .username("heo")
+                    .nickname("둥이")
                     .password(passwordEncoder.encode("1234"))
+                    .email("heo@ncafe.com")
+                    .phoneNumber("010-1234-5678")
                     .role("ROLE_USER")
                     .build());
         }

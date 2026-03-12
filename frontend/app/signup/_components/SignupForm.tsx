@@ -4,7 +4,7 @@ import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle, Mail, Phone, Smile, CheckSquare, Square } from 'lucide-react';
 import styles from '@/app/login/login.module.css';
 import Modal from '@/components/common/Modal/Modal';
 
@@ -12,7 +12,11 @@ export default function SignupForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [termsAgreed, setTermsAgreed] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,13 +31,24 @@ export default function SignupForm() {
             return;
         }
 
+        if (!termsAgreed) {
+            setError('이용약관 및 개인정보 처리방침에 동의해주세요.');
+            return;
+        }
+
         setIsLoading(true);
 
         try {
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ 
+                    username, 
+                    password, 
+                    nickname, 
+                    email, 
+                    phoneNumber 
+                }),
             });
 
             if (!response.ok) {
@@ -128,6 +143,71 @@ export default function SignupForm() {
                                 required
                             />
                         </div>
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="nickname" className={styles.label}>닉네임</label>
+                        <div className={styles.inputWrapper}>
+                            <Smile size={18} className={styles.inputIcon} />
+                            <input
+                                type="text"
+                                id="nickname"
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                className={styles.input}
+                                placeholder="사용할 닉네임을 입력하세요"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="email" className={styles.label}>이메일</label>
+                        <div className={styles.inputWrapper}>
+                            <Mail size={18} className={styles.inputIcon} />
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className={styles.input}
+                                placeholder="example@ncafe.com"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="phoneNumber" className={styles.label}>휴대폰 번호</label>
+                        <div className={styles.inputWrapper}>
+                            <Phone size={18} className={styles.inputIcon} />
+                            <input
+                                type="tel"
+                                id="phoneNumber"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                className={styles.input}
+                                placeholder="010-0000-0000"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.termsGroup}>
+                        <label className={styles.termsLabel}>
+                            <input
+                                type="checkbox"
+                                checked={termsAgreed}
+                                onChange={(e) => setTermsAgreed(e.target.checked)}
+                                className={styles.hiddenCheckbox}
+                            />
+                            <div className={styles.customCheckbox}>
+                                {termsAgreed ? <CheckSquare size={20} color="#a87edb" /> : <Square size={20} color="#ddd" />}
+                            </div>
+                            <span className={styles.termsText}>
+                                [필수] 이용약관 및 개인정보 처리방침에 동의합니다.
+                            </span>
+                        </label>
                     </div>
 
                     <button

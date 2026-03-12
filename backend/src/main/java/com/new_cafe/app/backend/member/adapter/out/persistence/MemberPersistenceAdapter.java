@@ -20,6 +20,11 @@ public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort,
     }
 
     @Override
+    public Optional<Member> findByUsername(String username) {
+        return memberJpaRepository.findByUsername(username);
+    }
+
+    @Override
     public Member save(Member member) {
         return memberJpaRepository.save(member);
     }
@@ -30,7 +35,17 @@ public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort,
     }
 
     @Override
+    public boolean existsByUsername(String username) {
+        return memberJpaRepository.existsByUsername(username);
+    }
+
+    @Override
     public void deleteByNickname(String nickname) {
         memberJpaRepository.deleteByNickname(nickname);
+    }
+
+    @Override
+    public void deleteByUsername(String username) {
+        memberJpaRepository.deleteByUsername(username);
     }
 }

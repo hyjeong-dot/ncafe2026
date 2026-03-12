@@ -16,4 +16,5 @@ public interface LoadMemberPort {
      * @return 회원 도메인 모델 (없으면 Optional.empty)
      */
     Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByUsername(String username);
 }

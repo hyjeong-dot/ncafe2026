@@ -20,11 +20,20 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "nickname", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     private String role; // "ROLE_ADMIN", "ROLE_USER"
 
