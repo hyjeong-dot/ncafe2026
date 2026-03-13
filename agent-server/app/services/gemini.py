@@ -73,11 +73,12 @@ def _format_user_info(user_context: Optional[dict]) -> str:
     if not user_context:
         return "- 비로그인 사용자 (게스트)\n- 허용 작업: 메뉴 조회, 장바구니 담기 (로컬 저장)"
     
-    role = user_context.get('role', 'MEMBER')
+    role = (user_context.get('role') or 'ROLE_USER').upper()
     nickname = user_context.get('nickname', '고객')
     timezone = user_context.get('timezone', 'Asia/Seoul')
     
-    if role == 'ADMIN':
+    # 백엔드 role 값: "ROLE_ADMIN", "ROLE_USER"
+    if 'ADMIN' in role:
         allowed = "모든 작업 (메뉴 조회, 장바구니, 주문, 메뉴 관리, 주문 관리)"
         role_label = "관리자 (ADMIN)"
     else:
