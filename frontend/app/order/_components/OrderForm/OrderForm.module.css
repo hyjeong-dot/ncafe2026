@@ -24,7 +24,7 @@
 
 /* 결제 카드 */
 .paymentCard {
-    border: 1px solid var(--border-color);
+    border: 1px solid #dce8f7;
     border-radius: var(--radius-md);
     overflow: hidden;
 }
@@ -33,52 +33,69 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.8rem 1.2rem;
-    background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
-    border-bottom: 1px solid #dce8f7;
+    padding: 0.75rem 1.2rem;
+    background: linear-gradient(135deg, #0064FF 0%, #3385ff 100%);
 }
 
-.tossLogo {
+.tossLeft {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #0064FF;
+}
+
+.shieldIcon {
+    color: #fff;
+    opacity: 0.9;
 }
 
 .tossText {
     font-weight: 700;
     font-size: 0.95rem;
     letter-spacing: -0.02em;
+    color: #fff;
 }
 
 .tossDesc {
     font-size: 0.8rem;
-    color: #6b8ab5;
+    color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
 }
 
-.paymentWidget {
-    min-height: 0;
+.paymentInfo {
+    padding: 1.2rem;
+    background: #f8faff;
 }
 
-.widgetPlaceholder {
+.paymentMethod {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.methodIcon {
+    font-size: 1.8rem;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
-    padding: 2rem 1rem;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e8effa;
+    box-shadow: 0 2px 4px rgba(0, 100, 255, 0.05);
+}
+
+.methodTitle {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    margin: 0 0 0.2rem 0;
+}
+
+.methodSub {
+    font-size: 0.82rem;
     color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.spinner {
-    animation: spin 1s linear infinite;
-    color: var(--ditto-400);
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    margin: 0;
 }
 
 /* 라디오 그룹 */

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Shield, Loader2 } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import styles from './OrderForm.module.css';
 
 interface OrderFormProps {
@@ -17,23 +16,6 @@ export default function OrderForm({
     requestMemo,
     setRequestMemo
 }: OrderFormProps) {
-    const [widgetReady, setWidgetReady] = useState(false);
-
-    // 위젯 렌더링 감지
-    useEffect(() => {
-        const el = document.getElementById('payment-widget');
-        if (!el) return;
-
-        const observer = new MutationObserver(() => {
-            if (el.children.length > 0) {
-                setWidgetReady(true);
-                observer.disconnect();
-            }
-        });
-        observer.observe(el, { childList: true, subtree: true });
-        return () => observer.disconnect();
-    }, []);
-
     return (
         <div className={styles.formSection}>
             {/* 결제 수단 */}
@@ -41,20 +23,21 @@ export default function OrderForm({
                 <h3>결제 수단 💳</h3>
                 <div className={styles.paymentCard}>
                     <div className={styles.tossBanner}>
-                        <div className={styles.tossLogo}>
-                            <Shield size={18} />
+                        <div className={styles.tossLeft}>
+                            <Shield size={18} className={styles.shieldIcon} />
                             <span className={styles.tossText}>tosspayments</span>
                         </div>
                         <span className={styles.tossDesc}>안전한 결제</span>
                     </div>
-                    <div id="payment-widget" className={styles.paymentWidget} />
-                    {!widgetReady && (
-                        <div className={styles.widgetPlaceholder}>
-                            <Loader2 size={20} className={styles.spinner} />
-                            <span>결제 수단을 불러오는 중...</span>
+                    <div className={styles.paymentInfo}>
+                        <div className={styles.paymentMethod}>
+                            <span className={styles.methodIcon}>💳</span>
+                            <div>
+                                <p className={styles.methodTitle}>신용/체크카드</p>
+                                <p className={styles.methodSub}>결제하기를 누르면 토스 결제창이 열립니다</p>
+                            </div>
                         </div>
-                    )}
-                    <div id="agreement-widget" />
+                    </div>
                 </div>
             </div>
 
