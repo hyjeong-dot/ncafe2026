@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from 'react';
+import { Shield, Loader2 } from 'lucide-react';
 import styles from './OrderForm.module.css';
 
 interface OrderFormProps {
@@ -15,14 +17,48 @@ export default function OrderForm({
     requestMemo,
     setRequestMemo
 }: OrderFormProps) {
+    const [widgetReady, setWidgetReady] = useState(false);
+
+    // 위젯 렌더링 감지
+    useEffect(() => {
+        const el = document.getElementById('payment-widget');
+        if (!el) return;
+
+        const observer = new MutationObserver(() => {
+            if (el.children.length > 0) {
+                setWidgetReady(true);
+                observer.disconnect();
+            }
+        });
+        observer.observe(el, { childList: true, subtree: true });
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div className={styles.formSection}>
+            {/* 결제 수단 */}
             <div className={styles.formGroup}>
                 <h3>결제 수단 💳</h3>
-                <div id="payment-widget" className={styles.paymentWidget} />
-                <div id="agreement-widget" className={styles.agreementWidget} />
+                <div className={styles.paymentCard}>
+                    <div className={styles.tossBanner}>
+                        <div className={styles.tossLogo}>
+                            <Shield size={18} />
+                            <span className={styles.tossText}>tosspayments</span>
+                        </div>
+                        <span className={styles.tossDesc}>안전한 결제</span>
+                    </div>
+                    <div id="payment-widget" className={styles.paymentWidget} />
+                    {!widgetReady && (
+                        <div className={styles.widgetPlaceholder}>
+                            <Loader2 size={20} className={styles.spinner} />
+                            <span>결제 수단을 불러오는 중...</span>
+                        </div>
+                    )}
+                    <div id="agreement-widget" />
+                </div>
             </div>
 
+            {/* 매장 이용 방법 */}
             <div className={styles.formGroup}>
                 <h3>매장 이용 방법 ✨</h3>
                 <div className={styles.radioGroup}>
@@ -49,6 +85,7 @@ export default function OrderForm({
                 </div>
             </div>
 
+            {/* 요청사항 */}
             <div className={styles.formGroup}>
                 <h3>요청사항 📝</h3>
                 <textarea

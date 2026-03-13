@@ -22,6 +22,66 @@
     gap: 0.5rem;
 }
 
+/* 결제 카드 */
+.paymentCard {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.tossBanner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+    border-bottom: 1px solid #dce8f7;
+}
+
+.tossLogo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #0064FF;
+}
+
+.tossText {
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+}
+
+.tossDesc {
+    font-size: 0.8rem;
+    color: #6b8ab5;
+    font-weight: 500;
+}
+
+.paymentWidget {
+    min-height: 0;
+}
+
+.widgetPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    color: var(--ditto-400);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 라디오 그룹 */
 .radioGroup {
     display: flex;
     gap: 1rem;
@@ -57,6 +117,7 @@
     display: none;
 }
 
+/* 텍스트 영역 */
 .textarea {
     width: 100%;
     min-height: 120px;
@@ -72,14 +133,4 @@
 
 .textarea:focus {
     border-color: var(--ditto-600);
-}
-
-.paymentWidget {
-    min-height: 50px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-}
-
-.agreementWidget {
-    margin-top: 0.5rem;
 }
