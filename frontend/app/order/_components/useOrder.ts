@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { CartItem, useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { fetchAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
-import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
+import { loadPaymentWidget } from '@tosspayments/payment-widget-sdk';
 
 const TOSS_CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || '';
-const TOSS_CHANNEL_KEY = process.env.NEXT_PUBLIC_TOSS_CHANNEL_KEY || '';
 
 export function useOrder() {
     const router = useRouter();
@@ -24,6 +23,9 @@ export function useOrder() {
     const [requestMemo, setRequestMemo] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
+
+    const paymentWidgetRef = useRef<any>(null);
+    const paymentMethodsWidgetRef = useRef<any>(null);
 
     // Redirect to login if unauthenticated or menus if empty cart
     useEffect(() => {
@@ -60,10 +62,48 @@ export function useOrder() {
         setCartOpen(false);
     }, [setCartOpen]);
 
+    // 결제위젯 초기화
+    useEffect(() => {
+        if (!user || totalPrice <= 0 || !TOSS_CLIENT_KEY) return;
+
+        const initWidget = async () => {
+            try {
+                const customerKey = user.username || 'guest_' + Date.now();
+                const paymentWidget = await loadPaymentWidget(TOSS_CLIENT_KEY, customerKey);
+                paymentWidgetRef.current = paymentWidget;
+
+                // 결제 수단 UI 렌더링
+                const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
+                    '#payment-widget',
+                    totalPrice
+                );
+                paymentMethodsWidgetRef.current = paymentMethodsWidget;
+
+                // 약관 UI 렌더링
+                paymentWidget.renderAgreement('#agreement-widget');
+            } catch (error) {
+                console.error('결제위젯 초기화 실패:', error);
+            }
+        };
+
+        initWidget();
+    }, [user, totalPrice]);
+
+    // 금액 변경 시 위젯 업데이트
+    useEffect(() => {
+        if (paymentMethodsWidgetRef.current && totalPrice > 0) {
+            paymentMethodsWidgetRef.current.updateAmount(totalPrice);
+        }
+    }, [totalPrice]);
+
     const handleSubmitOrder = async () => {
         if (items.length === 0) return;
         if (!orderType) {
             toast.error('매장 이용 방법을 선택해 주세요.');
+            return;
+        }
+        if (!paymentWidgetRef.current) {
+            toast.error('결제 시스템을 불러오는 중입니다. 잠시 후 다시 시도해주세요.');
             return;
         }
 
@@ -86,44 +126,29 @@ export function useOrder() {
 
             const { orderUid, totalPrice: orderTotal } = orderResult;
 
-            // 장바구니/directOrder 정리 (결제 실패 시에도 주문은 PENDING으로 남음)
+            // 장바구니/directOrder 정리
             if (isDirectOrder) {
                 sessionStorage.removeItem('directOrder');
             } else {
                 await clearCart();
             }
 
-            // 2. 토스페이먼츠 결제 요청
-            const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
-            const payment = tossPayments.payment({ customerKey: user?.username || 'guest' });
-
-            // 주문 이름 생성 (첫 번째 메뉴 + 외 N개)
+            // 2. 결제위젯으로 결제 요청
             const orderName = items.length > 1
                 ? `${items[0].korName} 외 ${items.length - 1}건`
                 : items[0].korName;
 
-            await payment.requestPayment({
-                method: 'CARD',
-                amount: {
-                    currency: 'KRW',
-                    value: orderTotal,
-                },
+            await paymentWidgetRef.current.requestPayment({
                 orderId: orderUid,
                 orderName,
                 customerName: user?.name || '고객',
+                customerEmail: user?.email || undefined,
                 successUrl: `${window.location.origin}/order/success`,
                 failUrl: `${window.location.origin}/order/fail`,
-                card: {
-                    useEscrow: false,
-                    flowMode: 'DEFAULT',
-                    useCardPoint: false,
-                    useAppCardOnly: false,
-                },
             });
 
         } catch (error: any) {
             console.error('Payment error:', error);
-            // 사용자가 결제 취소한 경우
             if (error?.code === 'USER_CANCEL' || error?.code === 'PAY_PROCESS_CANCELED') {
                 toast.error('결제가 취소되었습니다.');
             } else {
