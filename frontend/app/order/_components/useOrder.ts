@@ -88,11 +88,20 @@ export function useOrder() {
                 quantity: item.quantity
             }));
 
+            // 옵션 정보를 메모에 자동 포함
+            const optionLines = items
+                .filter(item => item.selectedOptionNames && item.selectedOptionNames.length > 0)
+                .map(item => `[${item.korName}] ${item.selectedOptionNames!.join(', ')}`);
+            const fullMemo = [
+                ...(optionLines.length > 0 ? [`📋 옵션: ${optionLines.join(' / ')}`] : []),
+                ...(requestMemo.trim() ? [requestMemo.trim()] : [])
+            ].join('\n');
+
             const orderResult = await fetchAPI('/orders', {
                 method: 'POST',
                 body: JSON.stringify({
                     orderType,
-                    requestMemo,
+                    requestMemo: fullMemo,
                     items: formattedItems
                 })
             });
