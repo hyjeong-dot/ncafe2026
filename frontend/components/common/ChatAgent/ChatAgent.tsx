@@ -85,9 +85,11 @@ function getDummyResponse(userMessage: string): string {
 }
 
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function ChatAgent() {
     const router = useRouter();
+    const { user } = useAuth();
     const { isCartOpen, setCartOpen } = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
@@ -168,7 +170,12 @@ export default function ChatAgent() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: formattedMessages,
-                    stream: false
+                    stream: false,
+                    userContext: user ? {
+                        nickname: user.name,
+                        role: user.role,
+                        timezone: 'Asia/Seoul',
+                    } : null
                 }),
             });
 

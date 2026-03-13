@@ -12,14 +12,15 @@ def to_gemini_messages(messages: list[Message]) -> list[dict]:
 @router.post("")
 def chat_endpoint(request: ChatRequest):
     gemini_messages = to_gemini_messages(request.messages)
+    user_ctx = request.userContext.model_dump() if request.userContext else None
     
     if not request.stream:
-        response_text = chat(gemini_messages)
+        response_text = chat(gemini_messages, user_context=user_ctx)
         return {"content": response_text}
         
     def event_generator():
         try:
-            for text_chunk in chat_stream(gemini_messages):
+            for text_chunk in chat_stream(gemini_messages, user_context=user_ctx):
                 yield {"data": json.dumps({"content": text_chunk}, ensure_ascii=False)}
             yield {"data": "[DONE]"}
         except Exception as e:
