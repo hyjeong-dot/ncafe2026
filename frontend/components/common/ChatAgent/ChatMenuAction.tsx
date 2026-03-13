@@ -38,26 +38,42 @@ type SelectedOptions = Record<number, number[]>;
 interface ChatMenuActionProps {
     menuId: number;
     intent: 'ORDER' | 'CART';
+    actionCompleted?: boolean;         // 부모가 관리하는 완료 상태
     onComplete?: (message: string) => void;
+    onMarkCompleted?: () => void;      // 완료 시 부모에게 알림 (메시지 상태에 저장)
 }
 
-export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuActionProps) {
+export default function ChatMenuAction({ menuId, intent, actionCompleted, onComplete, onMarkCompleted }: ChatMenuActionProps) {
     const router = useRouter();
     const { addItem } = useCart();
 
     const [menu, setMenu] = useState<MenuData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [selections, setSelections] = useState<SelectedOptions>({});
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(actionCompleted || false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [completedMessage, setCompletedMessage] = useState('');
     const [completedOptions, setCompletedOptions] = useState('');
 
+    // 사용자가 옵션을 직접 클릭했는지 추적
+    const userInteracted = useRef(false);
     const autoExecuteTimer = useRef<NodeJS.Timeout | null>(null);
-    const hasAutoExecuted = useRef(false);
+    const hasAutoExecuted = useRef(actionCompleted || false);
+
+    // 이미 완료된 상태면 즉시 반환
+    if (actionCompleted && !isCompleted) {
+        setIsCompleted(true);
+        hasAutoExecuted.current = true;
+    }
 
     // 메뉴 + 옵션 데이터 로드
     useEffect(() => {
+        // 이미 완료된 액션이면 데이터 로드 skip
+        if (actionCompleted) {
+            setIsLoading(false);
+            return;
+        }
+
         const fetchMenu = async () => {
             try {
                 const res = await fetch(`/api/menus/${menuId}`);
@@ -65,14 +81,8 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
                 const data = await res.json();
                 setMenu(data);
 
-                // 필수 단일선택 → 첫 번째 항목 자동 선택
-                const initial: SelectedOptions = {};
-                (data.options || []).forEach((opt: MenuOption) => {
-                    if (opt.isRequired && !opt.isMultiSelect && opt.items.length > 0) {
-                        initial[opt.id] = [opt.items[0].id];
-                    }
-                });
-                setSelections(initial);
+                // ✅ 옵션 자동 선택 하지 않음! 사용자가 직접 클릭하도록.
+                setSelections({});
             } catch (err) {
                 console.error('ChatMenuAction: menu fetch error', err);
             } finally {
@@ -80,12 +90,13 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
             }
         };
         fetchMenu();
-    }, [menuId]);
+    }, [menuId, actionCompleted]);
 
     // 필수 옵션이 모두 선택되었는지 체크
     const allRequiredSelected = useCallback((): boolean => {
         if (!menu) return false;
         const requiredOptions = menu.options.filter(o => o.isRequired);
+        if (requiredOptions.length === 0) return true;
         return requiredOptions.every(opt => {
             const sel = selections[opt.id];
             return sel && sel.length > 0;
@@ -122,18 +133,18 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
         return names;
     }, [menu, selections]);
 
-    // 자동 실행 (필수 옵션 모두 선택 후 1.5초 대기)
+    // 자동 실행: 사용자가 옵션을 클릭한 적이 있고 + 필수 옵션 모두 채워졌을 때만
     useEffect(() => {
         if (isCompleted || isProcessing || !menu || hasAutoExecuted.current) return;
 
-        // 옵션이 없으면 즉시 실행
+        // 옵션이 없는 메뉴 → 즉시 실행
         if (menu.options.length === 0) {
             executeAction();
             return;
         }
 
-        if (allRequiredSelected()) {
-            // 타이머 초기화
+        // ✅ 사용자가 직접 옵션을 클릭한 적이 있을 때만 자동 실행 대기
+        if (userInteracted.current && allRequiredSelected()) {
             if (autoExecuteTimer.current) {
                 clearTimeout(autoExecuteTimer.current);
             }
@@ -152,9 +163,10 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
                 clearTimeout(autoExecuteTimer.current);
             }
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selections, menu, isCompleted, isProcessing, allRequiredSelected]);
 
-    // 실제 장바구니 담기 + 필요시 주문 페이지 이동
+    // 실제 실행 로직
     const executeAction = async () => {
         if (!menu || isProcessing || hasAutoExecuted.current) return;
         hasAutoExecuted.current = true;
@@ -164,21 +176,24 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
         const selectedNames = getSelectedNames();
 
         try {
-            await addItem({
-                id: menu.id.toString(),
-                korName: menu.korName,
-                engName: menu.engName,
-                price: menu.price + extra,
-                imageSrc: menu.imageSrc,
-                selectedOptionNames: selectedNames.length > 0 ? selectedNames : undefined,
-            });
-
             const optionStr = selectedNames.length > 0 ? `(${selectedNames.join(', ')})` : '';
 
             if (intent === 'ORDER') {
+                // ✅ 단일 주문: 장바구니를 거치지 않고 directOrder로 처리
+                sessionStorage.setItem('directOrder', JSON.stringify([{
+                    id: menu.id.toString(),
+                    korName: menu.korName,
+                    engName: menu.engName,
+                    price: menu.price + extra,
+                    quantity: 1,
+                    imageSrc: menu.imageSrc,
+                    selectedOptionNames: selectedNames.length > 0 ? selectedNames : undefined,
+                }]));
+
                 setCompletedMessage(`주문 준비 완료!`);
                 setCompletedOptions(`${menu.korName}${optionStr} → 주문 페이지로 이동 중...`);
                 setIsCompleted(true);
+                onMarkCompleted?.();
 
                 onComplete?.(`✅ ${menu.korName}${optionStr} 주문 페이지로 이동할게몽! 💜`);
 
@@ -186,9 +201,20 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
                     router.push('/order');
                 }, 800);
             } else {
+                // CART: 장바구니에 담기
+                await addItem({
+                    id: menu.id.toString(),
+                    korName: menu.korName,
+                    engName: menu.engName,
+                    price: menu.price + extra,
+                    imageSrc: menu.imageSrc,
+                    selectedOptionNames: selectedNames.length > 0 ? selectedNames : undefined,
+                });
+
                 setCompletedMessage(`장바구니에 담았어요!`);
                 setCompletedOptions(`${menu.korName}${optionStr}`);
                 setIsCompleted(true);
+                onMarkCompleted?.();
 
                 onComplete?.(`✅ ${menu.korName}${optionStr} 장바구니에 담았어몽! 💜`);
             }
@@ -200,15 +226,17 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
         }
     };
 
-    // 단일 선택 (라디오)
+    // 단일 선택 (라디오) — 사용자 상호작용 플래그 설정
     const handleRadioSelect = (optionId: number, itemId: number) => {
         if (isCompleted || isProcessing) return;
+        userInteracted.current = true;
         setSelections(prev => ({ ...prev, [optionId]: [itemId] }));
     };
 
-    // 다중 선택 (체크박스)
+    // 다중 선택 (체크박스) — 사용자 상호작용 플래그 설정
     const handleCheckboxToggle = (optionId: number, itemId: number) => {
         if (isCompleted || isProcessing) return;
+        userInteracted.current = true;
         setSelections(prev => {
             const current = prev[optionId] || [];
             const isSelected = current.includes(itemId);
@@ -234,15 +262,13 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
         );
     }
 
-    if (!menu) return null;
-
-    // 완료 상태
+    // 이미 완료된 상태 (부모에서 전달받은 경우 포함)
     if (isCompleted) {
         return (
             <div className={`${styles.actionCard} ${styles.completedCard}`}>
                 <div className={styles.completedMessage}>
                     <span className={styles.completedEmoji}>✅</span>
-                    <span>{completedMessage}</span>
+                    <span>{completedMessage || (intent === 'ORDER' ? '주문 완료!' : '장바구니 담기 완료!')}</span>
                 </div>
                 {completedOptions && (
                     <div className={styles.selectedSummary}>{completedOptions}</div>
@@ -250,6 +276,8 @@ export default function ChatMenuAction({ menuId, intent, onComplete }: ChatMenuA
             </div>
         );
     }
+
+    if (!menu) return null;
 
     const extra = calcExtra();
 

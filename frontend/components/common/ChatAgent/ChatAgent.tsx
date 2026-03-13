@@ -35,6 +35,7 @@ interface Message {
     content: string;
     timestamp: Date;
     menuAction?: MenuAction;
+    actionCompleted?: boolean;  // 옵션 선택 + 실행 완료 여부 (재실행 방지)
 }
 
 // 더미 응답 데이터 (Gemini 연동 전까지 사용)
@@ -345,7 +346,17 @@ export default function ChatAgent() {
                                         <ChatMenuAction
                                             menuId={msg.menuAction.menuId}
                                             intent={msg.menuAction.intent}
+                                            actionCompleted={msg.actionCompleted}
                                             onComplete={handleMenuActionComplete}
+                                            onMarkCompleted={() => {
+                                                setMessages(prev =>
+                                                    prev.map(m =>
+                                                        m.id === msg.id
+                                                            ? { ...m, actionCompleted: true }
+                                                            : m
+                                                    )
+                                                );
+                                            }}
                                         />
                                     )}
                                     <div className={`${styles.messageTime} ${msg.role === 'agent' ? styles.messageTimeAgent : ''}`}>
