@@ -26,6 +26,9 @@ jobs:
           echo "SPRING_DATASOURCE_URL='${SPRING_DATASOURCE_URL}'" >> .env
           echo "SPRING_DATASOURCE_USERNAME='${SPRING_DATASOURCE_USERNAME:-ncafe}'" >> .env
           echo "GEMINI_API_KEY='${GEMINI_API_KEY}'" >> .env
+          echo "TOSS_SECRET_KEY='${TOSS_SECRET_KEY}'" >> .env
+          echo "TOSS_CLIENT_KEY='${TOSS_CLIENT_KEY}'" >> .env
+          echo "TOSS_CHANNEL_KEY='${TOSS_CHANNEL_KEY}'" >> .env
         env:
           COMPOSE_PROJECT_NAME: ${{ vars.COMPOSE_PROJECT_NAME }}
           USER_ID: ${{ vars.USER_ID }}
@@ -36,6 +39,9 @@ jobs:
           SPRING_DATASOURCE_URL: ${{ vars.SPRING_DATASOURCE_URL }}
           SPRING_DATASOURCE_USERNAME: ${{ vars.SPRING_DATASOURCE_USERNAME }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
+          TOSS_CLIENT_KEY: ${{ vars.TOSS_CLIENT_KEY }}
+          TOSS_CHANNEL_KEY: ${{ vars.TOSS_CHANNEL_KEY }}
 
       - name: Sync Upload Images
         run: |

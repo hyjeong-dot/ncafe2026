@@ -26,6 +26,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_TOSS_CLIENT_KEY: ${TOSS_CLIENT_KEY}
+        NEXT_PUBLIC_TOSS_CHANNEL_KEY: ${TOSS_CHANNEL_KEY}
     container_name: ${USER_ID}-frontend
     ports:
       - "${FRONTEND_PORT:-3034}:3000" # 외부 포트:내부 포트(3000)

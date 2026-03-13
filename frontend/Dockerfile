@@ -21,6 +21,12 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# NEXT_PUBLIC_ 변수는 빌드 시 JS에 인라인됨 → ARG로 받아서 ENV로 설정
+ARG NEXT_PUBLIC_TOSS_CLIENT_KEY
+ARG NEXT_PUBLIC_TOSS_CHANNEL_KEY
+ENV NEXT_PUBLIC_TOSS_CLIENT_KEY=$NEXT_PUBLIC_TOSS_CLIENT_KEY
+ENV NEXT_PUBLIC_TOSS_CHANNEL_KEY=$NEXT_PUBLIC_TOSS_CHANNEL_KEY
+
 RUN npm run build
 
 # Production image, copy all the files and run next
