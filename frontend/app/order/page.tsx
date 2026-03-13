@@ -12,8 +12,6 @@ export default function OrderPage() {
         totalPrice,
         orderType,
         setOrderType,
-        paymentMethod,
-        setPaymentMethod,
         requestMemo,
         setRequestMemo,
         isSubmitting,
@@ -35,8 +33,6 @@ export default function OrderPage() {
                 <OrderForm
                     orderType={orderType}
                     setOrderType={setOrderType}
-                    paymentMethod={paymentMethod}
-                    setPaymentMethod={setPaymentMethod}
                     requestMemo={requestMemo}
                     setRequestMemo={setRequestMemo}
                 />

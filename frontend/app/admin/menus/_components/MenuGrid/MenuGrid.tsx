@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Loader2, UtensilsCrossed, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, List } from 'lucide-react';
 import Modal from '@/components/common/Modal/Modal';
 import MenuCard from '../MenuCard/MenuCard';
+import MenuTable from '../MenuTable/MenuTable';
 import styles from './MenuGrid.module.css';
 import { useMenus } from './useMenus';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
@@ -14,15 +15,9 @@ interface MenuGridProps {
 const ITEMS_PER_PAGE = 12;
 
 export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: MenuGridProps) {
-    // const {
-    //     filteredMenus,
-    //     isLoading,
-    //     toggleSoldOut,
-    //     deleteMenu
-    // } = useMenus({ selectedCategory, searchQuery });
-
     const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
     const { menus, toggleSoldOut, deleteMenu, isLoading } = useMenus({
         selectedCategory: selectedCategory || undefined,
@@ -63,16 +58,49 @@ export default function MenuGrid({ selectedCategory = null, searchQuery = '' }: 
 
     return (
         <>
-            <section className={styles.menuGrid} aria-label="Menu list">
-                {currentMenus.map((menu) => (
-                    <MenuCard
-                        key={menu.id}
-                        menu={menu}
-                        onToggleSoldOut={toggleSoldOut}
-                        onDelete={handleDeleteClick}
-                    />
-                ))}
-            </section>
+            {/* View Toggle */}
+            <div className={styles.viewToggle}>
+                <button
+                    className={`${styles.toggleBtn} ${viewMode === 'grid' ? styles.active : ''}`}
+                    onClick={() => setViewMode('grid')}
+                    title="그리드 뷰"
+                >
+                    <LayoutGrid size={16} />
+                    <span>Grid</span>
+                </button>
+                <button
+                    className={`${styles.toggleBtn} ${viewMode === 'list' ? styles.active : ''}`}
+                    onClick={() => setViewMode('list')}
+                    title="리스트 뷰"
+                >
+                    <List size={16} />
+                    <span>List</span>
+                </button>
+                <span className={styles.menuCount}>{menus.length}개 메뉴</span>
+            </div>
+
+            {/* Grid View */}
+            {viewMode === 'grid' && (
+                <section className={styles.menuGrid} aria-label="Menu list">
+                    {currentMenus.map((menu) => (
+                        <MenuCard
+                            key={menu.id}
+                            menu={menu}
+                            onToggleSoldOut={toggleSoldOut}
+                            onDelete={handleDeleteClick}
+                        />
+                    ))}
+                </section>
+            )}
+
+            {/* List View */}
+            {viewMode === 'list' && (
+                <MenuTable
+                    menus={currentMenus}
+                    onToggleSoldOut={toggleSoldOut}
+                    onDelete={handleDeleteClick}
+                />
+            )}
 
             {totalPages > 1 && (
                 <div className={styles.pagination}>

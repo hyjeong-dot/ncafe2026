@@ -1,3 +1,45 @@
+/* View Toggle */
+.viewToggle {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+
+.toggleBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.toggleBtn:hover {
+    background: var(--ditto-50);
+    color: var(--text-secondary);
+}
+
+.toggleBtn.active {
+    background: var(--ditto-600);
+    color: white;
+    border-color: var(--ditto-600);
+}
+
+.menuCount {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Grid */
 .menuGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

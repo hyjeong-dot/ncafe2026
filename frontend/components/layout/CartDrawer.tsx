@@ -90,6 +90,9 @@ export default function CartDrawer() {
                                                     <Trash2 size={14} />
                                                 </button>
                                             </div>
+                                            {item.selectedOptionNames && item.selectedOptionNames.length > 0 && (
+                                                <p className={styles.optionNames}>{item.selectedOptionNames.join(' · ')}</p>
+                                            )}
                                             <p className={styles.price}>{(item.price * item.quantity).toLocaleString()}원</p>
                                             <div className={styles.quantityControl}>
                                                 <button

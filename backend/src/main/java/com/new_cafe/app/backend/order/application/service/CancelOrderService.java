@@ -20,7 +20,7 @@ public class CancelOrderService implements CancelOrderUseCase {
     @Override
     @Transactional
     public void cancelOrder(Long orderId, String username) {
-        Member member = loadMemberPort.findByNickname(username)
+        Member member = loadMemberPort.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Order order = orderPort.findById(orderId)

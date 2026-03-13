@@ -22,7 +22,7 @@ public class GetMyOrdersService implements GetMyOrdersUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<OrderResult> getMyOrders(String username) {
-        Member member = loadMemberPort.findByNickname(username)
+        Member member = loadMemberPort.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         return orderPort.findAllByMemberIdOrderByCreatedAtDesc(member.getId()).stream()

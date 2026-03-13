@@ -26,7 +26,7 @@ public class CreateOrderService implements CreateOrderUseCase {
     @Override
     @Transactional
     public OrderResult createOrder(CreateOrderCommand command) {
-        Member member = loadMemberPort.findByNickname(command.getUsername())
+        Member member = loadMemberPort.findByUsername(command.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         String orderUid = "ORDER-" + System.currentTimeMillis() + "-" + java.util.UUID.randomUUID().toString().substring(0, 8);

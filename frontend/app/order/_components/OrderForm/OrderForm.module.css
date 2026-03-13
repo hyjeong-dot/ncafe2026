@@ -73,3 +73,15 @@
 .textarea:focus {
     border-color: var(--ditto-600);
 }
+
+.tossBadge {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+    border: 1px solid #cce0ff;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    color: #555;
+}

@@ -21,7 +21,6 @@ export function useOrder() {
     const [isDirectOrder, setIsDirectOrder] = useState(false);
 
     const [orderType, setOrderType] = useState<'DINE_IN' | 'TAKEOUT' | null>(null);
-    const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'KAKAOPAY'>('CARD');
     const [requestMemo, setRequestMemo] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
@@ -147,8 +146,6 @@ export function useOrder() {
         totalPrice,
         orderType,
         setOrderType,
-        paymentMethod,
-        setPaymentMethod,
         requestMemo,
         setRequestMemo,
         isSubmitting,
