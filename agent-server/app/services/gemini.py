@@ -28,7 +28,8 @@ def select_menu(menu_id: int, intent: str) -> str:
 
 def navigate(target: str) -> str:
     """사용자가 요청한 페이지나 기능으로 화면을 이동시킵니다.
-    target 종류: 'home'(홈), 'menus'(메뉴판), 'cart'(장바구니 열기), 'mypage'(마이페이지), 'login'(로그인)
+    target 종류: 'home'(홈), 'menus'(메뉴판), 'cart'(장바구니 열기), 'mypage'(마이페이지), 'login'(로그인), 'menu_detail_ID'(메뉴 상세 페이지, 예: menu_detail_1)
+    메뉴 상세 페이지로 이동할 때는 반드시 get_menu_info로 메뉴 ID를 먼저 확인한 후 'menu_detail_ID' 형태로 사용해야 합니다. (예: menu_detail_3)
     """
     return f"[NAV:{target}]"
 

@@ -202,25 +202,30 @@ export default function ChatAgent() {
         }
 
         // 화면 이동 처리 ([NAV:target])
-        const navMatch = agentReply.match(/\[NAV:(\w+)\]/);
+        const navMatch = agentReply.match(/\[NAV:([\w]+)\]/);
         if (navMatch) {
             const target = navMatch[1];
-            switch (target) {
-                case 'home':
-                    router.push('/');
-                    break;
-                case 'menus':
-                    router.push('/menus');
-                    break;
-                case 'cart':
-                    setCartOpen(true);
-                    break;
-                case 'mypage':
-                    router.push('/mypage');
-                    break;
-                case 'login':
-                    router.push('/login');
-                    break;
+            if (target.startsWith('menu_detail_')) {
+                const detailId = target.replace('menu_detail_', '');
+                router.push(`/menus/${detailId}`);
+            } else {
+                switch (target) {
+                    case 'home':
+                        router.push('/');
+                        break;
+                    case 'menus':
+                        router.push('/menus');
+                        break;
+                    case 'cart':
+                        setCartOpen(true);
+                        break;
+                    case 'mypage':
+                        router.push('/mypage');
+                        break;
+                    case 'login':
+                        router.push('/login');
+                        break;
+                }
             }
         }
 
