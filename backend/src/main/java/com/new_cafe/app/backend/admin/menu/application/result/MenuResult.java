@@ -17,6 +17,7 @@ public class MenuResult {
     private final String categoryIcon;
     private final String imageSrc;
     private final List<MenuImageResult> images;
+    private final List<MenuOptionResult> options;   // 메뉴 옵션 목록 (상세 조회 시 포함)
     private final Boolean isAvailable;
     private final Boolean isSoldOut;
     private final Integer sortOrder;

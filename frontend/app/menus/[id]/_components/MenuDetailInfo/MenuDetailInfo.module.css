@@ -87,6 +87,14 @@
     color: #6e4a9e;
 }
 
+.extraPriceNote {
+    display: block;
+    font-size: 0.8rem;
+    color: #a87edb;
+    font-weight: 500;
+    margin-top: 0.3rem;
+}
+
 .descSection {
     margin-bottom: 2rem;
 }

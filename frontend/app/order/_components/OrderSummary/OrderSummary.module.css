@@ -27,8 +27,14 @@
 .item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     font-size: 0.95rem;
+    gap: 0.8rem;
+}
+
+.itemInfo {
+    flex: 1;
+    min-width: 0;
 }
 
 .itemName {
@@ -36,6 +42,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.itemOptions {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    line-height: 1.4;
 }
 
 .itemQty {

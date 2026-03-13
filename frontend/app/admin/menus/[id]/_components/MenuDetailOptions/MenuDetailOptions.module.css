@@ -117,3 +117,28 @@
     color: var(--ditto-600);
     font-variant-numeric: tabular-nums;
 }
+
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-8) 0;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+.emptyState {
+    text-align: center;
+    padding: var(--space-8) 0;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import type { SelectedOptions } from '../MenuDetailOptions/MenuDetailOptions';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react';
@@ -14,9 +15,12 @@ import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 interface MenuDetailInfoProps {
     id: number;
+    selectedOptions?: SelectedOptions;
+    extraPrice?: number;
+    selectedOptionNames?: string[];
 }
 
-export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
+export default function MenuDetailInfo({ id, selectedOptions = {}, extraPrice = 0, selectedOptionNames = [] }: MenuDetailInfoProps) {
     const { menu, isLoading, error } = useMenuDetail(id);
     const { user } = useAuth();
     const { addItem, setCartOpen } = useCart();
@@ -123,7 +127,12 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
             <p className={styles.engTitle}>{menu.engName}</p>
 
             <div className={styles.priceSection}>
-                <span className={styles.price}>₩{formatPrice(menu.price)}</span>
+                <span className={styles.price}>₩{formatPrice(menu.price + extraPrice)}</span>
+                {extraPrice > 0 && (
+                    <span className={styles.extraPriceNote}>
+                        (기본 ₩{formatPrice(menu.price)} + 옵션 ₩{formatPrice(extraPrice)})
+                    </span>
+                )}
             </div>
 
             <div className={styles.descSection}>
@@ -151,9 +160,10 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                             id: menu.id.toString(),
                             korName: menu.korName,
                             engName: menu.engName,
-                            price: menu.price,
-                            image: menu.imageSrc,    // 로컬용
-                            imageSrc: menu.imageSrc  // 서버 동기화용 호환성
+                            price: menu.price + extraPrice,
+                            image: menu.imageSrc,
+                            imageSrc: menu.imageSrc,
+                            selectedOptionNames: selectedOptionNames.length > 0 ? selectedOptionNames : undefined
                         });
                         setIsCartConfirmModalOpen(true);
                     }}
@@ -201,10 +211,11 @@ export default function MenuDetailInfo({ id }: MenuDetailInfoProps) {
                         id: menu.id.toString(),
                         korName: menu.korName,
                         engName: menu.engName,
-                        price: menu.price,
-                        quantity: 1, // 개수는 기본 1개로 설정
+                        price: menu.price + extraPrice,
+                        quantity: 1,
                         image: menu.imageSrc,
-                        imageSrc: menu.imageSrc
+                        imageSrc: menu.imageSrc,
+                        selectedOptionNames: selectedOptionNames.length > 0 ? selectedOptionNames : undefined
                     }]));
                     router.push('/order');
                 }}

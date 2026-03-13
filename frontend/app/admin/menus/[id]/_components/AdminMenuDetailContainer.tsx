@@ -54,7 +54,7 @@ export default function AdminMenuDetailContainer({ id }: AdminMenuDetailContaine
                 {/* Right Column: Info & Options */}
                 <div className={styles.infoSection}>
                     <MenuDetailInfo id={id} />
-                    <MenuDetailOptions />
+                    <MenuDetailOptions menuId={id} />
                 </div>
             </main>
 

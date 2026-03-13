@@ -1,0 +1,181 @@
+/* ─── 옵션 컨테이너 ─── */
+.optionsContainer {
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--border-color, #e5e7eb);
+    padding-top: var(--space-6);
+}
+
+.optionsTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary, #111827);
+    margin: 0 0 var(--space-4, 16px) 0;
+}
+
+/* ─── 옵션 그룹 ─── */
+.optionGroup {
+    background: var(--bg-secondary, #f9fafb);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: var(--radius-lg, 12px);
+    margin-bottom: var(--space-3, 12px);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.optionGroupWarning {
+    border-color: #fbbf24;
+    background: #fffbeb;
+}
+
+/* ─── 그룹 헤더 ─── */
+.groupHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4, 16px);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text-primary, #111827);
+    transition: background 0.15s ease;
+}
+
+.groupHeader:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.groupInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    flex-wrap: wrap;
+}
+
+.groupName {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.requiredBadge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 1px 8px;
+    border-radius: var(--radius-full, 999px);
+    letter-spacing: 0.02em;
+}
+
+.optionalBadge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted, #9ca3af);
+    background: var(--bg-secondary, #f3f4f6);
+    border: 1px solid var(--border-color, #e5e7eb);
+    padding: 1px 8px;
+    border-radius: var(--radius-full, 999px);
+}
+
+.selectType {
+    font-size: 0.75rem;
+    color: var(--text-muted, #9ca3af);
+}
+
+.groupRight {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    color: var(--text-muted, #9ca3af);
+}
+
+.selectedCount {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ditto-600, #7c3aed);
+    background: var(--ditto-50, #f5f3ff);
+    padding: 2px 10px;
+    border-radius: var(--radius-full, 999px);
+}
+
+/* ─── 항목 리스트 ─── */
+.itemsList {
+    padding: 0 var(--space-3, 12px) var(--space-3, 12px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.optionItem {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3, 12px) var(--space-4, 16px);
+    background: white;
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text-primary, #111827);
+    transition: all 0.15s ease;
+}
+
+.optionItem:hover {
+    background: var(--ditto-50, #f5f3ff);
+    border-color: var(--ditto-200, #ddd6fe);
+}
+
+.optionItemSelected {
+    background: var(--ditto-50, #f5f3ff);
+    border-color: var(--ditto-400, #a78bfa);
+    box-shadow: 0 0 0 1px var(--ditto-200, #ddd6fe);
+}
+
+.itemLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+}
+
+.checkIcon {
+    color: var(--ditto-500, #8b5cf6);
+    flex-shrink: 0;
+}
+
+.uncheckIcon {
+    color: var(--text-muted, #d1d5db);
+    flex-shrink: 0;
+}
+
+.itemName {
+    font-weight: 500;
+}
+
+.itemPrice {
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.priceUp {
+    color: var(--ditto-600, #7c3aed);
+}
+
+.priceDown {
+    color: #059669;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 480px) {
+    .optionItem {
+        padding: var(--space-3, 12px);
+    }
+
+    .groupHeader {
+        padding: var(--space-3, 12px);
+    }
+}

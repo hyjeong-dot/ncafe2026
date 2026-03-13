@@ -23,8 +23,15 @@ export default function OrderSummary({
             <div className={styles.itemList}>
                 {items.map(item => (
                     <div key={item.id} className={styles.item}>
-                        <div className={styles.itemName}>
-                           {item.korName}
+                        <div className={styles.itemInfo}>
+                            <div className={styles.itemName}>
+                               {item.korName}
+                            </div>
+                            {item.selectedOptionNames && item.selectedOptionNames.length > 0 && (
+                                <div className={styles.itemOptions}>
+                                    {item.selectedOptionNames.join(' · ')}
+                                </div>
+                            )}
                         </div>
                         <div className={styles.itemQty}>{item.quantity}개</div>
                         <div className={styles.itemPrice}>{(item.price * item.quantity).toLocaleString()}원</div>

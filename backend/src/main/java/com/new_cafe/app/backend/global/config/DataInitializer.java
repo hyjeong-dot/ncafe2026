@@ -3,11 +3,15 @@ package com.new_cafe.app.backend.global.config;
 import com.new_cafe.app.backend.admin.category.adapter.out.persistence.AdminCategoryJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuImageJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuJpaRepository;
+import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.MenuOptionJpaRepository;
+import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.OptionItemJpaRepository;
 import com.new_cafe.app.backend.member.adapter.out.persistence.MemberJpaRepository;
 import com.new_cafe.app.backend.member.domain.model.Member;
 import com.new_cafe.app.backend.admin.category.domain.model.AdminCategory;
 import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import com.new_cafe.app.backend.admin.menu.domain.model.AdminMenuImage;
+import com.new_cafe.app.backend.admin.menu.domain.model.MenuOption;
+import com.new_cafe.app.backend.admin.menu.domain.model.OptionItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +27,8 @@ public class DataInitializer implements CommandLineRunner {
         private final AdminCategoryJpaRepository categoryRepository;
         private final AdminMenuJpaRepository menuRepository;
         private final AdminMenuImageJpaRepository menuImageRepository;
+        private final MenuOptionJpaRepository menuOptionRepository;
+        private final OptionItemJpaRepository optionItemRepository;
         private final MemberJpaRepository memberRepository;
         private final PasswordEncoder passwordEncoder;
 
@@ -59,6 +65,7 @@ public class DataInitializer implements CommandLineRunner {
                 AdminCategory dessert = findOrCreateCategory("Dessert", "🍰", 4);
 
                 // 2. 메뉴 및 이미지 데이터 생성
+                // ─── Signature ───
                 saveMenu("말랑 퍼플 라떼", "Malrang Purple Latte", "보랏빛 마법 가루가 들어간 메타몽 카페의 시그니처 라떼", 7000, signature.getId(),
                                 1,
                                 "/upload/images/purple-latte.png");
@@ -68,6 +75,7 @@ public class DataInitializer implements CommandLineRunner {
                 saveMenu("바나나 크림 라떼", "Banana Cream Latte", "달콤한 바나나 크림이 올라간 부드러운 라떼", 6500, signature.getId(), 3,
                                 "/upload/images/bananalatte.png");
 
+                // ─── Coffee ───
                 saveMenu("꾸덕 콜드브루", "Ggudeok Cold Brew", "진하고 깊은 풍미의 콜드브루 위에 꾸덕한 크림이 가득", 4500, coffee.getId(), 1,
                                 "/upload/images/cold-brew.png");
                 saveMenu("아메리카노", "Americano", "깊고 진한 풍미의 프리미엄 아메리카노", 4500, coffee.getId(), 2,
@@ -81,6 +89,7 @@ public class DataInitializer implements CommandLineRunner {
                 saveMenu("에스프레소", "Espresso", "이탈리안 정통 스타일의 진한 에스프레소", 4000, coffee.getId(), 6,
                                 "/upload/images/espresso.png");
 
+                // ─── Sandwich & Bagel ───
                 saveMenu("햄 치즈 샌드위치", "Ham & Cheese Sandwich", "신선한 야채와 고소한 햄, 치즈의 만남", 7500, sandwich.getId(), 1,
                                 "/upload/images/ham-cheese-sandwich.png", "/upload/images/ham-cheese-sandwich1.png");
                 saveMenu("에그 스크램블 샌드위치", "Scrambled Egg Sandwich", "부드러운 에그 스크램블이 가득한 영양 만점 샌드위치", 7800,
@@ -96,6 +105,7 @@ public class DataInitializer implements CommandLineRunner {
                 saveMenu("크림 치즈 베이글", "Bagel with Cream Cheese", "꾸덕한 크림 치즈를 듬뿍 바른 클래식 베이글", 5500, sandwich.getId(), 6,
                                 "/upload/images/bagel-cream-cheese.png", "/upload/images/bagel-cream-cheese1.png");
 
+                // ─── Dessert ───
                 saveMenu("겹겹이 초코 크로와상", "Layered Chocolate Croissant", "바삭한 결이 살아있는 크로와상에 진한 초콜릿이 듬뿍", 4800,
                                 dessert.getId(), 1,
                                 "/upload/images/chocolate-croissant.png");
@@ -111,8 +121,188 @@ public class DataInitializer implements CommandLineRunner {
                                 "/upload/images/chocolate-mousse.png", "/upload/images/chocolate-mousse1.png");
                 saveMenu("딸기 케이크", "Strawberry Cake", "신선한 생딸기와 생크림의 달콤한 조화", 7500, dessert.getId(), 7,
                                 "/upload/images/strawberry-cake.png", "/upload/images/strawberry-cake1.png");
+
+                // 3. 메뉴별 옵션 데이터 생성 (옵션이 아직 없는 메뉴만)
+                initMenuOptions();
         }
 
+        // ───────────────────────────────────────────────
+        //  메뉴별 옵션 초기 데이터
+        // ───────────────────────────────────────────────
+        private void initMenuOptions() {
+                // 이미 옵션이 존재하면 건너뜀 (사용자 수정 데이터 보호)
+                if (menuOptionRepository.count() > 0) {
+                        return;
+                }
+
+                // ─── Signature ───
+                initOptionsFor("말랑 퍼플 라떼", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                        optDef("휘핑 크림", false, false, item("없음", 0), item("추가", 500)),
+                });
+
+                initOptionsFor("초록 변신 말차", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("당도 조절", false, false, item("덜 달게", 0), item("보통", 0), item("달게", 0)),
+                });
+
+                initOptionsFor("바나나 크림 라떼", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                        optDef("휘핑 크림", false, false, item("없음", 0), item("추가", 500)),
+                });
+
+                // ─── Coffee ───
+                initOptionsFor("꾸덕 콜드브루", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                        optDef("얼음 양", false, false, item("적게", 0), item("보통", 0), item("많이", 0)),
+                });
+
+                initOptionsFor("아메리카노", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                });
+
+                initOptionsFor("카페 라떼", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                        optDef("시럽 선택", false, false, item("없음", 0), item("바닐라", 500), item("헤이즐넛", 500), item("카라멜", 500)),
+                });
+
+                initOptionsFor("카푸치노", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                });
+
+                initOptionsFor("카라멜 마끼아또", new OptionDef[]{
+                        optDef("사이즈", true, false, item("Regular", 0), item("Large", 500)),
+                        optDef("온도", true, false, item("HOT", 0), item("ICE", 0)),
+                        optDef("샷 추가", false, true, item("샷 추가", 500)),
+                        optDef("카라멜 드리즐", false, false, item("보통", 0), item("많이", 0)),
+                });
+
+                initOptionsFor("에스프레소", new OptionDef[]{
+                        optDef("샷 추가", false, true, item("더블샷", 500)),
+                });
+
+                // ─── Sandwich & Bagel ───
+                initOptionsFor("햄 치즈 샌드위치", new OptionDef[]{
+                        optDef("빵 선택", true, false, item("화이트", 0), item("통밀", 0), item("호밀", 0)),
+                        optDef("토핑 추가", false, true, item("치즈 추가", 500), item("계란 추가", 500), item("아보카도", 1000)),
+                        optDef("소스 선택", false, false, item("마요네즈", 0), item("허니머스타드", 0), item("랜치", 0)),
+                });
+
+                initOptionsFor("에그 스크램블 샌드위치", new OptionDef[]{
+                        optDef("빵 선택", true, false, item("화이트", 0), item("통밀", 0), item("호밀", 0)),
+                        optDef("토핑 추가", false, true, item("치즈 추가", 500), item("베이컨", 1000)),
+                        optDef("소스 선택", false, false, item("마요네즈", 0), item("허니머스타드", 0), item("랜치", 0)),
+                });
+
+                initOptionsFor("참치 샌드위치", new OptionDef[]{
+                        optDef("빵 선택", true, false, item("화이트", 0), item("통밀", 0), item("호밀", 0)),
+                        optDef("토핑 추가", false, true, item("치즈 추가", 500), item("계란 추가", 500)),
+                        optDef("소스 선택", false, false, item("마요네즈", 0), item("허니머스타드", 0)),
+                });
+
+                initOptionsFor("터키 샌드위치", new OptionDef[]{
+                        optDef("빵 선택", true, false, item("화이트", 0), item("통밀", 0), item("호밀", 0)),
+                        optDef("토핑 추가", false, true, item("치즈 추가", 500), item("아보카도", 1000)),
+                        optDef("소스 선택", false, false, item("마요네즈", 0), item("허니머스타드", 0), item("랜치", 0)),
+                });
+
+                initOptionsFor("비프 베이글", new OptionDef[]{
+                        optDef("토핑 추가", false, true, item("치즈 추가", 500), item("계란 추가", 500)),
+                        optDef("소스 선택", false, false, item("마요네즈", 0), item("바베큐", 0)),
+                });
+
+                initOptionsFor("크림 치즈 베이글", new OptionDef[]{
+                        optDef("크림치즈 종류", true, false, item("플레인", 0), item("블루베리", 500), item("갈릭허브", 500)),
+                });
+
+                // ─── Dessert ───
+                initOptionsFor("겹겹이 초코 크로와상", new OptionDef[]{
+                        optDef("워밍", false, false, item("그대로", 0), item("데워주세요", 0)),
+                });
+
+                initOptionsFor("아몬드 쿠키", new OptionDef[]{
+                        optDef("포장 여부", false, false, item("매장", 0), item("포장", 0)),
+                });
+
+                initOptionsFor("버터 쿠키", new OptionDef[]{
+                        optDef("포장 여부", false, false, item("매장", 0), item("포장", 0)),
+                });
+
+                initOptionsFor("초코칩 쿠키", new OptionDef[]{
+                        optDef("포장 여부", false, false, item("매장", 0), item("포장", 0)),
+                });
+
+                initOptionsFor("두바이 쫀득 쿠키", new OptionDef[]{
+                        optDef("포장 여부", false, false, item("매장", 0), item("포장", 0)),
+                });
+
+                initOptionsFor("초콜릿 무스", new OptionDef[]{
+                        optDef("토핑 추가", false, true, item("초코 소스 추가", 500), item("딸기 토핑", 1000)),
+                });
+
+                initOptionsFor("딸기 케이크", new OptionDef[]{
+                        optDef("사이즈", true, false, item("조각", 0), item("홀케이크", 20000)),
+                        optDef("토핑 추가", false, true, item("딸기 추가", 1500), item("생크림 추가", 500)),
+                });
+        }
+
+        // ───────────────────────────────────────────────
+        //  헬퍼 메서드: 메뉴 이름으로 찾아서 옵션 저장
+        // ───────────────────────────────────────────────
+        private void initOptionsFor(String menuKorName, OptionDef[] options) {
+                menuRepository.findByKorName(menuKorName).ifPresent(menu -> {
+                        for (int i = 0; i < options.length; i++) {
+                                OptionDef def = options[i];
+                                MenuOption saved = menuOptionRepository.save(MenuOption.builder()
+                                                .menuId(menu.getId())
+                                                .name(def.name)
+                                                .isRequired(def.isRequired)
+                                                .isMultiSelect(def.isMultiSelect)
+                                                .sortOrder(i)
+                                                .build());
+
+                                for (int j = 0; j < def.items.length; j++) {
+                                        ItemDef itemDef = def.items[j];
+                                        optionItemRepository.save(OptionItem.builder()
+                                                        .optionId(saved.getId())
+                                                        .name(itemDef.name)
+                                                        .priceDelta(itemDef.priceDelta)
+                                                        .sortOrder(j)
+                                                        .build());
+                                }
+                        }
+                });
+        }
+
+        // ───────────────────────────────────────────────
+        //  헬퍼: 옵션/항목 정의용 내부 레코드
+        // ───────────────────────────────────────────────
+        private record OptionDef(String name, boolean isRequired, boolean isMultiSelect, ItemDef[] items) {}
+        private record ItemDef(String name, int priceDelta) {}
+
+        private OptionDef optDef(String name, boolean required, boolean multi, ItemDef... items) {
+                return new OptionDef(name, required, multi, items);
+        }
+
+        private ItemDef item(String name, int priceDelta) {
+                return new ItemDef(name, priceDelta);
+        }
+
+        // ───────────────────────────────────────────────
+        //  기존 헬퍼 메서드 (카테고리 / 메뉴)
+        // ───────────────────────────────────────────────
         private AdminCategory findOrCreateCategory(String name, String icon, int sortOrder) {
                 return categoryRepository.findByName(name)
                                 .orElseGet(() -> categoryRepository.save(AdminCategory.builder()

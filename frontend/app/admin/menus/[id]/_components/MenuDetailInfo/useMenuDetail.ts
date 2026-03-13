@@ -6,6 +6,24 @@ export interface MenuImageDetail {
     sortOrder: number;
 }
 
+export interface OptionItemDetail {
+    id: number;
+    optionId: number;
+    name: string;
+    priceDelta: number;
+    sortOrder: number;
+}
+
+export interface MenuOptionDetail {
+    id: number;
+    menuId: number;
+    name: string;
+    isRequired: boolean;
+    isMultiSelect: boolean;
+    sortOrder: number;
+    items: OptionItemDetail[];
+}
+
 export interface MenuDetail {
     id: number;
     korName: string;
@@ -15,11 +33,12 @@ export interface MenuDetail {
     categoryName: string;
     imageSrc: string;
     images?: MenuImageDetail[];
+    options?: MenuOptionDetail[];
     isAvailable: boolean;
     isSoldOut: boolean;
     sortOrder: number;
-    createdAt: string; // ISO string from backend
-    updatedAt: string; // ISO string from backend
+    createdAt: string;
+    updatedAt: string;
 }
 
 export function useMenuDetail(id: number) {

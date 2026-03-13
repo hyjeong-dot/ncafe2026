@@ -13,6 +13,7 @@ export interface CartItem {
     quantity: number;
     image?: string;
     imageSrc?: string; // For backward compatibility with server response
+    selectedOptionNames?: string[];  // 선택한 옵션 표시용 (예: ["Large", "ICE", "샷 추가"])
 }
 
 interface CartContextType {
