@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styles from './ChatAgent.module.css';
 import MenuChatCard from './MenuChatCard';
+import ChatMenuAction from './ChatMenuAction';
 
 // =============================================
 // 📌 Gemini API 연동 시 아래 주석을 해제하세요
@@ -23,11 +24,17 @@ import MenuChatCard from './MenuChatCard';
 //    아래 더미 응답 setTimeout 블록을 주석 처리하면 연동 완료!
 // =============================================
 
+interface MenuAction {
+    menuId: number;
+    intent: 'ORDER' | 'CART';
+}
+
 interface Message {
     id: string;
     role: 'user' | 'agent';
     content: string;
     timestamp: Date;
+    menuAction?: MenuAction;
 }
 
 // 더미 응답 데이터 (Gemini 연동 전까지 사용)
@@ -81,7 +88,7 @@ import { useCart } from '@/context/CartContext';
 
 export default function ChatAgent() {
     const router = useRouter();
-    const { isCartOpen, setCartOpen, addItem } = useCart();
+    const { isCartOpen, setCartOpen } = useCart();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
     const [inputValue, setInputValue] = useState('');
@@ -209,32 +216,20 @@ export default function ChatAgent() {
             }
         }
 
-        // 장바구니 추가 처리 ([CART_ADD:ID:QTY])
-        const cartMatch = agentReply.match(/\[CART_ADD:(\d+):(\d+)\]/);
-        if (cartMatch) {
-            const menuId = cartMatch[1];
-            const quantity = parseInt(cartMatch[2], 10);
-            
-            try {
-                // 메뉴 정보를 가져와서 장바구니에 추가
-                const res = await fetch(`/api/menus/${menuId}`);
-                if (res.ok) {
-                    const menu = await res.json();
-                    for (let i = 0; i < quantity; i++) {
-                        await addItem({
-                            id: menu.id.toString(),
-                            korName: menu.korName,
-                            engName: menu.engName,
-                            price: menu.price,
-                            imageSrc: menu.imageSrc
-                        });
-                    }
-                    // 담은 후 장바구니 열어주기
-                    setTimeout(() => setCartOpen(true), 500);
-                }
-            } catch (error) {
-                console.error('Failed to add to cart via chat:', error);
-            }
+        // 메뉴 선택 처리 ([MENU_SELECT:ID:INTENT]) — 옵션 선택 UI 표시
+        const menuSelectMatch = agentReply.match(/\[MENU_SELECT:(\d+):(ORDER|CART)\]/);
+        if (menuSelectMatch) {
+            const selectedMenuId = parseInt(menuSelectMatch[1], 10);
+            const selectedIntent = menuSelectMatch[2] as 'ORDER' | 'CART';
+
+            // 에이전트 메시지에 menuAction 데이터 추가
+            setMessages(prev =>
+                prev.map(m =>
+                    m.id === agentMessage.id
+                        ? { ...m, menuAction: { menuId: selectedMenuId, intent: selectedIntent } }
+                        : m
+                )
+            );
         }
     };
 
@@ -253,10 +248,21 @@ export default function ChatAgent() {
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // 마크다운 볼드 및 메뉴 ID 태그 처리 ([ID:1], [NAV:target], [CART_ADD:ID:QTY] 형태)
+    // 메뉴 액션 완료 시 후속 메시지 추가
+    const handleMenuActionComplete = (completionMsg: string) => {
+        const followUpMessage: Message = {
+            id: `agent-complete-${Date.now()}`,
+            role: 'agent',
+            content: completionMsg,
+            timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, followUpMessage]);
+    };
+
+    // 마크다운 볼드 및 메뉴 ID 태그 처리
     const renderContent = (text: string) => {
-        // [ID:숫자], [NAV:대상], [CART_ADD:ID:QTY] 태그를 분리
-        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\]|\[CART_ADD:\d+:\d+\])/g);
+        // [ID:숫자], [NAV:대상], [MENU_SELECT:ID:INTENT] 태그를 분리
+        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\]|\[MENU_SELECT:\d+:(?:ORDER|CART)\])/g);
         
         return segments.map((segment, i) => {
             // 메뉴 ID 태그인 경우
@@ -268,7 +274,7 @@ export default function ChatAgent() {
             }
             
             // 특수 태그인 경우 화면엔 그리지 않음
-            if ((segment.startsWith('[NAV:') || segment.startsWith('[CART_ADD:')) && segment.endsWith(']')) {
+            if ((segment.startsWith('[NAV:') || segment.startsWith('[MENU_SELECT:')) && segment.endsWith(']')) {
                 return null;
             }
             
@@ -327,6 +333,14 @@ export default function ChatAgent() {
                                     >
                                         {renderContent(msg.content)}
                                     </div>
+                                    {/* 메뉴 옵션 선택 UI */}
+                                    {msg.menuAction && (
+                                        <ChatMenuAction
+                                            menuId={msg.menuAction.menuId}
+                                            intent={msg.menuAction.intent}
+                                            onComplete={handleMenuActionComplete}
+                                        />
+                                    )}
                                     <div className={`${styles.messageTime} ${msg.role === 'agent' ? styles.messageTimeAgent : ''}`}>
                                         {formatTime(msg.timestamp)}
                                     </div>
