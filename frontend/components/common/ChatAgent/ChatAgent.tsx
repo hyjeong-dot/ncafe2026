@@ -90,6 +90,8 @@ export default function ChatAgent() {
     const [showScrollTop, setShowScrollTop] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
+    const bubbleRef = useRef<HTMLButtonElement>(null);
 
     // Scroll Top 버튼이 보이는지 감지 (Footer에서 관리하는 값과 동기화)
     useEffect(() => {
@@ -111,6 +113,22 @@ export default function ChatAgent() {
             inputRef.current?.focus();
             setUnreadCount(0);
         }
+    }, [isOpen]);
+
+    // 외부 클릭 시 닫기
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as Node;
+            if (
+                panelRef.current && !panelRef.current.contains(target) &&
+                bubbleRef.current && !bubbleRef.current.contains(target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
     const sendMessage = async (content: string) => {
@@ -271,7 +289,7 @@ export default function ChatAgent() {
         <>
             {/* Chat Panel */}
             {isOpen && (
-                <div className={`${styles.chatPanel} ${showScrollTop ? styles.shifted : ''}`}>
+                <div ref={panelRef} className={`${styles.chatPanel} ${showScrollTop ? styles.shifted : ''}`}>
                     {/* Header */}
                     <div className={styles.chatHeader}>
                         <div className={styles.chatHeaderInfo}>
@@ -375,6 +393,7 @@ export default function ChatAgent() {
 
             {/* Floating Chat Bubble */}
             <button
+                ref={bubbleRef}
                 className={`${styles.chatBubble} ${showScrollTop ? styles.shifted : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="AI 채팅 열기"

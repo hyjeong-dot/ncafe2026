@@ -1,5 +1,7 @@
 package com.new_cafe.app.backend.global.config;
 
+import com.new_cafe.app.backend.admin.cafe.adapter.out.persistence.CafeSettingsJpaRepository;
+import com.new_cafe.app.backend.admin.cafe.domain.model.CafeSettings;
 import com.new_cafe.app.backend.admin.category.adapter.out.persistence.AdminCategoryJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuImageJpaRepository;
 import com.new_cafe.app.backend.admin.menu.adapter.out.persistence.AdminMenuJpaRepository;
@@ -17,6 +19,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -30,12 +33,24 @@ public class DataInitializer implements CommandLineRunner {
         private final MenuOptionJpaRepository menuOptionRepository;
         private final OptionItemJpaRepository optionItemRepository;
         private final MemberJpaRepository memberRepository;
+        private final CafeSettingsJpaRepository cafeSettingsRepository;
         private final PasswordEncoder passwordEncoder;
 
         @Override
         @Transactional
         public void run(String... args) throws Exception {
-                // 0. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
+                // 0. 카페 설정 초기화
+                if (cafeSettingsRepository.count() == 0) {
+                        cafeSettingsRepository.save(CafeSettings.builder()
+                                        .cafeName("메타몽 카페")
+                                        .description("메타몽이 운영하는 힐링 카페에 오신 걸 환영해몽! (._.)")
+                                        .openTime(LocalTime.of(9, 0))
+                                        .closeTime(LocalTime.of(22, 0))
+                                        .manualClosed(false)
+                                        .build());
+                }
+
+                // 1. 관리자 계정 생성 // 데이터가 하나도 없을 때만 실행됩니다.
                 if (memberRepository.count() == 0) {
                         // 관리자 계정
                         memberRepository.save(Member.builder()
