@@ -29,10 +29,13 @@ public class CreateOrderService implements CreateOrderUseCase {
         Member member = loadMemberPort.findByNickname(command.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
+        String orderUid = "ORDER-" + System.currentTimeMillis() + "-" + java.util.UUID.randomUUID().toString().substring(0, 8);
+
         Order order = Order.builder()
                 .memberId(member.getId())
                 .orderType(command.getOrderType())
                 .requestMemo(command.getRequestMemo())
+                .orderUid(orderUid)
                 .status(OrderStatus.PENDING)
                 .build();
 
@@ -54,6 +57,7 @@ public class CreateOrderService implements CreateOrderUseCase {
 
         return OrderResult.builder()
                 .orderId(savedOrder.getId())
+                .orderUid(savedOrder.getOrderUid())
                 .totalPrice(savedOrder.getTotalPrice())
                 .orderType(savedOrder.getOrderType())
                 .status(savedOrder.getStatus())

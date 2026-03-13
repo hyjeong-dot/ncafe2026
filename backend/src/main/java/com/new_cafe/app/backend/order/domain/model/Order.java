@@ -37,6 +37,12 @@ public class Order {
     @Column(name = "request_memo", length = 500)
     private String requestMemo;
 
+    @Column(name = "order_uid", unique = true, length = 100)
+    private String orderUid;
+
+    @Column(name = "payment_key", length = 200)
+    private String paymentKey;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OrderLineItem> items = new ArrayList<>();

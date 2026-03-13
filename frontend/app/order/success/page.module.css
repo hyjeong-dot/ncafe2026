@@ -1,0 +1,102 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #ddd6fe 100%);
+    padding: 2rem;
+}
+
+.card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 20px 60px rgba(139, 92, 246, 0.12);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+}
+
+.successIcon {
+    color: #8b5cf6;
+    margin-bottom: 1.5rem;
+}
+
+.errorIcon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.spinner {
+    color: #8b5cf6;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #4a3570;
+    margin-bottom: 0.8rem;
+}
+
+.description {
+    font-size: 1rem;
+    color: #8b62c0;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.primaryBtn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #d4bbf7, #a855f7);
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+}
+
+.primaryBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(168, 85, 247, 0.3);
+}
+
+.secondaryBtn {
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    color: #8b5cf6;
+    border: 2px solid #ede9fe;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover {
+    background: #f5f3ff;
+    border-color: #d4bbf7;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 2rem 1.5rem;
+    }
+}

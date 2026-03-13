@@ -26,8 +26,12 @@ public class JwtProvider {
     private final long expirationTime;
 
     public JwtProvider(
-            @Value("${jwt.secret:defaultSecretKeyLongEnoughMustBe32BytesDefaultTokenKey!!}") String secretKey,
+            @Value("${jwt.secret:}") String secretKey,
             @Value("${jwt.expiration:86400000}") long expirationTime) {
+        if (secretKey == null || secretKey.isBlank()) {
+            // 환경 변수 미설정 시 임시 키로 기동 (실제 운영 시 반드시 설정 필요)
+            secretKey = "temporary-dev-key-must-set-JWT_SECRET-env-var!!";
+        }
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
         this.expirationTime = expirationTime;
     }

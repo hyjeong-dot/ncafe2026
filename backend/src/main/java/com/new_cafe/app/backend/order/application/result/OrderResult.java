@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderResult {
     private final Long orderId;
+    private final String orderUid;
     private final int totalPrice;
     private final OrderType orderType;
     private final OrderStatus status;
