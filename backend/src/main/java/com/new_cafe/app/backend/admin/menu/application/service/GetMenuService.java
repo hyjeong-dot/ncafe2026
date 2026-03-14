@@ -81,6 +81,7 @@ public class GetMenuService implements GetMenuUseCase {
 
         return MenuResult.builder()
                 .id(menu.getId())
+                .slug(menu.getSlug())
                 .korName(menu.getKorName())
                 .engName(menu.getEngName())
                 .description(menu.getDescription())

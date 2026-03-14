@@ -45,4 +45,19 @@ public class MenuPersistenceAdapter implements SaveMenuPort, LoadMenuPort, Delet
     public void deleteById(Long id) {
         menuJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsBySlug(String slug) {
+        return menuJpaRepository.existsBySlug(slug);
+    }
+
+    @Override
+    public List<Menu> findAllBySlugIsNull() {
+        return menuJpaRepository.findAllBySlugIsNull();
+    }
+
+    @Override
+    public long countBySlugStartingWith(String slugPrefix) {
+        return menuJpaRepository.countBySlugStartingWith(slugPrefix);
+    }
 }

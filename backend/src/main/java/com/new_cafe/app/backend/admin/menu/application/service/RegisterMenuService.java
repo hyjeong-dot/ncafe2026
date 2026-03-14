@@ -2,6 +2,7 @@ package com.new_cafe.app.backend.admin.menu.application.service;
 
 import com.new_cafe.app.backend.admin.menu.application.command.RegisterMenuCommand;
 import com.new_cafe.app.backend.admin.menu.application.port.in.RegisterMenuUseCase;
+import com.new_cafe.app.backend.admin.menu.application.port.out.LoadMenuPort;
 import com.new_cafe.app.backend.admin.menu.application.port.out.SaveMenuPort;
 import com.new_cafe.app.backend.admin.menu.domain.model.Menu;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegisterMenuService implements RegisterMenuUseCase {
 
     private final SaveMenuPort saveMenuPort;
+    private final LoadMenuPort loadMenuPort;
 
     @Override
     public Long registerMenu(RegisterMenuCommand command) {
+        String slug = generateUniqueSlug(command.getEngName());
+
         Menu menu = Menu.builder()
                 .korName(command.getKorName())
                 .engName(command.getEngName())
+                .slug(slug)
                 .description(command.getDescription())
                 .price(command.getPrice())
                 .categoryId(command.getCategoryId())
@@ -31,5 +36,28 @@ public class RegisterMenuService implements RegisterMenuUseCase {
                 .build();
 
         return saveMenuPort.save(menu);
+    }
+
+    /**
+     * 유일한 slug를 생성합니다.
+     * 중복 시 suffix(-2, -3, ...)를 붙입니다.
+     */
+    private String generateUniqueSlug(String engName) {
+        String baseSlug = Menu.generateSlug(engName);
+        if (baseSlug == null) return null;
+
+        if (!loadMenuPort.existsBySlug(baseSlug)) {
+            return baseSlug;
+        }
+
+        // 중복 발생 시 suffix 추가
+        long count = loadMenuPort.countBySlugStartingWith(baseSlug);
+        String candidateSlug;
+        do {
+            count++;
+            candidateSlug = baseSlug + "-" + count;
+        } while (loadMenuPort.existsBySlug(candidateSlug));
+
+        return candidateSlug;
     }
 }

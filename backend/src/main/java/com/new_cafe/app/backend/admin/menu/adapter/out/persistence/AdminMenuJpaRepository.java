@@ -19,4 +19,11 @@ public interface AdminMenuJpaRepository extends JpaRepository<Menu, Long> {
     boolean existsByKorName(String korName);
 
     Optional<Menu> findByKorName(String korName);
+
+    // slug 관련
+    boolean existsBySlug(String slug);
+
+    List<Menu> findAllBySlugIsNull();
+
+    long countBySlugStartingWith(String slugPrefix);
 }

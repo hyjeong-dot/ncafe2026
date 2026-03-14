@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface LoadMenuPort {
     List<Menu> findAll(Long categoryId, String searchQuery);
     Optional<Menu> findById(Long id);
+    boolean existsBySlug(String slug);
+    List<Menu> findAllBySlugIsNull();
+    long countBySlugStartingWith(String slugPrefix);
 }
