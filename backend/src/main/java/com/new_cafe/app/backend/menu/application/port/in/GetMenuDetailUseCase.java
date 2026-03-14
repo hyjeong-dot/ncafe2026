@@ -7,4 +7,5 @@ import com.new_cafe.app.backend.menu.application.result.MenuDetailResult;
  */
 public interface GetMenuDetailUseCase {
     MenuDetailResult getAvailableMenu(Long id);
+    MenuDetailResult getAvailableMenuBySlug(String slug);
 }

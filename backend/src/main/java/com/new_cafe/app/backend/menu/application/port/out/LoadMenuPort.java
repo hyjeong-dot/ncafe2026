@@ -14,4 +14,5 @@ public interface LoadMenuPort {
     List<Menu> searchAvailable(String searchQuery);
     List<Menu> searchAvailableByCategoryId(Long categoryId, String searchQuery);
     Optional<Menu> findAvailableById(Long id);
+    Optional<Menu> findAvailableBySlug(String slug);
 }

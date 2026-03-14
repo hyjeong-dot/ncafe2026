@@ -26,6 +26,9 @@ public class Menu {
     @Column(name = "eng_name")
     private String engName;
 
+    @Column(unique = true)
+    private String slug;
+
     private String description;
 
     @Column(nullable = false)
@@ -56,6 +59,9 @@ public class Menu {
         if (this.isAvailable == null) this.isAvailable = true;
         if (this.isSoldOut == null) this.isSoldOut = false;
         if (this.sortOrder == null) this.sortOrder = 0;
+        if (this.slug == null && this.engName != null) {
+            this.slug = generateSlug(this.engName);
+        }
     }
 
     @PreUpdate
@@ -68,5 +74,20 @@ public class Menu {
     public void updatePrice(int newPrice) {
         if (newPrice < 0) throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
         this.price = newPrice;
+    }
+
+    /**
+     * engName → slug 변환 유틸
+     * 예: "Purple Latte" → "purple-latte"
+     */
+    public static String generateSlug(String engName) {
+        if (engName == null || engName.isBlank()) return null;
+        return engName
+                .toLowerCase()
+                .trim()
+                .replaceAll("[^a-z0-9\\s-]", "")
+                .replaceAll("\\s+", "-")
+                .replaceAll("-+", "-")
+                .replaceAll("^-|-$", "");
     }
 }

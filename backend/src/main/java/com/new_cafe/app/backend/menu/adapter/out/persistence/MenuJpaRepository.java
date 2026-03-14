@@ -19,6 +19,9 @@ public interface MenuJpaRepository extends JpaRepository<Menu, Long> {
     // 카테고리 + 검색어 기반 판매 가능한 메뉴 조회
     List<Menu> findAllByIsAvailableTrueAndCategoryIdAndKorNameContainingIgnoreCaseOrIsAvailableTrueAndCategoryIdAndDescriptionContainingIgnoreCaseOrderBySortOrderAsc(Long categoryId, String korName, Long categoryId2, String description);
 
-    // 판매 가능한 메뉴 단건 조회
+    // 판매 가능한 메뉴 단건 조회 (ID)
     Optional<Menu> findByIdAndIsAvailableTrue(Long id);
+
+    // 판매 가능한 메뉴 단건 조회 (slug)
+    Optional<Menu> findBySlugAndIsAvailableTrue(String slug);
 }

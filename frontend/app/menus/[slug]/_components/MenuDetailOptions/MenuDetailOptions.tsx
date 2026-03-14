@@ -26,11 +26,11 @@ interface MenuOption {
 export type SelectedOptions = Record<number, number[]>;
 
 interface MenuDetailOptionsProps {
-    menuId: number;
+    slug: string;
     onSelectionChange?: (selections: SelectedOptions, totalExtra: number, selectedNames: string[]) => void;
 }
 
-export default function MenuDetailOptions({ menuId, onSelectionChange }: MenuDetailOptionsProps) {
+export default function MenuDetailOptions({ slug, onSelectionChange }: MenuDetailOptionsProps) {
     const [options, setOptions] = useState<MenuOption[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selections, setSelections] = useState<SelectedOptions>({});
@@ -41,7 +41,7 @@ export default function MenuDetailOptions({ menuId, onSelectionChange }: MenuDet
         const fetchOptions = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`/api/menus/${menuId}`);
+                const response = await fetch(`/api/menus/${slug}`);
                 if (!response.ok) throw new Error('Failed to fetch');
                 const data = await response.json();
                 const opts: MenuOption[] = data.options || [];
@@ -66,8 +66,8 @@ export default function MenuDetailOptions({ menuId, onSelectionChange }: MenuDet
             }
         };
 
-        if (menuId) fetchOptions();
-    }, [menuId]);
+        if (slug) fetchOptions();
+    }, [slug]);
 
     // 선택 변경 시 부모에 알림
     const calcExtra = useCallback((sels: SelectedOptions) => {

@@ -8,10 +8,10 @@ from app.services import rag_service
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 def get_menu_info(menu_name: str) -> str:
-    """메뉴 이름을 입력받아 실제 DB에서 해당 메뉴의 고유 ID와 정보를 조회합니다."""
+    """메뉴 이름을 입력받아 실제 DB에서 해당 메뉴의 고유 ID, slug와 정보를 조회합니다."""
     menu = rag_service.search_menu_by_name(menu_name)
     if menu:
-        return f"메뉴명: {menu['kor_name']}, ID: {menu['id']}"
+        return f"메뉴명: {menu['kor_name']}, ID: {menu['id']}, slug: {menu['slug']}"
     return "해당 메뉴를 DB에서 찾을 수 없습니다."
 
 def get_cafe_settings() -> str:
@@ -28,8 +28,8 @@ def select_menu(menu_id: int, intent: str) -> str:
 
 def navigate(target: str) -> str:
     """사용자가 요청한 페이지나 기능으로 화면을 이동시킵니다.
-    target 종류: 'home'(홈), 'menus'(메뉴판), 'cart'(장바구니 열기), 'mypage'(마이페이지), 'login'(로그인), 'menu_detail_ID'(메뉴 상세 페이지, 예: menu_detail_1)
-    메뉴 상세 페이지로 이동할 때는 반드시 get_menu_info로 메뉴 ID를 먼저 확인한 후 'menu_detail_ID' 형태로 사용해야 합니다. (예: menu_detail_3)
+    target 종류: 'home'(홈), 'menus'(메뉴판), 'cart'(장바구니 열기), 'mypage'(마이페이지), 'login'(로그인), 'menu_detail_SLUG'(메뉴 상세 페이지, 예: menu_detail_americano)
+    메뉴 상세 페이지로 이동할 때는 반드시 get_menu_info로 메뉴의 slug를 먼저 확인한 후 'menu_detail_SLUG' 형태로 사용해야 합니다. (예: menu_detail_purple-latte)
     """
     return f"[NAV:{target}]"
 

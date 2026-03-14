@@ -27,6 +27,9 @@ public class Menu {
     @Column(name = "eng_name")
     private String engName;
 
+    @Column(unique = true)
+    private String slug;
+
     private String description;
 
     private int price;

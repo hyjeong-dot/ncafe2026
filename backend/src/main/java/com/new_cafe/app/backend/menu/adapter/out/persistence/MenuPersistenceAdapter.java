@@ -37,4 +37,9 @@ public class MenuPersistenceAdapter implements LoadMenuPort {
     public Optional<Menu> findAvailableById(Long id) {
         return menuJpaRepository.findByIdAndIsAvailableTrue(id);
     }
+
+    @Override
+    public Optional<Menu> findAvailableBySlug(String slug) {
+        return menuJpaRepository.findBySlugAndIsAvailableTrue(slug);
+    }
 }

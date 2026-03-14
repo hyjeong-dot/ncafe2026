@@ -14,14 +14,14 @@ import Modal from '@/components/common/Modal/Modal';
 import LoadingDitto from '@/components/common/LoadingDitto/LoadingDitto';
 
 interface MenuDetailInfoProps {
-    id: number;
+    slug: string;
     selectedOptions?: SelectedOptions;
     extraPrice?: number;
     selectedOptionNames?: string[];
 }
 
-export default function MenuDetailInfo({ id, selectedOptions = {}, extraPrice = 0, selectedOptionNames = [] }: MenuDetailInfoProps) {
-    const { menu, isLoading, error } = useMenuDetail(id);
+export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice = 0, selectedOptionNames = [] }: MenuDetailInfoProps) {
+    const { menu, isLoading, error } = useMenuDetail(slug);
     const { user } = useAuth();
     const { addItem, setCartOpen } = useCart();
     const router = useRouter();

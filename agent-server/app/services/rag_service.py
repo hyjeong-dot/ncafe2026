@@ -152,7 +152,7 @@ def search_menu_by_name(menu_name: str):
         search_pattern = f"%{clean_name}%"
         
         cur.execute("""
-            SELECT id, kor_name FROM menus 
+            SELECT id, kor_name, slug FROM menus 
             WHERE REPLACE(LOWER(kor_name), ' ', '') LIKE %s 
                OR REPLACE(LOWER(eng_name), ' ', '') LIKE %s
             LIMIT 1;

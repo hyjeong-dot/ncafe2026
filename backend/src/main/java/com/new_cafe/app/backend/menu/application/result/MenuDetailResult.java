@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class MenuDetailResult {
     private final Long id;
+    private final String slug;
     private final String korName;
     private final String engName;
     private final String description;

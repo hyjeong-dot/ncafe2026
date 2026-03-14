@@ -33,17 +33,25 @@ public class MenuController {
     }
 
     /**
-     * 메뉴 상세 조회
+     * 메뉴 상세 조회 (ID)
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public MenuDetailResult getMenu(@PathVariable Long id) {
         return getMenuDetailUseCase.getAvailableMenu(id);
     }
 
     /**
-     * 메뉴 이미지 목록 조회
+     * 메뉴 상세 조회 (slug)
      */
-    @GetMapping("/{id}/images")
+    @GetMapping("/{slug:[a-z0-9-]+}")
+    public MenuDetailResult getMenuBySlug(@PathVariable String slug) {
+        return getMenuDetailUseCase.getAvailableMenuBySlug(slug);
+    }
+
+    /**
+     * 메뉴 이미지 목록 조회 (ID)
+     */
+    @GetMapping("/{id:\\d+}/images")
     public MenuImageListResult getMenuImages(@PathVariable Long id) {
         return getMenuImageListUseCase.getMenuImages(id);
     }

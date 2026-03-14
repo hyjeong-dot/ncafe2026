@@ -35,7 +35,17 @@ public class GetMenuDetailService implements GetMenuDetailUseCase {
     public MenuDetailResult getAvailableMenu(Long id) {
         Menu menu = loadMenuPort.findAvailableById(id)
                 .orElseThrow(() -> new MenuNotFoundException(id));
+        return buildMenuDetailResult(menu);
+    }
 
+    @Override
+    public MenuDetailResult getAvailableMenuBySlug(String slug) {
+        Menu menu = loadMenuPort.findAvailableBySlug(slug)
+                .orElseThrow(() -> new MenuNotFoundException(slug));
+        return buildMenuDetailResult(menu);
+    }
+
+    private MenuDetailResult buildMenuDetailResult(Menu menu) {
         List<Category> categories = loadCategoryPort.findAllActive();
         String categoryName = "";
         String categoryIcon = "";
@@ -80,6 +90,7 @@ public class GetMenuDetailService implements GetMenuDetailUseCase {
 
         return MenuDetailResult.builder()
                 .id(menu.getId())
+                .slug(menu.getSlug())
                 .korName(menu.getKorName())
                 .engName(menu.getEngName())
                 .description(menu.getDescription())

@@ -7,9 +7,8 @@ import MenuDetailInfo from './_components/MenuDetailInfo';
 import MenuDetailOptions, { SelectedOptions } from './_components/MenuDetailOptions/MenuDetailOptions';
 import styles from './page.module.css';
 
-export default function MenuDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id: idStr } = use(params);
-    const id = Number(idStr);
+export default function MenuDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
 
     const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
     const [extraPrice, setExtraPrice] = useState(0);
@@ -28,18 +27,18 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
             <main className={styles.container}>
                 <div className={styles.layout}>
                     {/* Left: Images */}
-                    <MenuDetailImage menuId={id} />
+                    <MenuDetailImage slug={slug} />
 
                     {/* Right: Info + Options */}
                     <div>
                         <MenuDetailInfo
-                            id={id}
+                            slug={slug}
                             selectedOptions={selectedOptions}
                             extraPrice={extraPrice}
                             selectedOptionNames={selectedOptionNames}
                         />
                         <MenuDetailOptions
-                            menuId={id}
+                            slug={slug}
                             onSelectionChange={handleOptionChange}
                         />
                     </div>

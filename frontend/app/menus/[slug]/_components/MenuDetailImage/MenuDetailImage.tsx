@@ -9,12 +9,12 @@ import { useMenuDetail } from '../MenuDetailInfo/useMenuDetail';
 import { getImageSrc } from '@/lib/api';
 
 interface MenuDetailImageProps {
-    menuId: number;
+    slug: string;
 }
 
-export default function MenuDetailImage({ menuId }: MenuDetailImageProps) {
-    const { menu } = useMenuDetail(menuId);
-    const { images, isLoading: isDataLoading } = useMenuImages(menuId);
+export default function MenuDetailImage({ slug }: MenuDetailImageProps) {
+    const { menu } = useMenuDetail(slug);
+    const { images, isLoading: isDataLoading } = useMenuImages(menu?.id ?? 0);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [isImageReady, setIsImageReady] = useState(false);
 

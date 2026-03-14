@@ -7,6 +7,7 @@ import styles from './MenuChatCard.module.css';
 
 interface MenuDetail {
   id: number;
+  slug: string;
   korName: string;
   engName: string;
   description: string;
@@ -62,7 +63,7 @@ export default function MenuChatCard({ id }: { id: number }) {
         <h4 className={styles.name}>{menu.korName}</h4>
         <p className={styles.price}>₩{menu.price.toLocaleString()}</p>
         <p className={styles.desc}>{menu.description}</p>
-        <Link href={`/menus/${menu.id}`} className={styles.link}>
+        <Link href={`/menus/${menu.slug}`} className={styles.link}>
           상세보기
         </Link>
       </div>

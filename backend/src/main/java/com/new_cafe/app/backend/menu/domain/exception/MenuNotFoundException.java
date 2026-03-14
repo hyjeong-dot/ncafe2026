@@ -9,7 +9,7 @@ public class MenuNotFoundException extends RuntimeException {
         super("메뉴를 찾을 수 없습니다. (ID: " + menuId + ")");
     }
 
-    public MenuNotFoundException(String message) {
-        super(message);
+    public MenuNotFoundException(String slug) {
+        super("메뉴를 찾을 수 없습니다. (slug: " + slug + ")");
     }
 }

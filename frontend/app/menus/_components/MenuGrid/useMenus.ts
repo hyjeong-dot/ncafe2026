@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 
 export interface MenuResponse {
     id: number;
+    slug: string;
     korName: string;
     engName: string;
     description: string;

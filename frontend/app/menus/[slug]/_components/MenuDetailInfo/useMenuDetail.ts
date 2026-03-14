@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { MenuResponse } from '../../../_components/MenuGrid/useMenus';
 
-export function useMenuDetail(id: number) {
+export function useMenuDetail(slug: string) {
     const [menu, setMenu] = useState<MenuResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!slug) return;
 
         const fetchMenu = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`/api/menus/${id}`);
+                const response = await fetch(`/api/menus/${slug}`);
 
                 if (response.status === 401) {
                     if (typeof window !== 'undefined') window.location.href = '/login';
@@ -33,7 +33,7 @@ export function useMenuDetail(id: number) {
         };
 
         fetchMenu();
-    }, [id]);
+    }, [slug]);
 
     return { menu, isLoading, error };
 }

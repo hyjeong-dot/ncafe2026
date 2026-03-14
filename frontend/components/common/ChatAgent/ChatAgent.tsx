@@ -202,7 +202,7 @@ export default function ChatAgent() {
         }
 
         // 화면 이동 처리 ([NAV:target])
-        const navMatch = agentReply.match(/\[NAV:([\w]+)\]/);
+        const navMatch = agentReply.match(/\[NAV:([\w-]+)\]/);
         if (navMatch) {
             const target = navMatch[1];
             if (target.startsWith('menu_detail_')) {
@@ -275,7 +275,7 @@ export default function ChatAgent() {
     // 마크다운 볼드 및 메뉴 ID 태그 처리
     const renderContent = (text: string) => {
         // [ID:숫자], [NAV:대상], [MENU_SELECT:ID:INTENT] 태그를 분리
-        const segments = text.split(/(\[ID:\d+\]|\[NAV:\w+\]|\[MENU_SELECT:\d+:(?:ORDER|CART)\])/g);
+        const segments = text.split(/(\[ID:\d+\]|\[NAV:[\w-]+\]|\[MENU_SELECT:\d+:(?:ORDER|CART)\])/g);
         
         return segments.map((segment, i) => {
             // 메뉴 ID 태그인 경우

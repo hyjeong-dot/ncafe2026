@@ -19,7 +19,7 @@ export default function MenuCard({ menu, onLoad }: MenuCardProps) {
     const imageSrc = getImageSrc(menu.imageSrc);
 
     return (
-        <Link href={`/menus/${menu.id}`} className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}>
+        <Link href={`/menus/${menu.slug}`} className={`${styles.card} ${menu.isSoldOut ? styles.soldOut : ''}`}>
             <div className={styles.imageWrapper}>
                 <Image
                     src={imageSrc}
