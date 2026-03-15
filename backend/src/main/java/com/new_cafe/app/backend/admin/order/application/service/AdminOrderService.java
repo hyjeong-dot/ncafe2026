@@ -46,8 +46,13 @@ public class AdminOrderService implements GetAdminOrderListUseCase, UpdateOrderS
         order.setStatus(status);
         orderRepository.save(order);
 
-        // 취소 시 스탬프 차감 (주문 생성 시 상품 수량만큼 적립했으므로)
+        // 취소 시 쿠폰 복원 + 스탬프 차감
         if (status == OrderStatus.CANCELLED) {
+            try {
+                couponService.restoreCoupon(order.getCouponId());
+            } catch (Exception e) {
+                log.warn("Coupon restore failed for order {}: {}", orderId, e.getMessage());
+            }
             try {
                 int totalQuantity = order.getItems().stream()
                         .mapToInt(item -> item.getQuantity())

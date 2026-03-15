@@ -61,6 +61,16 @@ public class Coupon {
     }
 
     /**
+     * 쿠폰 복원 (주문 취소 시)
+     */
+    public void restore() {
+        if (this.status == CouponStatus.USED) {
+            this.status = CouponStatus.ACTIVE;
+            this.usedAt = null;
+        }
+    }
+
+    /**
      * 할인 금액 계산
      */
     public int calculateDiscount(int orderTotal) {

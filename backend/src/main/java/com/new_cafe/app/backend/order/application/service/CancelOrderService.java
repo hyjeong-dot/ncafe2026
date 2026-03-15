@@ -41,7 +41,14 @@ public class CancelOrderService implements CancelOrderUseCase {
         order.setStatus(OrderStatus.CANCELLED);
         orderPort.saveOrder(order);
 
-        // 스탬프 차감 (상품 수량만큼)
+        // 쿠폰 복원 (사용했던 쿠폰 되돌리기)
+        try {
+            couponService.restoreCoupon(order.getCouponId());
+        } catch (Exception e) {
+            log.warn("Coupon restore failed for order {}: {}", orderId, e.getMessage());
+        }
+
+        // 스탬프 차감 (상품 수량만큼 + 보상 쿠폰 회수 확인)
         try {
             int totalQuantity = order.getItems().stream()
                     .mapToInt(item -> item.getQuantity())

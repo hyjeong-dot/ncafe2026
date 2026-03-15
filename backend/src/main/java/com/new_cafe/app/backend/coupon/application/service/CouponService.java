@@ -148,7 +148,21 @@ public class CouponService {
     }
 
     /**
+     * 쿠폰 복원 (주문 취소 시 사용된 쿠폰 되돌리기)
+     */
+    @Transactional
+    public void restoreCoupon(Long couponId) {
+        if (couponId == null) return;
+        couponRepository.findById(couponId).ifPresent(coupon -> {
+            coupon.restore();
+            couponRepository.save(coupon);
+            log.info("Coupon {} restored", couponId);
+        });
+    }
+
+    /**
      * 스탬프 차감 (주문 취소 시 상품 수량만큼)
+     * 10개 이하로 떨어지면 미사용 보상 쿠폰 회수
      */
     @Transactional
     public void removeStamps(UUID memberId, int count) {
@@ -160,6 +174,26 @@ public class CouponService {
                     stampCardRepository.save(card);
                     log.info("Stamps removed ({}) for member: {}", count, memberId);
                 });
+
+        // 미사용 아메리카노 보상 쿠폰이 있으면 회수 (스탬프 부족 시)
+        revokeUnusedStampRewardIfNeeded(memberId);
+    }
+
+    /**
+     * 미사용 스탬프 보상 쿠폰 회수
+     */
+    private void revokeUnusedStampRewardIfNeeded(UUID memberId) {
+        // 현재 활성 카드의 스탬프가 0이고, 미사용 아메리카노 쿠폰이 있으면 회수
+        StampCard currentCard = stampCardRepository.findByMemberIdAndCompletedFalse(memberId).orElse(null);
+        if (currentCard != null && currentCard.getStamps() == 0) {
+            couponRepository.findByMemberIdAndStatus(memberId, CouponStatus.ACTIVE).stream()
+                    .filter(c -> "아메리카노 무료 쿠폰".equals(c.getTemplate().getName()))
+                    .forEach(c -> {
+                        c.setStatus(CouponStatus.EXPIRED);
+                        couponRepository.save(c);
+                        log.info("Unused stamp reward coupon {} revoked for member: {}", c.getId(), memberId);
+                    });
+        }
     }
 
     /**
