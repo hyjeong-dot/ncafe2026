@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.order.application.service;
 
+import com.new_cafe.app.backend.coupon.application.service.CouponService;
 import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
 import com.new_cafe.app.backend.menu.application.port.out.LoadMenuPort;
@@ -12,9 +13,11 @@ import com.new_cafe.app.backend.order.domain.model.Order;
 import com.new_cafe.app.backend.order.domain.model.OrderLineItem;
 import com.new_cafe.app.backend.order.domain.model.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CreateOrderService implements CreateOrderUseCase {
@@ -22,6 +25,7 @@ public class CreateOrderService implements CreateOrderUseCase {
     private final OrderPort orderPort;
     private final LoadMenuPort loadMenuPort;
     private final LoadMemberPort loadMemberPort;
+    private final CouponService couponService;
 
     @Override
     @Transactional
@@ -54,6 +58,14 @@ public class CreateOrderService implements CreateOrderUseCase {
 
         order.calculateTotalPrice();
         Order savedOrder = orderPort.saveOrder(order);
+
+        // 스탬프 카드 적립
+        try {
+            couponService.addStamp(member.getId());
+            log.info("Stamp added for member: {}", member.getUsername());
+        } catch (Exception e) {
+            log.warn("Failed to add stamp for member: {}", member.getUsername(), e);
+        }
 
         return OrderResult.builder()
                 .orderId(savedOrder.getId())
