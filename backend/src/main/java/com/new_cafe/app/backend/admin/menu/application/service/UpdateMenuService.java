@@ -34,7 +34,33 @@ public class UpdateMenuService implements UpdateMenuUseCase {
         menu.setIsSoldOut(command.getIsSoldOut());
         menu.setSortOrder(command.getSortOrder());
 
+        // slug가 아직 없으면 자동 생성 (이미 있으면 변경하지 않음 — URL 안정성)
+        if (menu.getSlug() == null && command.getEngName() != null) {
+            menu.setSlug(generateUniqueSlug(command.getEngName()));
+        }
+
         saveMenuPort.save(menu);
+    }
+
+    /**
+     * 유일한 slug 생성 (중복 시 suffix 추가)
+     */
+    private String generateUniqueSlug(String engName) {
+        String baseSlug = Menu.generateSlug(engName);
+        if (baseSlug == null) return null;
+
+        if (!loadMenuPort.existsBySlug(baseSlug)) {
+            return baseSlug;
+        }
+
+        long count = loadMenuPort.countBySlugStartingWith(baseSlug);
+        String candidateSlug;
+        do {
+            count++;
+            candidateSlug = baseSlug + "-" + count;
+        } while (loadMenuPort.existsBySlug(candidateSlug));
+
+        return candidateSlug;
     }
 
     @Override
