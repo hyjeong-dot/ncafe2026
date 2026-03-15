@@ -29,15 +29,15 @@ public class CouponService {
      */
     @Transactional
     public CouponResponse issueWelcomeCoupon(UUID memberId) {
-        String templateName = "첫 방문 무료 음료";
+        String templateName = "첫 방문 1,000원 할인";
 
         // 이미 발급받았는지 체크
         if (couponRepository.existsByMemberIdAndTemplate_Name(memberId, templateName)) {
             throw new IllegalStateException("이미 첫 방문 쿠폰을 받으셨어요!");
         }
 
-        CouponTemplate template = getOrCreateTemplate(templateName, CouponType.FREE_DRINK, 0, 0,
-                "회원가입 축하! 첫 음료 한 잔이 무료!", 30);
+        CouponTemplate template = getOrCreateTemplate(templateName, CouponType.FIXED, 1000, 0,
+                "회원가입 축하! 1,000원 할인 쿠폰이에요 💜", 30);
 
         Coupon coupon = createCoupon(template, memberId, "WELCOME");
 
@@ -50,24 +50,15 @@ public class CouponService {
         return CouponResponse.from(coupon);
     }
 
-    /**
-     * 리뷰 감사 쿠폰 발급
-     */
-    @Transactional
-    public CouponResponse issueReviewCoupon(UUID memberId) {
-        CouponTemplate template = getOrCreateTemplate("리뷰 감사 할인", CouponType.PERCENT, 10, 5000,
-                "리뷰 작성 감사 쿠폰! 10% 할인!", 14);
-        Coupon coupon = createCoupon(template, memberId, "REVIEW");
-        return CouponResponse.from(coupon);
-    }
+    // 리뷰 이벤트는 실물 메타몽 스티커 증정 (선착순) → 디지털 쿠폰 발급 없음
 
     /**
      * 10잔 적립 완료 쿠폰 발급
      */
     @Transactional
     public CouponResponse issueStampRewardCoupon(UUID memberId) {
-        CouponTemplate template = getOrCreateTemplate("단골 변신 보상", CouponType.FREE_DRINK, 0, 0,
-                "10잔 적립 완료! 무료 음료 한 잔!", 30);
+        CouponTemplate template = getOrCreateTemplate("아메리카노 무료 쿠폰", CouponType.FREE_DRINK, 0, 0,
+                "10잔 적립 완료! 아메리카노 한 잔 무료! ☕", 30);
         Coupon coupon = createCoupon(template, memberId, "STAMP");
         return CouponResponse.from(coupon);
     }
