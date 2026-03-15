@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 
 export interface AdminOrderItem {
@@ -24,7 +24,7 @@ export function useAdminOrders() {
     const [orders, setOrders] = useState<AdminOrder[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
         try {
             const response = await fetch('/api/admin/orders');
             if (response.status === 401) {
@@ -40,14 +40,35 @@ export function useAdminOrders() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchOrders();
-        // Option: polling or SSE for real-time updates
-        const interval = setInterval(fetchOrders, 30000); // 30초마다 갱신
-        return () => clearInterval(interval);
-    }, []);
+
+        // SSE 구독 — 주문 변경 시 실시간 갱신
+        const eventSource = new EventSource('/api/admin/orders/stream');
+
+        eventSource.addEventListener('order-update', (event) => {
+            console.log('[SSE] 주문 업데이트:', event.data);
+            fetchOrders(); // 변경 알림 받으면 전체 목록 새로고침
+
+            if (event.data === 'new-order') {
+                toast('🔔 새 주문이 들어왔습니다!', { icon: '📦' });
+            }
+        });
+
+        eventSource.addEventListener('connected', () => {
+            console.log('[SSE] 주문 스트림 연결됨');
+        });
+
+        eventSource.onerror = () => {
+            console.warn('[SSE] 연결 끊김, 자동 재연결 시도...');
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [fetchOrders]);
 
     const updateStatus = async (orderId: number, status: string) => {
         try {
@@ -57,7 +78,7 @@ export function useAdminOrders() {
             if (!response.ok) throw new Error('상태 변경 실패');
             
             toast.success('주문 상태가 변경되었습니다! 🪄');
-            fetchOrders(); // Refresh
+            // SSE가 이벤트를 보내서 자동 갱신되므로 수동 refresh 불필요
         } catch (error) {
             console.error('Update status error:', error);
             toast.error('주문 상태 변경 중 오류가 발생했습니다.');

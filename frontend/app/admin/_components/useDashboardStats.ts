@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface DashboardStatsData {
     totalMenus: number;
@@ -19,7 +18,7 @@ export function useDashboardStats() {
     });
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             const response = await fetch('/api/admin/dashboard/stats');
             
@@ -37,15 +36,26 @@ export function useDashboardStats() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchStats();
 
-        // 30초마다 실시간으로 오늘의 주문 건수 등을 업데이트해몽! (._.)✨
-        const interval = setInterval(fetchStats, 30000);
-        return () => clearInterval(interval);
-    }, []);
+        // SSE 구독 — 주문 변경 시 대시보드 통계도 즉시 갱신
+        const eventSource = new EventSource('/api/admin/orders/stream');
+
+        eventSource.addEventListener('order-update', () => {
+            fetchStats();
+        });
+
+        eventSource.onerror = () => {
+            console.warn('[SSE] 대시보드 SSE 연결 끊김, 자동 재연결 시도...');
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [fetchStats]);
 
     return {
         stats,
