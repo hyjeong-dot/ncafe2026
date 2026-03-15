@@ -126,6 +126,19 @@ public class CouponService {
     }
 
     /**
+     * 스탬프 차감 (주문 취소 시 호출)
+     */
+    @Transactional
+    public void removeStamp(UUID memberId) {
+        stampCardRepository.findByMemberIdAndCompletedFalse(memberId)
+                .ifPresent(card -> {
+                    card.removeStamp();
+                    stampCardRepository.save(card);
+                    log.info("Stamp removed for member: {}", memberId);
+                });
+    }
+
+    /**
      * 내 스탬프 카드 조회
      */
     @Transactional(readOnly = true)

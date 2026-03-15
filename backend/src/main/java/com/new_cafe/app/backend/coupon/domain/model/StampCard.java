@@ -40,7 +40,7 @@ public class StampCard {
     }
 
     /**
-     * 스탬프 추가 (주문 시 호출)
+     * 스탬프 추가 (수령완료 시 호출)
      * @return 10개 달성 시 true
      */
     public boolean addStamp() {
@@ -51,5 +51,14 @@ public class StampCard {
             return true; // 10잔 달성!
         }
         return false;
+    }
+
+    /**
+     * 스탬프 차감 (주문 취소 시 호출)
+     */
+    public void removeStamp() {
+        if (this.stamps > 0) {
+            this.stamps--;
+        }
     }
 }

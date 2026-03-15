@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.order.application.service;
 
+import com.new_cafe.app.backend.coupon.application.service.CouponService;
 import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
 import com.new_cafe.app.backend.order.application.port.in.CancelOrderUseCase;
@@ -7,15 +8,18 @@ import com.new_cafe.app.backend.order.application.port.out.OrderPort;
 import com.new_cafe.app.backend.order.domain.model.Order;
 import com.new_cafe.app.backend.order.domain.model.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CancelOrderService implements CancelOrderUseCase {
 
     private final OrderPort orderPort;
     private final LoadMemberPort loadMemberPort;
+    private final CouponService couponService;
 
     @Override
     @Transactional
@@ -36,5 +40,13 @@ public class CancelOrderService implements CancelOrderUseCase {
 
         order.setStatus(OrderStatus.CANCELLED);
         orderPort.saveOrder(order);
+
+        // 스탬프 차감
+        try {
+            couponService.removeStamp(member.getId());
+            log.info("Stamp removed for cancelled order {} by user {}", orderId, username);
+        } catch (Exception e) {
+            log.warn("Stamp removal failed for order {}: {}", orderId, e.getMessage());
+        }
     }
 }

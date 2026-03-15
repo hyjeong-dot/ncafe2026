@@ -5,17 +5,20 @@ import com.new_cafe.app.backend.admin.order.application.port.in.GetAdminOrderLis
 import com.new_cafe.app.backend.admin.order.application.port.in.UpdateOrderStatusUseCase;
 import com.new_cafe.app.backend.admin.order.application.result.AdminOrderLineItemResult;
 import com.new_cafe.app.backend.admin.order.application.result.AdminOrderResult;
+import com.new_cafe.app.backend.coupon.application.service.CouponService;
 import com.new_cafe.app.backend.member.adapter.out.persistence.MemberJpaRepository;
 import com.new_cafe.app.backend.order.adapter.out.persistence.repository.OrderRepository;
 import com.new_cafe.app.backend.order.domain.model.Order;
 import com.new_cafe.app.backend.order.domain.model.OrderStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,6 +27,7 @@ public class AdminOrderService implements GetAdminOrderListUseCase, UpdateOrderS
     private final OrderRepository orderRepository;
     private final MemberJpaRepository memberRepository;
     private final AdminMenuJpaRepository menuRepository;
+    private final CouponService couponService;
 
     @Override
     @Transactional(readOnly = true)
@@ -38,8 +42,19 @@ public class AdminOrderService implements GetAdminOrderListUseCase, UpdateOrderS
     public void updateStatus(Long orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
+
         order.setStatus(status);
         orderRepository.save(order);
+
+        // 취소 시 스탬프 차감 (주문 생성 시 이미 적립했으므로)
+        if (status == OrderStatus.CANCELLED) {
+            try {
+                couponService.removeStamp(order.getMemberId());
+                log.info("Stamp removed for cancelled order {}", orderId);
+            } catch (Exception e) {
+                log.warn("Stamp removal failed for order {}: {}", orderId, e.getMessage());
+            }
+        }
     }
 
     private AdminOrderResult toResult(Order order) {
