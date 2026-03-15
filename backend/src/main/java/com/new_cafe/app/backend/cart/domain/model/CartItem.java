@@ -27,6 +27,12 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(name = "unit_price")
+    private Integer unitPrice;  // 옵션 포함 단가 (null이면 메뉴 기본 가격 사용)
+
+    @Column(name = "selected_option_names", length = 1000)
+    private String selectedOptionNames;  // JSON 배열 문자열: ["Large", "ICE", "샷 추가"]
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

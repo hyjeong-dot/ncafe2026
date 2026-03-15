@@ -55,7 +55,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ 
                                         menuId: parseInt(item.id), 
-                                        quantity: item.quantity 
+                                        quantity: item.quantity,
+                                        unitPrice: item.price,
+                                        selectedOptionNames: item.selectedOptionNames || null
                                     })
                                 });
                             }
@@ -115,7 +117,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 await fetchAPI('/cart/items', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ menuId: parseInt(newItem.id), quantity: 1 })
+                    body: JSON.stringify({ 
+                        menuId: parseInt(newItem.id), 
+                        quantity: 1,
+                        unitPrice: newItem.price,
+                        selectedOptionNames: newItem.selectedOptionNames || null
+                    })
                 });
             } catch(e) {
                 console.error("Failed to sync add item to cart API:", e);
