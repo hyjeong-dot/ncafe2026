@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle, Mail, Phone, Smile, CheckSquare, Square, Check, X } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import toast from 'react-hot-toast';
 import styles from '@/app/login/login.module.css';
-import Modal from '@/components/common/Modal/Modal';
 
 // 비밀번호 강도 계산
 function getPasswordStrength(pw: string) {
@@ -49,7 +50,7 @@ export default function SignupForm() {
     const [termsAgreed, setTermsAgreed] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { login } = useAuth();
 
     // 각 필드 touched 상태 (포커스 후 blur 했는지)
     const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -126,20 +127,38 @@ export default function SignupForm() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/auth/signup', {
+            // 1) 회원가입
+            const signupRes = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password, nickname, email, phoneNumber }),
             });
 
-            if (!response.ok) {
-                const data = await response.json();
+            if (!signupRes.ok) {
+                const data = await signupRes.json();
                 setError(data.message || '회원가입에 실패했습니다.');
                 setIsLoading(false);
                 return;
             }
 
-            setIsModalOpen(true);
+            // 2) 자동 로그인
+            const loginRes = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const loginResult = await loginRes.json();
+
+            if (loginRes.ok && loginResult.success) {
+                login(loginResult.data);
+                toast.success('회원가입 완료! 환영해요 💜');
+                window.location.href = '/';
+            } else {
+                // 가입은 됐지만 로그인 실패 시 로그인 페이지로
+                toast.success('회원가입 완료! 로그인해주세요 💜');
+                router.push('/login');
+            }
         } catch (err) {
             setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
             setIsLoading(false);
@@ -358,17 +377,6 @@ export default function SignupForm() {
                     </Link>
                 </div>
             </div>
-
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={() => router.replace('/login')}
-                title="회원가입 완료"
-                description="회원가입이 완료되었습니다. 로그인해주세요! 🫠"
-                confirmText="로그인"
-                cancelText="닫기"
-                variant="ditto"
-            />
         </div>
     );
 }
