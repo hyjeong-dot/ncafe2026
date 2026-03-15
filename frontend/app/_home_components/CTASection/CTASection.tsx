@@ -14,8 +14,8 @@ export default function CTASection() {
           (지금 슬슬 졸리대요… 빨리 와주세요!)
         </h2>
         <p className={styles.ctaDesc}>
-          첫 방문 시 메타몽이 직접 골라주는 오늘의 추천 음료 한 잔 무료!
-          그리고 말랑 미니 피규어도 챙겨 가세요 🎁
+          지금 가입하면 1,000원 할인 쿠폰을 바로 드려요! 🎫
+          음료 10잔 적립하면 아메리카노도 무료! ☕
         </p>
         <div className={styles.ctaButtons}>
           <Link href="/menus" className={styles.ctaPrimary}>

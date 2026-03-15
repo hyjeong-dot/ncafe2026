@@ -7,7 +7,8 @@ import {
     History,
     Heart,
     CreditCard,
-    UserMinus
+    UserMinus,
+    Ticket
 } from "lucide-react";
 import styles from "./MyPageSidebar.module.css";
 
@@ -70,6 +71,13 @@ export default function MyPageSidebar({
                 >
                     <Heart size={18} />
                     찜한 메뉴
+                </button>
+                <button
+                    className={`${styles.menuItem} ${activeTab === "coupons" ? styles.active : ""}`}
+                    onClick={() => onTabChange("coupons")}
+                >
+                    <Ticket size={18} />
+                    내 쿠폰
                 </button>
                 <button
                     className={`${styles.menuItem} ${activeTab === "payment" ? styles.active : ""}`}

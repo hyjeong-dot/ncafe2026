@@ -1,0 +1,214 @@
+.content {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+}
+
+.sectionTitle {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-6);
+}
+
+/* ---- 스탬프 카드 ---- */
+.stampCard {
+    background: linear-gradient(135deg, #f8f0ff 0%, #efe0ff 100%);
+    border: 2px solid #e0ccff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stampHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.stampHeader h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6b3fa0;
+}
+
+.stampCount {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #8b62c0;
+    background: rgba(139, 98, 192, 0.1);
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+
+.stampDesc {
+    font-size: 0.85rem;
+    color: #8b7aa8;
+    margin-bottom: 1rem;
+}
+
+.stampGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.stampSlot {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px dashed #d4c0ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #c4b0d8;
+    font-weight: 600;
+    transition: all 300ms ease;
+}
+
+.stampFilled {
+    background: #8b62c0;
+    border: 2px solid #7a52b0;
+    font-size: 1.3rem;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(139, 98, 192, 0.3);
+    animation: stampPop 300ms ease;
+}
+
+@keyframes stampPop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.stampComplete {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 700;
+    color: #6b3fa0;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 0.8rem;
+    border-radius: 10px;
+}
+
+/* ---- 쿠폰 섹션 ---- */
+.couponSection {
+    margin-top: 1.5rem;
+}
+
+.subTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.couponCount {
+    background: #8b62c0;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+}
+
+.couponList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.emptyState {
+    color: var(--text-muted);
+    text-align: center;
+    padding: var(--space-8) 0;
+    font-size: 0.95rem;
+}
+
+/* ---- 쿠폰 카드 ---- */
+.couponCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e0ccff;
+    border-left: 5px solid #8b62c0;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.couponCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 98, 192, 0.12);
+}
+
+.couponUsed {
+    opacity: 0.55;
+    border-left-color: #ccc;
+}
+
+.couponUsed:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.couponLeft {
+    flex: 1;
+}
+
+.couponDiscount {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #6b3fa0;
+    margin-bottom: 4px;
+}
+
+.couponName {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.couponDesc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.couponRight {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.couponCode {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #8b62c0;
+    background: #f8f0ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.couponExpiry {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e85d75;
+}
+
+.couponOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
