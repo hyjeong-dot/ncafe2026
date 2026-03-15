@@ -57,7 +57,7 @@ public class CouponService {
      */
     @Transactional
     public CouponResponse issueStampRewardCoupon(UUID memberId) {
-        CouponTemplate template = getOrCreateTemplate("아메리카노 무료 쿠폰", CouponType.FREE_DRINK, 0, 0,
+        CouponTemplate template = getOrCreateTemplate("아메리카노 무료 쿠폰", CouponType.FREE_DRINK, 4500, 0,
                 "10잔 적립 완료! 아메리카노 한 잔 무료! ☕", 30);
         Coupon coupon = createCoupon(template, memberId, "STAMP");
         return CouponResponse.from(coupon);

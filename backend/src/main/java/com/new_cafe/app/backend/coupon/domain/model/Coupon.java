@@ -70,7 +70,7 @@ public class Coupon {
         return switch (template.getType()) {
             case FIXED -> Math.min(template.getDiscount(), orderTotal);
             case PERCENT -> orderTotal * template.getDiscount() / 100;
-            case FREE_DRINK -> orderTotal; // 프론트에서 가장 비싼 1잔 가격으로 계산
+            case FREE_DRINK -> Math.min(template.getDiscount(), orderTotal); // 아메리카노 가격(4500원) 고정 할인
         };
     }
 }

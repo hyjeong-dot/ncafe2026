@@ -130,9 +130,7 @@ export function useOrder() {
                 discount = Math.floor(totalPrice * coupon.discount / 100);
                 break;
             case 'FREE_DRINK':
-                // 가장 저렴한 아이템 가격만큼 할인
-                const minPrice = Math.min(...items.map(i => i.price));
-                discount = minPrice;
+                discount = coupon.discount; // 아메리카노 가격 4,500원 고정
                 break;
         }
         setDiscountAmount(Math.min(discount, totalPrice));
