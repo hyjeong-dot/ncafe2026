@@ -127,3 +127,21 @@
         transform: translateY(0) scale(1);
     }
 }
+
+.kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px 5px;
+    margin-left: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: monospace;
+    color: inherit;
+    opacity: 0.6;
+    line-height: 1;
+    vertical-align: middle;
+}

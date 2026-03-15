@@ -62,7 +62,7 @@ export default function Modal({
 
                 <div className={styles.footer}>
                     <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
-                        {cancelText}
+                        {cancelText} <kbd className={styles.kbd}>ESC</kbd>
                     </button>
                     {onConfirm && (
                         <button
