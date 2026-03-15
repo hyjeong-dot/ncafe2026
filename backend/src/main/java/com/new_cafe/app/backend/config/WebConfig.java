@@ -45,8 +45,6 @@ public class WebConfig implements WebMvcConfigurer {
         String cleanLocation = firstLocation.replace("file:", "");
         java.nio.file.Path uploadPath = java.nio.file.Paths.get(cleanLocation, "images").toAbsolutePath().normalize();
         
-        // 리눅스 절대 경로에 가장 확실한 형태는 file:///절대경로/ 또는 file:/절대경로/ 입니다.
-        // 여기서는 명확성을 위해 / 접두어를 보강합니다.
         String absolutePath = uploadPath.toString();
         String resourceLocation = "file:" + (absolutePath.startsWith("/") ? absolutePath : "/" + absolutePath) + "/";
         
