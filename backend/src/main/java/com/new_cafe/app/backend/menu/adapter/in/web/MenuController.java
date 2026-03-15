@@ -43,7 +43,7 @@ public class MenuController {
     /**
      * 메뉴 상세 조회 (slug)
      */
-    @GetMapping("/{slug:[a-z0-9-]+}")
+    @GetMapping("/{slug:[a-z][a-z0-9-]*}")
     public MenuDetailResult getMenuBySlug(@PathVariable String slug) {
         return getMenuDetailUseCase.getAvailableMenuBySlug(slug);
     }
