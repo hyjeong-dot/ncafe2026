@@ -31,13 +31,23 @@ export default function Modal({
         setMounted(true);
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+
+            // ESC 키로 모달 닫기
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === 'Escape') onClose();
+            };
+            document.addEventListener('keydown', handleKeyDown);
+            return () => {
+                document.body.style.overflow = 'unset';
+                document.removeEventListener('keydown', handleKeyDown);
+            };
         } else {
             document.body.style.overflow = 'unset';
         }
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, onClose]);
 
     if (!mounted || !isOpen) return null;
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingBag, X, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,6 +37,16 @@ export default function CartDrawer() {
         setCartOpen(false);
         router.push('/order');
     };
+
+    // ESC 키로 장바구니 닫기
+    useEffect(() => {
+        if (!isCartOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setCartOpen(false);
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isCartOpen, setCartOpen]);
 
     if (!isCartOpen) return null;
 

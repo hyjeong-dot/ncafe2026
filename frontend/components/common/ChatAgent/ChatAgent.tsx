@@ -137,8 +137,15 @@ export default function ChatAgent() {
                 setIsOpen(false);
             }
         };
+        const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+            if (e.key === 'Escape') setIsOpen(false);
+        };
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
     }, [isOpen]);
 
     const sendMessage = async (content: string) => {
