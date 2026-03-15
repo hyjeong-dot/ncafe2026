@@ -194,6 +194,15 @@ export default function ChatAgent() {
             timestamp: new Date(),
         };
 
+        // 메뉴 선택 처리 ([MENU_SELECT:ID:INTENT]) — 메시지 생성 시 바로 menuAction 포함
+        const menuSelectMatch = agentReply.match(/\[MENU_SELECT:(\d+):(ORDER|CART)\]/);
+        if (menuSelectMatch) {
+            agentMessage.menuAction = {
+                menuId: parseInt(menuSelectMatch[1], 10),
+                intent: menuSelectMatch[2] as 'ORDER' | 'CART',
+            };
+        }
+
         setMessages(prev => [...prev, agentMessage]);
         setIsTyping(false);
 
@@ -206,8 +215,8 @@ export default function ChatAgent() {
         if (navMatch) {
             const target = navMatch[1];
             if (target.startsWith('menu_detail_')) {
-                const detailId = target.replace('menu_detail_', '');
-                router.push(`/menus/${detailId}`);
+                const detailSlug = target.replace('menu_detail_', '');
+                router.push(`/menus/${detailSlug}`);
             } else {
                 switch (target) {
                     case 'home':
@@ -227,22 +236,6 @@ export default function ChatAgent() {
                         break;
                 }
             }
-        }
-
-        // 메뉴 선택 처리 ([MENU_SELECT:ID:INTENT]) — 옵션 선택 UI 표시
-        const menuSelectMatch = agentReply.match(/\[MENU_SELECT:(\d+):(ORDER|CART)\]/);
-        if (menuSelectMatch) {
-            const selectedMenuId = parseInt(menuSelectMatch[1], 10);
-            const selectedIntent = menuSelectMatch[2] as 'ORDER' | 'CART';
-
-            // 에이전트 메시지에 menuAction 데이터 추가
-            setMessages(prev =>
-                prev.map(m =>
-                    m.id === agentMessage.id
-                        ? { ...m, menuAction: { menuId: selectedMenuId, intent: selectedIntent } }
-                        : m
-                )
-            );
         }
     };
 
