@@ -11,4 +11,6 @@ public interface StampCardRepository extends JpaRepository<StampCard, Long> {
     Optional<StampCard> findByMemberIdAndCompletedFalse(UUID memberId);
 
     Optional<StampCard> findFirstByMemberIdOrderByCreatedAtDesc(UUID memberId);
+
+    Optional<StampCard> findTopByMemberIdAndCompletedTrueOrderByCreatedAtDesc(UUID memberId);
 }
