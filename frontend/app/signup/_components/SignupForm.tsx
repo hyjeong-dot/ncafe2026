@@ -42,8 +42,40 @@ export default function SignupForm() {
         e.preventDefault();
         setError('');
 
+        // 아이디 검증
+        if (username.trim().length < 3) {
+            setError('아이디는 3자 이상 입력해주세요.');
+            return;
+        }
+
+        // 비밀번호 검증
+        if (password.length < 6) {
+            setError('비밀번호는 6자 이상이어야 합니다.');
+            return;
+        }
+
         if (password !== confirmPassword) {
             setError('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        // 닉네임 검증
+        if (nickname.trim().length < 2) {
+            setError('닉네임은 2자 이상 입력해주세요.');
+            return;
+        }
+
+        // 이메일 검증
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('올바른 이메일 형식을 입력해주세요.');
+            return;
+        }
+
+        // 전화번호 검증 (010-0000-0000 형식)
+        const phoneRegex = /^010-\d{4}-\d{4}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            setError('전화번호를 올바르게 입력해주세요. (예: 010-1234-5678)');
             return;
         }
 

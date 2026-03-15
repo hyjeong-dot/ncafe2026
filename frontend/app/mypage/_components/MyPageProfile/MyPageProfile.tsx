@@ -52,9 +52,40 @@ export default function MyPageProfile() {
     };
 
     const handleSave = async () => {
-        if (password && password !== confirmPassword) {
-            toast.error("비밀번호가 일치하지 않아요! 😢");
+        // 닉네임 검증
+        if (nickname.trim().length < 2) {
+            toast.error("닉네임은 2자 이상 입력해주세요! 💜");
             return;
+        }
+
+        // 이메일 검증
+        if (email.trim()) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                toast.error("올바른 이메일 형식을 입력해주세요! 💜");
+                return;
+            }
+        }
+
+        // 전화번호 검증
+        if (phoneNumber.trim()) {
+            const phoneRegex = /^010-\d{4}-\d{4}$/;
+            if (!phoneRegex.test(phoneNumber)) {
+                toast.error("전화번호를 올바르게 입력해주세요! (010-0000-0000) 💜");
+                return;
+            }
+        }
+
+        // 비밀번호 검증 (입력한 경우만)
+        if (password) {
+            if (password.length < 6) {
+                toast.error("비밀번호는 6자 이상이어야 해요! 💜");
+                return;
+            }
+            if (password !== confirmPassword) {
+                toast.error("비밀번호가 일치하지 않아요! 😢");
+                return;
+            }
         }
 
         setIsSaving(true);

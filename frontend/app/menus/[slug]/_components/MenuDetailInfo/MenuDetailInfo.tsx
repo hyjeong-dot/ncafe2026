@@ -18,9 +18,10 @@ interface MenuDetailInfoProps {
     selectedOptions?: SelectedOptions;
     extraPrice?: number;
     selectedOptionNames?: string[];
+    allRequiredSelected?: boolean;
 }
 
-export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice = 0, selectedOptionNames = [] }: MenuDetailInfoProps) {
+export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice = 0, selectedOptionNames = [], allRequiredSelected = true }: MenuDetailInfoProps) {
     const { menu, isLoading, error } = useMenuDetail(slug);
     const { user } = useAuth();
     const { addItem, setCartOpen } = useCart();
@@ -156,6 +157,10 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
                     className={styles.cartBtn}
                     disabled={menu.isSoldOut}
                     onClick={() => {
+                        if (!allRequiredSelected) {
+                            toast.error('필수 옵션을 모두 선택해주세요! 💜');
+                            return;
+                        }
                         addItem({
                             menuId: menu.id,
                             korName: menu.korName,
@@ -175,6 +180,10 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
                     className={styles.mainCta}
                     disabled={menu.isSoldOut}
                     onClick={() => handleAction(() => {
+                        if (!allRequiredSelected) {
+                            toast.error('필수 옵션을 모두 선택해주세요! 💜');
+                            return;
+                        }
                         setIsOrderModalOpen(true);
                     })}
                 >

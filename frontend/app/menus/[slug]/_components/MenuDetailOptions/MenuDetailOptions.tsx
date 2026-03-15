@@ -27,7 +27,7 @@ export type SelectedOptions = Record<number, number[]>;
 
 interface MenuDetailOptionsProps {
     slug: string;
-    onSelectionChange?: (selections: SelectedOptions, totalExtra: number, selectedNames: string[]) => void;
+    onSelectionChange?: (selections: SelectedOptions, totalExtra: number, selectedNames: string[], metas?: { id: number; isRequired: boolean }[]) => void;
 }
 
 export default function MenuDetailOptions({ slug, onSelectionChange }: MenuDetailOptionsProps) {
@@ -99,7 +99,8 @@ export default function MenuDetailOptions({ slug, onSelectionChange }: MenuDetai
 
     useEffect(() => {
         if (onSelectionChange && options.length > 0) {
-            onSelectionChange(selections, calcExtra(selections), getSelectedNames(selections));
+            const metas = options.map(o => ({ id: o.id, isRequired: o.isRequired }));
+            onSelectionChange(selections, calcExtra(selections), getSelectedNames(selections), metas);
         }
     }, [selections, onSelectionChange, calcExtra, getSelectedNames, options.length]);
 
