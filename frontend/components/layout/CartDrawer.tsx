@@ -60,7 +60,7 @@ export default function CartDrawer() {
                             <h2>장바구니 <span>({items.length})</span></h2>
                         </div>
                         <button className={styles.closeBtn} onClick={() => setCartOpen(false)}>
-                            <X size={24} />
+                            <X size={24} /> <kbd className={styles.kbd}>ESC</kbd>
                         </button>
                     </div>
 

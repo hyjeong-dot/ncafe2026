@@ -212,14 +212,15 @@
 }
 
 .closeButton {
-    width: 32px;
     height: 32px;
-    border-radius: 50%;
+    padding: 0 10px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.15);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
     cursor: pointer;
     border: none;
     transition: all 200ms ease;
@@ -228,7 +229,18 @@
 
 .closeButton:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
+}
+
+.kbd {
+    font-size: 0.6rem;
+    font-weight: 700;
+    font-family: monospace;
+    padding: 1px 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1;
 }
 
 /* ---- Messages Area ---- */

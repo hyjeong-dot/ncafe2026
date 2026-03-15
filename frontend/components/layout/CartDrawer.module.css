@@ -63,12 +63,28 @@
     border: none;
     color: #8b62c0;
     cursor: pointer;
-    padding: 0.2rem;
-    transition: transform 200ms ease;
+    padding: 0.3rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 8px;
+    transition: all 200ms ease;
 }
 
 .closeBtn:hover {
-    transform: rotate(90deg);
+    background: #f8f4ff;
+}
+
+.kbd {
+    font-size: 0.6rem;
+    font-weight: 700;
+    font-family: monospace;
+    padding: 1px 4px;
+    background: #f0e6ff;
+    border: 1px solid #e0ccff;
+    border-radius: 3px;
+    color: #a87edb;
+    line-height: 1;
 }
 
 .content {
