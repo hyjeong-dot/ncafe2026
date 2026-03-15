@@ -40,18 +40,20 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(
             org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
-        
+
         String firstLocation = uploadLocation.split(",")[0].trim();
         String cleanLocation = firstLocation.replace("file:", "");
         java.nio.file.Path uploadPath = java.nio.file.Paths.get(cleanLocation, "images").toAbsolutePath().normalize();
-        
+
+        // 리눅스 절대 경로에 가장 확실한 형태는 file:///절대경로/ 또는 file:/절대경로/ 입니다.
+        // 여기서는 명확성을 위해 / 접두어를 보강합니다.
         String absolutePath = uploadPath.toString();
         String resourceLocation = "file:" + (absolutePath.startsWith("/") ? absolutePath : "/" + absolutePath) + "/";
-        
+
         System.out.println("DEBUG: Static Resource Handler Configured:");
         System.out.println("  - Path patterns: [/images/**, /upload/images/**]");
         System.out.println("  - Physical location: " + resourceLocation);
-        
+
         registry.addResourceHandler("/images/**", "/upload/images/**")
                 .addResourceLocations(resourceLocation);
     }

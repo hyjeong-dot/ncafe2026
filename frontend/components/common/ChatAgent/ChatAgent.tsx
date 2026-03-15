@@ -155,23 +155,30 @@ export default function ChatAgent() {
         setInputValue('');
         setIsTyping(true);
 
-        let agentReply = '';
+        const agentMessageId = `agent-${Date.now()}`;
+        let fullReply = '';
+
         try {
-            // Chat 메시지 내역을 Agent API 형식에 맞게 변환
             const formattedMessages = messages.map(m => ({
                 role: m.role === 'agent' ? 'model' : 'user',
                 content: m.content
             }));
-
-            // 현재 사용자 메시지 추가
             formattedMessages.push({ role: 'user', content: content.trim() });
+
+            // 빈 에이전트 메시지를 미리 추가 (스트리밍 대상)
+            setMessages(prev => [...prev, {
+                id: agentMessageId,
+                role: 'agent',
+                content: '',
+                timestamp: new Date(),
+            }]);
 
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     messages: formattedMessages,
-                    stream: false,
+                    stream: true,
                     userContext: user ? {
                         nickname: user.name,
                         role: user.role,
@@ -180,30 +187,79 @@ export default function ChatAgent() {
                 }),
             });
 
-            const data = await res.json();
-            agentReply = data.reply;
+            if (!res.ok || !res.body) {
+                throw new Error(`API request failed: ${res.status}`);
+            }
+
+            // SSE 스트리밍 파싱
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder('utf-8', { fatal: false });
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed.startsWith('data: ')) {
+                        const data = trimmed.slice(6);
+                        if (data === '[DONE]') break;
+
+                        try {
+                            const parsed = JSON.parse(data);
+                            if (parsed.content) {
+                                fullReply += parsed.content;
+                                const currentReply = fullReply;
+                                setMessages(prev =>
+                                    prev.map(msg =>
+                                        msg.id === agentMessageId
+                                            ? { ...msg, content: currentReply }
+                                            : msg
+                                    )
+                                );
+                            }
+                        } catch {
+                            // 불완전한 JSON 무시
+                        }
+                    }
+                }
+            }
         } catch (error) {
             console.error('Chat API error:', error);
-            agentReply = '삐릿...? 앗, 코드가 엉켜버렸몽... (._.) 내 몸이 굳어버렸당. 다시 부드럽게 반죽해 주세몽! 🫠';
+            fullReply = '삐릿...? 앗, 코드가 엉켜버렸몽... (._.) 내 몸이 굳어버렸당. 다시 부드럽게 반죽해 주세몽! 🫠';
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg.id === agentMessageId
+                        ? { ...msg, content: fullReply }
+                        : msg
+                )
+            );
         }
 
-        const agentMessage: Message = {
-            id: `agent-${Date.now()}`,
-            role: 'agent',
-            content: agentReply,
-            timestamp: new Date(),
-        };
-
-        // 메뉴 선택 처리 ([MENU_SELECT:ID:INTENT]) — 메시지 생성 시 바로 menuAction 포함
-        const menuSelectMatch = agentReply.match(/\[MENU_SELECT:(\d+):(ORDER|CART)\]/);
+        // 스트리밍 완료 후 태그 파싱
+        const menuSelectMatch = fullReply.match(/\[MENU_SELECT:(\d+):(ORDER|CART)\]/);
         if (menuSelectMatch) {
-            agentMessage.menuAction = {
-                menuId: parseInt(menuSelectMatch[1], 10),
-                intent: menuSelectMatch[2] as 'ORDER' | 'CART',
-            };
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg.id === agentMessageId
+                        ? {
+                            ...msg,
+                            menuAction: {
+                                menuId: parseInt(menuSelectMatch[1], 10),
+                                intent: menuSelectMatch[2] as 'ORDER' | 'CART',
+                            }
+                        }
+                        : msg
+                )
+            );
         }
 
-        setMessages(prev => [...prev, agentMessage]);
         setIsTyping(false);
 
         if (!isOpen) {
@@ -211,7 +267,7 @@ export default function ChatAgent() {
         }
 
         // 화면 이동 처리 ([NAV:target])
-        const navMatch = agentReply.match(/\[NAV:([\w-]+)\]/);
+        const navMatch = fullReply.match(/\[NAV:([\w-]+)\]/);
         if (navMatch) {
             const target = navMatch[1];
             if (target.startsWith('menu_detail_')) {

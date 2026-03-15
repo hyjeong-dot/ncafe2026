@@ -1,5 +1,5 @@
 import json
-from typing import Generator, Optional
+from typing import AsyncGenerator, Generator, Optional
 from google import genai
 from google.genai import types
 from app.config import GEMINI_API_KEY
@@ -110,12 +110,12 @@ def chat(messages: list[dict], user_context: Optional[dict] = None) -> str:
     )
     return response.text
 
-def chat_stream(messages: list[dict], user_context: Optional[dict] = None) -> Generator[str, None, None]:
+async def chat_stream(messages: list[dict], user_context: Optional[dict] = None) -> AsyncGenerator[str, None]:
     # 마지막 사용자 메시지를 추출하여 검색에 사용
     user_query = messages[-1]['parts'][0]['text'] if messages else ""
     system_prompt = get_augmented_prompt(user_query, user_context)
     
-    response = client.models.generate_content_stream(
+    response = await client.aio.models.generate_content_stream(
         model='gemini-2.5-flash',
         contents=messages,
         config=types.GenerateContentConfig(
@@ -123,6 +123,6 @@ def chat_stream(messages: list[dict], user_context: Optional[dict] = None) -> Ge
             tools=[get_menu_info, get_cafe_settings, navigate, select_menu]
         )
     )
-    for chunk in response:
+    async for chunk in response:
         if chunk.text:
             yield chunk.text
