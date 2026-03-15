@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class CreateOrderRequest {
     private String orderType; // DINE_IN or TAKEOUT
     private String requestMemo;
+    private Long couponId; // nullable
     private List<OrderLineItemRequest> items;
 
     public CreateOrderCommand toCommand(String username) {
@@ -22,6 +23,7 @@ public class CreateOrderRequest {
                 .username(username)
                 .orderType(OrderType.valueOf(this.orderType))
                 .requestMemo(this.requestMemo)
+                .couponId(this.couponId)
                 .items(this.items.stream()
                         .map(item -> OrderLineItemCommand.builder()
                                 .menuId(item.getMenuId())

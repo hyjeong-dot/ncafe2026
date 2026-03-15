@@ -24,6 +24,19 @@ function loadTossScript(): Promise<any> {
     });
 }
 
+export interface CouponData {
+    id: number;
+    name: string;
+    description: string;
+    type: string;
+    discount: number;
+    minOrder: number;
+    code: string;
+    status: string;
+    usable: boolean;
+    expiresAt: string;
+}
+
 export function useOrder() {
     const router = useRouter();
     const { user, isLoading: authLoading } = useAuth();
@@ -37,6 +50,11 @@ export function useOrder() {
     const [requestMemo, setRequestMemo] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
+
+    // 쿠폰 관련 상태
+    const [availableCoupons, setAvailableCoupons] = useState<CouponData[]>([]);
+    const [selectedCouponId, setSelectedCouponId] = useState<number | null>(null);
+    const [discountAmount, setDiscountAmount] = useState(0);
 
     // Redirect to login if unauthenticated or menus if empty cart
     useEffect(() => {
@@ -73,6 +91,55 @@ export function useOrder() {
         setCartOpen(false);
     }, [setCartOpen]);
 
+    // 사용 가능한 쿠폰 불러오기
+    useEffect(() => {
+        if (user) {
+            fetchAPI('/coupons/active')
+                .then(data => setAvailableCoupons(data || []))
+                .catch(err => console.error('Failed to load coupons:', err));
+        }
+    }, [user]);
+
+    // 쿠폰 선택 시 할인 계산
+    const handleCouponSelect = (couponId: number | null) => {
+        setSelectedCouponId(couponId);
+        if (!couponId) {
+            setDiscountAmount(0);
+            return;
+        }
+        const coupon = availableCoupons.find(c => c.id === couponId);
+        if (!coupon) {
+            setDiscountAmount(0);
+            return;
+        }
+
+        // 최소 주문 금액 체크
+        if (coupon.minOrder > 0 && totalPrice < coupon.minOrder) {
+            toast.error(`최소 주문 금액 ${coupon.minOrder.toLocaleString()}원 이상이어야 해요!`);
+            setSelectedCouponId(null);
+            setDiscountAmount(0);
+            return;
+        }
+
+        let discount = 0;
+        switch (coupon.type) {
+            case 'FIXED':
+                discount = coupon.discount;
+                break;
+            case 'PERCENT':
+                discount = Math.floor(totalPrice * coupon.discount / 100);
+                break;
+            case 'FREE_DRINK':
+                // 가장 저렴한 아이템 가격만큼 할인
+                const minPrice = Math.min(...items.map(i => i.price));
+                discount = minPrice;
+                break;
+        }
+        setDiscountAmount(Math.min(discount, totalPrice));
+    };
+
+    const finalPrice = Math.max(0, totalPrice - discountAmount);
+
     const handleSubmitOrder = async () => {
         if (items.length === 0) return;
         if (!orderType) {
@@ -102,6 +169,7 @@ export function useOrder() {
                 body: JSON.stringify({
                     orderType,
                     requestMemo: fullMemo,
+                    couponId: selectedCouponId,
                     items: formattedItems
                 })
             });
@@ -154,6 +222,7 @@ export function useOrder() {
         isLoading,
         items,
         totalPrice,
+        finalPrice,
         orderType,
         setOrderType,
         requestMemo,
@@ -161,6 +230,11 @@ export function useOrder() {
         isSubmitting,
         isSuccessModalOpen,
         handleSubmitOrder,
-        handleSuccessConfirm
+        handleSuccessConfirm,
+        // 쿠폰
+        availableCoupons,
+        selectedCouponId,
+        handleCouponSelect,
+        discountAmount
     };
 }

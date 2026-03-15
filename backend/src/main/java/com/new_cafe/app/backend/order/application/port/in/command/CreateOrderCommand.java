@@ -13,5 +13,6 @@ public class CreateOrderCommand {
     private final String username;
     private final OrderType orderType;
     private final String requestMemo;
+    private final Long couponId; // nullable
     private final List<OrderLineItemCommand> items;
 }

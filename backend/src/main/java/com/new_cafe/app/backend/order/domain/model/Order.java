@@ -43,6 +43,13 @@ public class Order {
     @Column(name = "payment_key", length = 200)
     private String paymentKey;
 
+    @Column(name = "coupon_id")
+    private Long couponId;
+
+    @Builder.Default
+    @Column(name = "discount_amount", nullable = false)
+    private int discountAmount = 0;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<OrderLineItem> items = new ArrayList<>();
@@ -62,6 +69,11 @@ public class Order {
         this.totalPrice = items.stream()
                 .mapToInt(item -> item.getPrice() * item.getQuantity())
                 .sum();
+    }
+
+    public void applyDiscount(int discount) {
+        this.discountAmount = discount;
+        this.totalPrice = Math.max(0, this.totalPrice - discount);
     }
 
     @PrePersist

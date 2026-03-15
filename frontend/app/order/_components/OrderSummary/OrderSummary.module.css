@@ -65,8 +65,40 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.5rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--border-color);
+}
+
+.originalPrice {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.discountRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.discountLabel {
+    font-size: 0.95rem;
+    color: #e85d75;
+}
+
+.discountPrice {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e85d75;
+}
+
+.finalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 2px solid var(--ditto-600);
     margin-bottom: 2rem;
 }
 
@@ -79,6 +111,45 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--ditto-600);
+}
+
+/* 쿠폰 선택 */
+.couponSection {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.couponLabel {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.couponSelect {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #e0ccff;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    background: #faf8ff;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 200ms;
+}
+
+.couponSelect:focus {
+    border-color: var(--ditto-600);
+}
+
+.discountInfo {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #e85d75;
 }
 
 .submitBtn {

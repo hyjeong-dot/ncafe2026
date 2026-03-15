@@ -10,6 +10,7 @@ export default function OrderPage() {
         isLoading,
         items,
         totalPrice,
+        finalPrice,
         orderType,
         setOrderType,
         requestMemo,
@@ -17,7 +18,11 @@ export default function OrderPage() {
         isSubmitting,
         isSuccessModalOpen,
         handleSubmitOrder,
-        handleSuccessConfirm
+        handleSuccessConfirm,
+        availableCoupons,
+        selectedCouponId,
+        handleCouponSelect,
+        discountAmount
     } = useOrder();
 
     if (isLoading) {
@@ -41,8 +46,13 @@ export default function OrderPage() {
                 <OrderSummary
                     items={items}
                     totalPrice={totalPrice}
+                    finalPrice={finalPrice}
                     isSubmitting={isSubmitting}
                     onSubmit={handleSubmitOrder}
+                    availableCoupons={availableCoupons}
+                    selectedCouponId={selectedCouponId}
+                    onCouponSelect={handleCouponSelect}
+                    discountAmount={discountAmount}
                 />
             </div>
 

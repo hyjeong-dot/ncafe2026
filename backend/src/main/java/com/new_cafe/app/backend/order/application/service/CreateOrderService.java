@@ -58,6 +58,21 @@ public class CreateOrderService implements CreateOrderUseCase {
         });
 
         order.calculateTotalPrice();
+
+        // 쿠폰 할인 적용
+        if (command.getCouponId() != null) {
+            try {
+                int discount = couponService.calculateAndUseCoupon(
+                        command.getCouponId(), member.getId(), order.getTotalPrice());
+                order.setCouponId(command.getCouponId());
+                order.applyDiscount(discount);
+                log.info("Coupon {} applied, discount: {}원", command.getCouponId(), discount);
+            } catch (Exception e) {
+                log.warn("Coupon apply failed: {}", e.getMessage());
+                // 쿠폰 적용 실패해도 주문은 진행
+            }
+        }
+
         Order savedOrder = orderPort.saveOrder(order);
 
         // 스탬프 카드 적립 (상품 수량만큼)

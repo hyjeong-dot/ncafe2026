@@ -103,6 +103,26 @@ public class CouponService {
     }
 
     /**
+     * 쿠폰 할인 계산 + 사용 처리 (주문 시 호출)
+     * @return 할인 금액
+     */
+    @Transactional
+    public int calculateAndUseCoupon(Long couponId, UUID memberId, int orderTotal) {
+        Coupon coupon = couponRepository.findByIdAndMemberId(couponId, memberId)
+                .orElseThrow(() -> new IllegalArgumentException("쿠폰을 찾을 수 없습니다."));
+
+        if (!coupon.isUsable()) {
+            throw new IllegalStateException("사용할 수 없는 쿠폰입니다.");
+        }
+
+        int discount = coupon.calculateDiscount(orderTotal);
+        coupon.use();
+        couponRepository.save(coupon);
+        log.info("Coupon {} used for order, discount: {}원", couponId, discount);
+        return discount;
+    }
+
+    /**
      * 스탬프 추가 (주문 시 상품 수량만큼)
      */
     @Transactional
