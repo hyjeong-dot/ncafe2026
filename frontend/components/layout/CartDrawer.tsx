@@ -34,6 +34,7 @@ export default function CartDrawer() {
             setLoginModalOpen(true);
             return;
         }
+        sessionStorage.removeItem('directOrder'); // 바로 주문 데이터 충돌 방지
         setCartOpen(false);
         router.push('/order');
     };

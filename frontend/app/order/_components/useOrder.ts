@@ -79,12 +79,22 @@ export function useOrder() {
                 setIsDirectOrder(true);
             } catch (e) {
                 console.error("Failed to parse direct order", e);
+                sessionStorage.removeItem('directOrder');
             }
         } else {
             setItems(cartItems);
             setTotalPrice(cartItems.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0));
             setIsDirectOrder(false);
         }
+
+        // 주문 페이지 벗어날 때 directOrder 정리
+        return () => {
+            if (!isDirectOrder) return;
+            // 결제 진행 중이 아니면 정리
+            if (!isSubmitting) {
+                sessionStorage.removeItem('directOrder');
+            }
+        };
     }, [cartItems]);
 
     useEffect(() => {
