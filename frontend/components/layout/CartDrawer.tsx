@@ -59,9 +59,12 @@ export default function CartDrawer() {
                             <ShoppingBag size={20} className={styles.bagIcon} />
                             <h2>장바구니 <span>({items.length})</span></h2>
                         </div>
-                        <button className={styles.closeBtn} onClick={() => setCartOpen(false)}>
-                            <X size={24} /> <kbd className={styles.kbd}>ESC</kbd>
-                        </button>
+                        <div className={styles.headerActions}>
+                            <kbd className={styles.kbdBadge}>ESC</kbd>
+                            <button className={styles.closeBtn} onClick={() => setCartOpen(false)} aria-label="닫기">
+                                <X size={24} />
+                            </button>
+                        </div>
                     </div>
 
                     <div className={styles.content}>

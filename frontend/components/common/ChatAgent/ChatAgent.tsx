@@ -395,9 +395,12 @@ export default function ChatAgent() {
                                 </div>
                             </div>
                         </div>
-                        <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="닫기">
-                            <X size={16} /> <kbd className={styles.kbd}>ESC</kbd>
-                        </button>
+                        <div className={styles.headerActions}>
+                            <kbd className={styles.kbdBadge}>ESC</kbd>
+                            <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="닫기">
+                                <X size={16} />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Messages */}
