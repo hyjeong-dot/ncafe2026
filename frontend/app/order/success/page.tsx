@@ -3,11 +3,14 @@
 import { useEffect, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle, Loader2 } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { fetchAPI } from '@/lib/api';
 import styles from './page.module.css';
 
 export default function PaymentSuccessPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { clearCart } = useCart();
     const [status, setStatus] = useState<'confirming' | 'success' | 'error'>('confirming');
     const [errorMessage, setErrorMessage] = useState('');
     const confirmedRef = useRef(false);
@@ -19,6 +22,7 @@ export default function PaymentSuccessPage() {
         const paymentKey = searchParams.get('paymentKey');
         const orderId = searchParams.get('orderId');
         const amount = searchParams.get('amount');
+        const clearCartType = searchParams.get('clearCart');
 
         if (!paymentKey || !orderId || !amount) {
             setStatus('error');
@@ -41,6 +45,13 @@ export default function PaymentSuccessPage() {
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(errorData.message || '결제 승인에 실패했습니다.');
+                }
+
+                // 결제 성공 후 장바구니 정리
+                if (clearCartType === 'direct') {
+                    sessionStorage.removeItem('directOrder');
+                } else if (clearCartType === 'cart') {
+                    await clearCart();
                 }
 
                 setStatus('success');

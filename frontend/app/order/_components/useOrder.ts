@@ -58,7 +58,7 @@ export function useOrder() {
 
     // Redirect to login if unauthenticated or menus if empty cart
     useEffect(() => {
-        if (!authLoading) {
+        if (!authLoading && !isSubmitting) {
             if (!user) {
                 toast.error('로그인이 필요합니다.');
                 router.replace('/login?redirect=/order');
@@ -67,7 +67,7 @@ export function useOrder() {
                 router.replace('/menus');
             }
         }
-    }, [user, authLoading, items, cartItems, router, isSuccessModalOpen]);
+    }, [user, authLoading, items, cartItems, router, isSuccessModalOpen, isSubmitting]);
 
     useEffect(() => {
         const directOrderStr = sessionStorage.getItem('directOrder');
@@ -184,14 +184,7 @@ export function useOrder() {
 
             const { orderUid, totalPrice: orderTotal } = orderResult;
 
-            // 장바구니/directOrder 정리
-            if (isDirectOrder) {
-                sessionStorage.removeItem('directOrder');
-            } else {
-                await clearCart();
-            }
-
-            // 2. 토스페이먼츠 V1 결제 요청
+            // 2. 토스페이먼츠 V1 결제 요청 (장바구니 정리는 결제 성공 후)
             const TossPayments = await loadTossScript();
             const tossPayments = TossPayments(TOSS_CLIENT_KEY);
 
@@ -199,12 +192,16 @@ export function useOrder() {
                 ? `${items[0].korName} 외 ${items.length - 1}건`
                 : items[0].korName;
 
+            // 결제 성공 URL에 정리 플래그 전달
+            const successParams = new URLSearchParams();
+            successParams.set('clearCart', isDirectOrder ? 'direct' : 'cart');
+
             tossPayments.requestPayment('카드', {
                 amount: orderTotal,
                 orderId: orderUid,
                 orderName,
                 customerName: user?.name || '고객',
-                successUrl: `${window.location.origin}/order/success`,
+                successUrl: `${window.location.origin}/order/success?${successParams.toString()}`,
                 failUrl: `${window.location.origin}/order/fail`,
             });
 

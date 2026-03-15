@@ -28,6 +28,7 @@ public class GetMyOrdersService implements GetMyOrdersUseCase {
         return orderPort.findAllByMemberIdOrderByCreatedAtDesc(member.getId()).stream()
                 .map(order -> OrderResult.builder()
                         .orderId(order.getId())
+                        .orderUid(order.getOrderUid())
                         .totalPrice(order.getTotalPrice())
                         .orderType(order.getOrderType())
                         .status(order.getStatus())

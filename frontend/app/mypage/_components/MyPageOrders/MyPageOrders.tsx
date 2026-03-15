@@ -10,11 +10,14 @@ import toast from 'react-hot-toast';
 
 interface OrderResult {
     orderId: number;
+    orderUid: string;
     totalPrice: number;
     orderType: string;
     status: string;
     createdAt: string;
 }
+
+const TOSS_CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || '';
 
 const getStatusBadge = (status: string) => {
     switch (status) {
@@ -78,6 +81,33 @@ export default function MyPageOrders() {
         }
     };
 
+    const handlePayOrder = async (order: OrderResult) => {
+        try {
+            const script = document.createElement('script');
+            script.src = 'https://js.tosspayments.com/v1/payment';
+            
+            await new Promise<void>((resolve, reject) => {
+                if ((window as any).TossPayments) { resolve(); return; }
+                script.onload = () => resolve();
+                script.onerror = () => reject();
+                document.head.appendChild(script);
+            });
+
+            const TossPayments = (window as any).TossPayments;
+            const tossPayments = TossPayments(TOSS_CLIENT_KEY);
+
+            tossPayments.requestPayment('카드', {
+                amount: order.totalPrice,
+                orderId: order.orderUid,
+                orderName: `주문 #${order.orderId}`,
+                successUrl: `${window.location.origin}/order/success`,
+                failUrl: `${window.location.origin}/order/fail`,
+            });
+        } catch (error) {
+            toast.error('결제 모듈 로드에 실패했습니다.');
+        }
+    };
+
     if (isLoading) {
         return (
             <div className={styles.content}>
@@ -120,6 +150,23 @@ export default function MyPageOrders() {
                                 <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>
                                     {getStatusBadge(order.status)}
                                 </div>
+                                {order.status === 'PENDING' && (
+                                    <button 
+                                        onClick={() => handlePayOrder(order)}
+                                        style={{
+                                            padding: '4px 12px',
+                                            background: 'var(--ditto-600)',
+                                            border: 'none',
+                                            color: '#fff',
+                                            fontSize: '0.85rem',
+                                            borderRadius: '6px',
+                                            cursor: 'pointer',
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        결제하기
+                                    </button>
+                                )}
                                 {(order.status === 'PENDING' || order.status === 'PAID') && (
                                     <button 
                                         onClick={() => handleCancelOrderClick(order.orderId)}
