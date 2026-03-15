@@ -1,7 +1,6 @@
 package com.new_cafe.app.backend.cart.adapter.in.web.dto;
 
 import com.new_cafe.app.backend.cart.application.command.AddCartItemCommand;
-import com.new_cafe.app.backend.cart.application.command.UpdateCartItemCommand;
 import lombok.Data;
 import java.util.List;
 import java.util.UUID;
@@ -20,14 +19,6 @@ public class CartItemRequest {
                 .quantity(quantity)
                 .unitPrice(unitPrice)
                 .selectedOptionNames(selectedOptionNames)
-                .build();
-    }
-
-    public UpdateCartItemCommand toUpdateCommand(UUID memberId, Long menuId) {
-        return UpdateCartItemCommand.builder()
-                .memberId(memberId)
-                .menuId(menuId)
-                .quantity(quantity)
                 .build();
     }
 }

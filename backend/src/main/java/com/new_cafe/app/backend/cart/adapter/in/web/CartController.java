@@ -6,6 +6,7 @@ import com.new_cafe.app.backend.cart.application.port.in.GetCartItemsUseCase;
 import com.new_cafe.app.backend.cart.application.port.in.RemoveCartItemUseCase;
 import com.new_cafe.app.backend.cart.application.port.in.UpdateCartItemUseCase;
 import com.new_cafe.app.backend.cart.application.command.RemoveCartItemCommand;
+import com.new_cafe.app.backend.cart.application.command.UpdateCartItemCommand;
 import com.new_cafe.app.backend.cart.application.command.ClearCartCommand;
 import com.new_cafe.app.backend.cart.application.result.CartItemResult;
 import com.new_cafe.app.backend.cart.adapter.in.web.dto.CartItemRequest;
@@ -62,19 +63,30 @@ public class CartController {
         return ResponseEntity.ok(Map.of("message", "장바구니에 추가되었습니다."));
     }
 
-    @PutMapping("/items/{menuId}")
-    public ResponseEntity<?> updateQuantity(@PathVariable Long menuId, @RequestBody CartItemRequest request) {
+    /**
+     * 수량 변경 - cartItemId(DB PK) 기반
+     */
+    @PutMapping("/items/{cartItemId}")
+    public ResponseEntity<?> updateQuantity(@PathVariable Long cartItemId, @RequestBody CartItemRequest request) {
         Member member = getCurrentMember();
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
         
-        updateCartItemUseCase.updateQuantity(request.toUpdateCommand(member.getId(), menuId));
+        UpdateCartItemCommand command = UpdateCartItemCommand.builder()
+                .memberId(member.getId())
+                .cartItemId(cartItemId)
+                .quantity(request.getQuantity())
+                .build();
+        updateCartItemUseCase.updateQuantity(command);
         return ResponseEntity.ok(Map.of("message", "수량이 변경되었습니다."));
     }
 
-    @DeleteMapping("/items/{menuId}")
-    public ResponseEntity<?> removeItem(@PathVariable Long menuId) {
+    /**
+     * 삭제 - cartItemId(DB PK) 기반
+     */
+    @DeleteMapping("/items/{cartItemId}")
+    public ResponseEntity<?> removeItem(@PathVariable Long cartItemId) {
         Member member = getCurrentMember();
         if (member == null) {
             return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
@@ -82,7 +94,7 @@ public class CartController {
         
         RemoveCartItemCommand command = RemoveCartItemCommand.builder()
                 .memberId(member.getId())
-                .menuId(menuId)
+                .cartItemId(cartItemId)
                 .build();
                 
         removeCartItemUseCase.removeItem(command);

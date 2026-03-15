@@ -8,6 +8,6 @@ import java.util.UUID;
 @Builder
 public class UpdateCartItemCommand {
     private final UUID memberId;
-    private final Long menuId;
+    private final Long cartItemId;  // cart_items 테이블의 PK
     private final int quantity;
 }

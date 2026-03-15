@@ -23,8 +23,9 @@ public class UpdateCartItemService implements UpdateCartItemUseCase {
                     return cartPersistencePort.save(newCart);
                 });
         
+        // cart_items PK로 수량 변경
         cart.getItems().stream()
-                .filter(item -> item.getMenuId().equals(command.getMenuId()))
+                .filter(item -> item.getId().equals(command.getCartItemId()))
                 .findFirst()
                 .ifPresent(item -> item.setQuantity(command.getQuantity()));
                 

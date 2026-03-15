@@ -157,7 +157,7 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
                     disabled={menu.isSoldOut}
                     onClick={() => {
                         addItem({
-                            id: menu.id.toString(),
+                            menuId: menu.id,
                             korName: menu.korName,
                             engName: menu.engName,
                             price: menu.price + extraPrice,
@@ -209,6 +209,7 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
                     // 옵션: 장바구니에 담지 않고 SessionStorage를 활용하여 단건 결제 데이터만 넘김
                     sessionStorage.setItem('directOrder', JSON.stringify([{
                         id: menu.id.toString(),
+                        menuId: menu.id,
                         korName: menu.korName,
                         engName: menu.engName,
                         price: menu.price + extraPrice,

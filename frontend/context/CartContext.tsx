@@ -6,19 +6,20 @@ import { useAuth } from './AuthContext';
 import { fetchAPI } from '../lib/api';
 
 export interface CartItem {
-    id: string; // backend returns menuId as id
+    id: string;           // 로그인: cart_items DB PK, 비로그인: 자동 생성 키
+    menuId?: number;      // 메뉴 ID (서버에서 반환)
     korName: string;
     engName: string;
-    price: number;
+    price: number;        // 옵션 포함 최종 단가
     quantity: number;
     image?: string;
-    imageSrc?: string; // For backward compatibility with server response
-    selectedOptionNames?: string[];  // 선택한 옵션 표시용 (예: ["Large", "ICE", "샷 추가"])
+    imageSrc?: string;
+    selectedOptionNames?: string[];  // 선택한 옵션 이름들
 }
 
 interface CartContextType {
     items: CartItem[];
-    addItem: (item: Omit<CartItem, 'quantity'>) => Promise<void>;
+    addItem: (item: Omit<CartItem, 'quantity' | 'id'> & { id?: string; menuId?: number }) => Promise<void>;
     removeItem: (id: string) => Promise<void>;
     updateQuantity: (id: string, quantity: number) => Promise<void>;
     clearCart: () => Promise<void>;
@@ -30,6 +31,17 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+/**
+ * 비회원 장바구니 키 생성: menuId + 옵션 조합으로 유일한 키
+ * 같은 메뉴라도 옵션이 다르면 별도 항목
+ */
+function generateCartKey(menuId: string | number, optionNames?: string[]): string {
+    const base = String(menuId);
+    if (!optionNames || optionNames.length === 0) return `local-${base}`;
+    const optionKey = [...optionNames].sort().join('|');
+    return `local-${base}-${optionKey}`;
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useAuth();
     const [items, setItems] = useState<CartItem[]>([]);
@@ -38,23 +50,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     // Initial load: either from API if user exists, or from localStorage
     useEffect(() => {
-        if (isLoading) return; // wait till auth is checked
+        if (isLoading) return;
         
         const loadCart = async () => {
             if (user) {
                 try {
-                    // 1. 로그인 직후라면 로컬스토리지의 비회원 장바구니 데이터를 서버와 합칩니다 (Migration)
+                    // 1. 비회원 장바구니 → 서버 마이그레이션
                     const savedCart = localStorage.getItem('ncafe-cart');
                     if (savedCart) {
                         const guestItems: CartItem[] = JSON.parse(savedCart);
                         if (guestItems.length > 0) {
-                            // 비회원 장바구니 아이템들을 순차적으로 서버에 추가
                             for (const item of guestItems) {
+                                const menuId = item.menuId || parseInt(item.id);
                                 await fetchAPI('/cart/items', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ 
-                                        menuId: parseInt(item.id), 
+                                        menuId, 
                                         quantity: item.quantity,
                                         unitPrice: item.price,
                                         selectedOptionNames: item.selectedOptionNames || null
@@ -62,12 +74,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                                 });
                             }
                         }
-                        // 합치기 완료 후 비회원 장바구니 데이터 삭제
                         localStorage.removeItem('ncafe-cart');
                         toast.success('비회원님이 담으셨던 메뉴를 장바구니에 합쳤어몽! 💜');
                     }
 
-                    // 2. 최종적으로 서버의 장바구니 데이터를 가져와 상태를 동기화합니다.
+                    // 2. 서버 장바구니 동기화
                     const data = await fetchAPI('/cart');
                     setItems(data || []);
                 } catch (error) {
@@ -91,43 +102,54 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         loadCart();
     }, [user, isLoading]);
 
-    // Save strictly to localStorage whenever it changes IF NO USER
+    // 비회원일 때만 localStorage에 저장
     useEffect(() => {
         if (isCartLoaded && !user) {
             localStorage.setItem('ncafe-cart', JSON.stringify(items));
         }
     }, [items, user, isCartLoaded]);
 
-    const addItem = async (newItem: Omit<CartItem, 'quantity'>) => {
-        // update local state first for optimistic UI response
-        setItems(prev => {
-            const existingItem = prev.find(item => item.id === newItem.id);
-            if (existingItem) {
-                return prev.map(item =>
-                    item.id === newItem.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            }
-            return [...prev, { ...newItem, quantity: 1 }];
-        });
+    const addItem = async (newItem: Omit<CartItem, 'quantity' | 'id'> & { id?: string; menuId?: number }) => {
+        const menuId = newItem.menuId || parseInt(newItem.id || '0');
 
         if (user) {
+            // 로그인 상태: 서버에 추가 후 전체 동기화
             try {
                 await fetchAPI('/cart/items', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        menuId: parseInt(newItem.id), 
+                        menuId, 
                         quantity: 1,
                         unitPrice: newItem.price,
                         selectedOptionNames: newItem.selectedOptionNames || null
                     })
                 });
+                // 서버에서 최신 상태 다시 가져오기 (DB PK 포함)
+                const data = await fetchAPI('/cart');
+                setItems(data || []);
             } catch(e) {
                 console.error("Failed to sync add item to cart API:", e);
-                // In a perfect world, rollback state if fails. Assuming optimistic works.
             }
+        } else {
+            // 비로그인: localStorage 기반, 같은 메뉴+옵션이면 수량 증가
+            const cartKey = generateCartKey(menuId, newItem.selectedOptionNames);
+            setItems(prev => {
+                const existingItem = prev.find(item => item.id === cartKey);
+                if (existingItem) {
+                    return prev.map(item =>
+                        item.id === cartKey
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    );
+                }
+                return [...prev, { 
+                    ...newItem, 
+                    id: cartKey,
+                    menuId,
+                    quantity: 1 
+                }];
+            });
         }
 
         toast.success(`${newItem.korName}을(를) 담았어요! 💜`);

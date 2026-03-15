@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,21 +41,18 @@ public class AddCartItemService implements AddCartItemUseCase {
             }
         }
 
+        // 같은 메뉴 + 같은 옵션 조합인 경우에만 수량 증가
+        final String finalOptionNamesJson = optionNamesJson;
         Optional<CartItem> existingItem = cart.getItems().stream()
-                .filter(item -> item.getMenuId().equals(command.getMenuId()))
+                .filter(item -> item.getMenuId().equals(command.getMenuId())
+                        && Objects.equals(item.getSelectedOptionNames(), finalOptionNamesJson))
                 .findFirst();
 
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             item.setQuantity(item.getQuantity() + command.getQuantity());
-            // 옵션/가격이 새로 전달되면 업데이트
-            if (optionNamesJson != null) {
-                item.setSelectedOptionNames(optionNamesJson);
-            }
-            if (command.getUnitPrice() != null) {
-                item.setUnitPrice(command.getUnitPrice());
-            }
         } else {
+            // 같은 메뉴라도 옵션이 다르면 새 항목으로 추가
             CartItem newItem = CartItem.builder()
                     .cart(cart)
                     .menuId(command.getMenuId())

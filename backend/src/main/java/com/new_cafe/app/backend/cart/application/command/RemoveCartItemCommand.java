@@ -8,5 +8,5 @@ import java.util.UUID;
 @Builder
 public class RemoveCartItemCommand {
     private final UUID memberId;
-    private final Long menuId;
+    private final Long cartItemId;  // cart_items 테이블의 PK
 }

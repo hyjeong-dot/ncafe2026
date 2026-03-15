@@ -182,6 +182,7 @@ export default function ChatMenuAction({ menuId, intent, actionCompleted, onComp
                 // ✅ 단일 주문: 장바구니를 거치지 않고 directOrder로 처리
                 sessionStorage.setItem('directOrder', JSON.stringify([{
                     id: menu.id.toString(),
+                    menuId: menu.id,
                     korName: menu.korName,
                     engName: menu.engName,
                     price: menu.price + extra,
@@ -203,7 +204,7 @@ export default function ChatMenuAction({ menuId, intent, actionCompleted, onComp
             } else {
                 // CART: 장바구니에 담기
                 await addItem({
-                    id: menu.id.toString(),
+                    menuId: menu.id,
                     korName: menu.korName,
                     engName: menu.engName,
                     price: menu.price + extra,

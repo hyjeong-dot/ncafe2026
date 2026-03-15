@@ -65,7 +65,8 @@ public class GetCartItemsService implements GetCartItemsUseCase {
             int price = item.getUnitPrice() != null ? item.getUnitPrice() : menu.getPrice();
 
             return CartItemResult.builder()
-                    .id(String.valueOf(menu.getId()))
+                    .id(String.valueOf(item.getId()))       // cart_items PK
+                    .menuId(menu.getId())                   // 메뉴 ID
                     .korName(menu.getKorName())
                     .engName(menu.getEngName())
                     .price(price)
