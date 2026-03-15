@@ -48,7 +48,7 @@ public class Order {
 
     @Builder.Default
     @Column(name = "discount_amount")
-    private int discountAmount = 0;
+    private Integer discountAmount = 0;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
