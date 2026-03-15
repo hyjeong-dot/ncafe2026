@@ -60,12 +60,15 @@ public class CreateOrderService implements CreateOrderUseCase {
         order.calculateTotalPrice();
         Order savedOrder = orderPort.saveOrder(order);
 
-        // 스탬프 카드 적립
+        // 스탬프 카드 적립 (상품 수량만큼)
         try {
-            couponService.addStamp(member.getId());
-            log.info("Stamp added for member: {}", member.getUsername());
+            int totalQuantity = savedOrder.getItems().stream()
+                    .mapToInt(item -> item.getQuantity())
+                    .sum();
+            couponService.addStamps(member.getId(), totalQuantity);
+            log.info("Stamps added ({}) for member: {}", totalQuantity, member.getUsername());
         } catch (Exception e) {
-            log.warn("Failed to add stamp for member: {}", member.getUsername(), e);
+            log.warn("Failed to add stamps for member: {}", member.getUsername(), e);
         }
 
         return OrderResult.builder()

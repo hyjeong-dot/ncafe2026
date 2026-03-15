@@ -69,12 +69,15 @@
 }
 
 .stampFilled {
-    background: #8b62c0;
+    background: linear-gradient(135deg, #d8b4fe, #a78bfa);
     border: 2px solid #7a52b0;
-    font-size: 1.3rem;
-    color: #fff;
     box-shadow: 0 2px 8px rgba(139, 98, 192, 0.3);
     animation: stampPop 300ms ease;
+}
+
+.stampImg {
+    border-radius: 50%;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
 }
 
 @keyframes stampPop {

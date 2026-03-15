@@ -46,11 +46,14 @@ public class AdminOrderService implements GetAdminOrderListUseCase, UpdateOrderS
         order.setStatus(status);
         orderRepository.save(order);
 
-        // 취소 시 스탬프 차감 (주문 생성 시 이미 적립했으므로)
+        // 취소 시 스탬프 차감 (주문 생성 시 상품 수량만큼 적립했으므로)
         if (status == OrderStatus.CANCELLED) {
             try {
-                couponService.removeStamp(order.getMemberId());
-                log.info("Stamp removed for cancelled order {}", orderId);
+                int totalQuantity = order.getItems().stream()
+                        .mapToInt(item -> item.getQuantity())
+                        .sum();
+                couponService.removeStamps(order.getMemberId(), totalQuantity);
+                log.info("Stamps removed ({}) for cancelled order {}", totalQuantity, orderId);
             } catch (Exception e) {
                 log.warn("Stamp removal failed for order {}: {}", orderId, e.getMessage());
             }

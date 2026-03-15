@@ -41,10 +41,13 @@ public class CancelOrderService implements CancelOrderUseCase {
         order.setStatus(OrderStatus.CANCELLED);
         orderPort.saveOrder(order);
 
-        // 스탬프 차감
+        // 스탬프 차감 (상품 수량만큼)
         try {
-            couponService.removeStamp(member.getId());
-            log.info("Stamp removed for cancelled order {} by user {}", orderId, username);
+            int totalQuantity = order.getItems().stream()
+                    .mapToInt(item -> item.getQuantity())
+                    .sum();
+            couponService.removeStamps(member.getId(), totalQuantity);
+            log.info("Stamps removed ({}) for cancelled order {} by user {}", totalQuantity, orderId, username);
         } catch (Exception e) {
             log.warn("Stamp removal failed for order {}: {}", orderId, e.getMessage());
         }

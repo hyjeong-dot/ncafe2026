@@ -103,38 +103,42 @@ public class CouponService {
     }
 
     /**
-     * 스탬프 추가 (주문 완료 시 호출)
+     * 스탬프 추가 (주문 시 상품 수량만큼)
      */
     @Transactional
-    public StampCardResponse addStamp(UUID memberId) {
+    public StampCardResponse addStamps(UUID memberId, int count) {
         StampCard card = stampCardRepository.findByMemberIdAndCompletedFalse(memberId)
                 .orElseGet(() -> stampCardRepository.save(StampCard.builder()
                         .memberId(memberId).stamps(0).completed(false).build()));
 
-        boolean completed = card.addStamp();
-        stampCardRepository.save(card);
-
-        if (completed) {
-            issueStampRewardCoupon(memberId);
-            // 새 카드 생성
-            stampCardRepository.save(StampCard.builder()
-                    .memberId(memberId).stamps(0).completed(false).build());
-            log.info("Stamp card completed for member: {}", memberId);
+        for (int i = 0; i < count; i++) {
+            boolean completed = card.addStamp();
+            if (completed) {
+                stampCardRepository.save(card);
+                issueStampRewardCoupon(memberId);
+                log.info("Stamp card completed for member: {}", memberId);
+                // 새 카드 생성 (남은 스탬프는 새 카드에 이어서)
+                card = stampCardRepository.save(StampCard.builder()
+                        .memberId(memberId).stamps(0).completed(false).build());
+            }
         }
 
+        stampCardRepository.save(card);
         return StampCardResponse.from(card);
     }
 
     /**
-     * 스탬프 차감 (주문 취소 시 호출)
+     * 스탬프 차감 (주문 취소 시 상품 수량만큼)
      */
     @Transactional
-    public void removeStamp(UUID memberId) {
+    public void removeStamps(UUID memberId, int count) {
         stampCardRepository.findByMemberIdAndCompletedFalse(memberId)
                 .ifPresent(card -> {
-                    card.removeStamp();
+                    for (int i = 0; i < count; i++) {
+                        card.removeStamp();
+                    }
                     stampCardRepository.save(card);
-                    log.info("Stamp removed for member: {}", memberId);
+                    log.info("Stamps removed ({}) for member: {}", count, memberId);
                 });
     }
 
