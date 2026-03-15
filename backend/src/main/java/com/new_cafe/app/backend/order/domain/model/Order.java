@@ -47,7 +47,7 @@ public class Order {
     private Long couponId;
 
     @Builder.Default
-    @Column(name = "discount_amount", nullable = false)
+    @Column(name = "discount_amount")
     private int discountAmount = 0;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
