@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import type { SelectedOptions } from '../MenuDetailOptions/MenuDetailOptions';
+import type { SelectedOptions } from './MenuDetailOptions/MenuDetailOptions';
 
 interface OptionMeta {
     id: number;
