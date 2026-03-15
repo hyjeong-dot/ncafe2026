@@ -157,6 +157,7 @@ export default function ChatAgent() {
 
         const agentMessageId = `agent-${Date.now()}`;
         let fullReply = '';
+        let messageCreated = false;
 
         try {
             const formattedMessages = messages.map(m => ({
@@ -164,14 +165,6 @@ export default function ChatAgent() {
                 content: m.content
             }));
             formattedMessages.push({ role: 'user', content: content.trim() });
-
-            // 빈 에이전트 메시지를 미리 추가 (스트리밍 대상)
-            setMessages(prev => [...prev, {
-                id: agentMessageId,
-                role: 'agent',
-                content: '',
-                timestamp: new Date(),
-            }]);
 
             const res = await fetch('/api/chat', {
                 method: 'POST',
@@ -216,13 +209,27 @@ export default function ChatAgent() {
                             if (parsed.content) {
                                 fullReply += parsed.content;
                                 const currentReply = fullReply;
-                                setMessages(prev =>
-                                    prev.map(msg =>
-                                        msg.id === agentMessageId
-                                            ? { ...msg, content: currentReply }
-                                            : msg
-                                    )
-                                );
+
+                                if (!messageCreated) {
+                                    // 첫 청크: 타이핑 인디케이터 숨기고, 메시지 생성
+                                    messageCreated = true;
+                                    setIsTyping(false);
+                                    setMessages(prev => [...prev, {
+                                        id: agentMessageId,
+                                        role: 'agent',
+                                        content: currentReply,
+                                        timestamp: new Date(),
+                                    }]);
+                                } else {
+                                    // 이후 청크: 메시지 내용 갱신
+                                    setMessages(prev =>
+                                        prev.map(msg =>
+                                            msg.id === agentMessageId
+                                                ? { ...msg, content: currentReply }
+                                                : msg
+                                        )
+                                    );
+                                }
                             }
                         } catch {
                             // 불완전한 JSON 무시
@@ -233,13 +240,22 @@ export default function ChatAgent() {
         } catch (error) {
             console.error('Chat API error:', error);
             fullReply = '삐릿...? 앗, 코드가 엉켜버렸몽... (._.) 내 몸이 굳어버렸당. 다시 부드럽게 반죽해 주세몽! 🫠';
-            setMessages(prev =>
-                prev.map(msg =>
-                    msg.id === agentMessageId
-                        ? { ...msg, content: fullReply }
-                        : msg
-                )
-            );
+            if (!messageCreated) {
+                setMessages(prev => [...prev, {
+                    id: agentMessageId,
+                    role: 'agent',
+                    content: fullReply,
+                    timestamp: new Date(),
+                }]);
+            } else {
+                setMessages(prev =>
+                    prev.map(msg =>
+                        msg.id === agentMessageId
+                            ? { ...msg, content: fullReply }
+                            : msg
+                    )
+                );
+            }
         }
 
         // 스트리밍 완료 후 태그 파싱
