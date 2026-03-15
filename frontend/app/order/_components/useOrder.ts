@@ -207,14 +207,27 @@ export function useOrder() {
 
         } catch (error: any) {
             console.error('Payment error:', error);
-            if (error?.code === 'USER_CANCEL' || error?.code === 'PAY_PROCESS_CANCELED') {
+            const msg = error?.message || '';
+            if (error?.code === 'USER_CANCEL' || error?.code === 'PAY_PROCESS_CANCELED' || msg.includes('취소')) {
                 toast.error('결제가 취소되었습니다.');
             } else {
-                toast.error(error.message || '결제 처리 중 오류가 발생했습니다.');
+                toast.error(msg || '결제 처리 중 오류가 발생했습니다.');
             }
             setIsSubmitting(false);
         }
     };
+
+    // 브라우저 뒤로가기(bfcache)로 돌아왔을 때 결제 상태 리셋
+    useEffect(() => {
+        const handlePageShow = (e: PageTransitionEvent) => {
+            if (e.persisted) {
+                // bfcache에서 복원됨 (토스 결제 페이지에서 뒤로가기)
+                setIsSubmitting(false);
+            }
+        };
+        window.addEventListener('pageshow', handlePageShow);
+        return () => window.removeEventListener('pageshow', handlePageShow);
+    }, []);
 
     const handleSuccessConfirm = () => {
         setSuccessModalOpen(false);
