@@ -364,3 +364,69 @@
     color: #6e4a9e;
     line-height: 1.4;
 }
+
+/* ─── Inline Validation ─── */
+.inputValid .input {
+    border-color: #48bb78;
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+}
+
+.inputInvalid .input {
+    border-color: #fc8181;
+    box-shadow: 0 0 0 3px rgba(252, 129, 129, 0.1);
+}
+
+.validationHints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    margin-top: 0.25rem;
+    padding-left: 0.2rem;
+}
+
+.hintItem {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.hintPass {
+    color: #48bb78;
+}
+
+.hintFail {
+    color: #fc8181;
+}
+
+/* Password Strength Bar */
+.strengthBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.strengthTrack {
+    flex: 1;
+    height: 4px;
+    background: #f0e6ff;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.strengthFill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strengthLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 2rem;
+    text-align: right;
+}
+

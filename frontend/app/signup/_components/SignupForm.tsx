@@ -1,12 +1,42 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle, Mail, Phone, Smile, CheckSquare, Square } from 'lucide-react';
+import { UserPlus, User, Lock, Eye, EyeOff, AlertCircle, Mail, Phone, Smile, CheckSquare, Square, Check, X } from 'lucide-react';
 import styles from '@/app/login/login.module.css';
 import Modal from '@/components/common/Modal/Modal';
+
+// 비밀번호 강도 계산
+function getPasswordStrength(pw: string) {
+    let score = 0;
+    if (pw.length >= 6) score++;
+    if (pw.length >= 8) score++;
+    if (/[a-zA-Z]/.test(pw)) score++;
+    if (/\d/.test(pw)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pw)) score++;
+
+    if (score <= 1) return { label: '약함', color: '#fc8181', percent: 20 };
+    if (score <= 2) return { label: '보통', color: '#f6ad55', percent: 40 };
+    if (score <= 3) return { label: '보통', color: '#ecc94b', percent: 60 };
+    if (score <= 4) return { label: '강함', color: '#48bb78', percent: 80 };
+    return { label: '매우 강함', color: '#38a169', percent: 100 };
+}
+
+// 검증 힌트 컴포넌트
+function ValidationHints({ hints }: { hints: { label: string; pass: boolean }[] }) {
+    return (
+        <div className={styles.validationHints}>
+            {hints.map((h, i) => (
+                <span key={i} className={`${styles.hintItem} ${h.pass ? styles.hintPass : styles.hintFail}`}>
+                    {h.pass ? <Check size={12} /> : <X size={12} />}
+                    {h.label}
+                </span>
+            ))}
+        </div>
+    );
+}
 
 export default function SignupForm() {
     const [username, setUsername] = useState('');
@@ -20,67 +50,76 @@ export default function SignupForm() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // 각 필드 touched 상태 (포커스 후 blur 했는지)
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
     const router = useRouter();
 
+    const markTouched = (field: string) => setTouched(prev => ({ ...prev, [field]: true }));
+
+    // ─── 실시간 검증 ───
+    const usernameValid = username.trim().length >= 3;
+    const usernameHints = [
+        { label: '3자 이상', pass: username.trim().length >= 3 },
+    ];
+
+    const passwordHints = [
+        { label: '6자 이상', pass: password.length >= 6 },
+        { label: '영문 포함', pass: /[a-zA-Z]/.test(password) },
+        { label: '숫자 포함', pass: /\d/.test(password) },
+    ];
+    const passwordValid = passwordHints.every(h => h.pass);
+    const strength = useMemo(() => getPasswordStrength(password), [password]);
+
+    const confirmHints = [
+        { label: '비밀번호 일치', pass: confirmPassword.length > 0 && password === confirmPassword },
+    ];
+    const confirmValid = confirmPassword.length > 0 && password === confirmPassword;
+
+    const nicknameValid = nickname.trim().length >= 2;
+    const nicknameHints = [
+        { label: '2자 이상', pass: nickname.trim().length >= 2 },
+    ];
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailValid = emailRegex.test(email);
+    const emailHints = [
+        { label: '올바른 이메일 형식', pass: emailValid },
+    ];
+
+    const phoneRegex = /^010-\d{4}-\d{4}$/;
+    const phoneValid = phoneRegex.test(phoneNumber);
+    const phoneHints = [
+        { label: '010-0000-0000 형식', pass: phoneValid },
+    ];
+
+    // 입력 상태 클래스
+    const getFieldClass = (field: string, isValid: boolean, value: string) => {
+        if (!touched[field] || value.length === 0) return '';
+        return isValid ? styles.inputValid : styles.inputInvalid;
+    };
+
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // 숫자만 남김
         const value = e.target.value.replace(/[^0-9]/g, '');
         let formattedValue = '';
-        
-        if (value.length < 4) {
-            formattedValue = value;
-        } else if (value.length < 8) {
-            formattedValue = `${value.slice(0, 3)}-${value.slice(3)}`;
-        } else {
-            formattedValue = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
-        }
-        
+        if (value.length < 4) formattedValue = value;
+        else if (value.length < 8) formattedValue = `${value.slice(0, 3)}-${value.slice(3)}`;
+        else formattedValue = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
         setPhoneNumber(formattedValue);
     };
+
+    const allValid = usernameValid && passwordValid && confirmValid && nicknameValid && emailValid && phoneValid && termsAgreed;
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
 
-        // 아이디 검증
-        if (username.trim().length < 3) {
-            setError('아이디는 3자 이상 입력해주세요.');
-            return;
-        }
+        // 모든 필드 touched 처리
+        setTouched({ username: true, password: true, confirmPassword: true, nickname: true, email: true, phoneNumber: true });
 
-        // 비밀번호 검증
-        if (password.length < 6) {
-            setError('비밀번호는 6자 이상이어야 합니다.');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            setError('비밀번호가 일치하지 않습니다.');
-            return;
-        }
-
-        // 닉네임 검증
-        if (nickname.trim().length < 2) {
-            setError('닉네임은 2자 이상 입력해주세요.');
-            return;
-        }
-
-        // 이메일 검증
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            setError('올바른 이메일 형식을 입력해주세요.');
-            return;
-        }
-
-        // 전화번호 검증 (010-0000-0000 형식)
-        const phoneRegex = /^010-\d{4}-\d{4}$/;
-        if (!phoneRegex.test(phoneNumber)) {
-            setError('전화번호를 올바르게 입력해주세요. (예: 010-1234-5678)');
-            return;
-        }
-
-        if (!termsAgreed) {
-            setError('이용약관 및 개인정보 처리방침에 동의해주세요.');
+        if (!allValid) {
+            if (!termsAgreed) setError('이용약관 및 개인정보 처리방침에 동의해주세요.');
+            else setError('입력 항목을 다시 확인해주세요.');
             return;
         }
 
@@ -90,13 +129,7 @@ export default function SignupForm() {
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    username, 
-                    password, 
-                    nickname, 
-                    email, 
-                    phoneNumber 
-                }),
+                body: JSON.stringify({ username, password, nickname, email, phoneNumber }),
             });
 
             if (!response.ok) {
@@ -136,32 +169,37 @@ export default function SignupForm() {
                         </div>
                     )}
 
+                    {/* 아이디 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="username" className={styles.label}>아이디</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('username', usernameValid, username)}`}>
                             <User size={18} className={styles.inputIcon} />
                             <input
                                 type="text"
                                 id="username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
+                                onBlur={() => markTouched('username')}
                                 className={styles.input}
                                 placeholder="사용할 아이디를 입력하세요"
                                 required
                                 autoComplete="off"
                             />
                         </div>
+                        {touched.username && username.length > 0 && <ValidationHints hints={usernameHints} />}
                     </div>
 
+                    {/* 비밀번호 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="password" className={styles.label}>비밀번호</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('password', passwordValid, password)}`}>
                             <Lock size={18} className={styles.inputIcon} />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 id="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                onBlur={() => markTouched('password')}
                                 className={styles.input}
                                 placeholder="비밀번호를 입력하세요"
                                 required
@@ -175,73 +213,102 @@ export default function SignupForm() {
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
+                        {password.length > 0 && (
+                            <>
+                                <div className={styles.strengthBar}>
+                                    <div className={styles.strengthTrack}>
+                                        <div
+                                            className={styles.strengthFill}
+                                            style={{ width: `${strength.percent}%`, backgroundColor: strength.color }}
+                                        />
+                                    </div>
+                                    <span className={styles.strengthLabel} style={{ color: strength.color }}>
+                                        {strength.label}
+                                    </span>
+                                </div>
+                                <ValidationHints hints={passwordHints} />
+                            </>
+                        )}
                     </div>
 
+                    {/* 비밀번호 확인 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="confirmPassword" className={styles.label}>비밀번호 확인</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('confirmPassword', confirmValid, confirmPassword)}`}>
                             <Lock size={18} className={styles.inputIcon} />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 id="confirmPassword"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                onBlur={() => markTouched('confirmPassword')}
                                 className={styles.input}
                                 placeholder="비밀번호를 다시 입력하세요"
                                 required
                             />
                         </div>
+                        {touched.confirmPassword && confirmPassword.length > 0 && <ValidationHints hints={confirmHints} />}
                     </div>
 
+                    {/* 닉네임 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="nickname" className={styles.label}>닉네임</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('nickname', nicknameValid, nickname)}`}>
                             <Smile size={18} className={styles.inputIcon} />
                             <input
                                 type="text"
                                 id="nickname"
                                 value={nickname}
                                 onChange={(e) => setNickname(e.target.value)}
+                                onBlur={() => markTouched('nickname')}
                                 className={styles.input}
                                 placeholder="사용할 닉네임을 입력하세요"
                                 required
                             />
                         </div>
+                        {touched.nickname && nickname.length > 0 && <ValidationHints hints={nicknameHints} />}
                     </div>
 
+                    {/* 이메일 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="email" className={styles.label}>이메일</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('email', emailValid, email)}`}>
                             <Mail size={18} className={styles.inputIcon} />
                             <input
                                 type="email"
                                 id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                onBlur={() => markTouched('email')}
                                 className={styles.input}
                                 placeholder="example@ncafe.com"
                                 required
                             />
                         </div>
+                        {touched.email && email.length > 0 && <ValidationHints hints={emailHints} />}
                     </div>
 
+                    {/* 전화번호 */}
                     <div className={styles.inputGroup}>
                         <label htmlFor="phoneNumber" className={styles.label}>휴대폰 번호</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={`${styles.inputWrapper} ${getFieldClass('phoneNumber', phoneValid, phoneNumber)}`}>
                             <Phone size={18} className={styles.inputIcon} />
                             <input
                                 type="tel"
                                 id="phoneNumber"
                                 value={phoneNumber}
-                                onChange={handlePhoneChange}
+                                onChange={(e) => { handlePhoneChange(e); markTouched('phoneNumber'); }}
+                                onBlur={() => markTouched('phoneNumber')}
                                 className={styles.input}
                                 placeholder="010-0000-0000"
                                 maxLength={13}
                                 required
                             />
                         </div>
+                        {touched.phoneNumber && phoneNumber.length > 0 && <ValidationHints hints={phoneHints} />}
                     </div>
 
+                    {/* 약관 동의 */}
                     <div className={styles.termsGroup}>
                         <label className={styles.termsLabel}>
                             <input
