@@ -4,4 +4,5 @@ export { default as MyPageProfile } from "./MyPageProfile/MyPageProfile";
 export { default as MyPageOrders } from "./MyPageOrders/MyPageOrders";
 export { default as MyPageFavorites } from "./MyPageFavorites/MyPageFavorites";
 export { default as MyPageCoupons } from "./MyPageCoupons/MyPageCoupons";
+export { default as MyPageReviews } from "./MyPageReviews/MyPageReviews";
 export { default as MyPageMain } from "./MyPageMain/MyPageMain";

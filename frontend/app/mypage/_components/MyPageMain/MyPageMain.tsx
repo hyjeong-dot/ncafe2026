@@ -12,7 +12,8 @@ import {
     MyPageProfile,
     MyPageOrders,
     MyPageFavorites,
-    MyPageCoupons
+    MyPageCoupons,
+    MyPageReviews
 } from "..";
 
 export default function MyPageMain() {
@@ -55,6 +56,7 @@ export default function MyPageMain() {
                     {activeTab === "orders" && <MyPageOrders />}
                     {activeTab === "favorites" && <MyPageFavorites />}
                     {activeTab === "coupons" && <MyPageCoupons />}
+                    {activeTab === "reviews" && <MyPageReviews />}
                     {activeTab === "payment" && (
                         <div style={{
                             background: 'var(--bg-primary)',
