@@ -41,19 +41,45 @@ export function useDashboardStats() {
     useEffect(() => {
         fetchStats();
 
-        // SSE 구독 — 주문 변경 시 대시보드 통계도 즉시 갱신
-        const eventSource = new EventSource('/api/admin/orders/stream');
+        let eventSource: EventSource | null = null;
+        let retryCount = 0;
+        let retryTimer: ReturnType<typeof setTimeout> | null = null;
+        let unmounted = false;
 
-        eventSource.addEventListener('order-update', () => {
-            fetchStats();
-        });
+        const connect = () => {
+            if (unmounted) return;
 
-        eventSource.onerror = () => {
-            console.warn('[SSE] 대시보드 SSE 연결 끊김, 자동 재연결 시도...');
+            eventSource = new EventSource('/api/admin/orders/stream');
+
+            eventSource.addEventListener('order-update', () => {
+                retryCount = 0;
+                fetchStats();
+            });
+
+            eventSource.addEventListener('connected', () => {
+                retryCount = 0;
+            });
+
+            eventSource.onerror = () => {
+                eventSource?.close();
+                eventSource = null;
+
+                if (unmounted) return;
+
+                retryCount++;
+                const delay = Math.min(2000 * Math.pow(2, retryCount - 1), 30000);
+                console.warn(`[SSE] 대시보드 연결 끊김. ${delay / 1000}초 후 재연결... (${retryCount}회)`);
+
+                retryTimer = setTimeout(connect, delay);
+            };
         };
 
+        connect();
+
         return () => {
-            eventSource.close();
+            unmounted = true;
+            eventSource?.close();
+            if (retryTimer) clearTimeout(retryTimer);
         };
     }, [fetchStats]);
 

@@ -45,28 +45,51 @@ export function useAdminOrders() {
     useEffect(() => {
         fetchOrders();
 
-        // SSE 구독 — 주문 변경 시 실시간 갱신
-        const eventSource = new EventSource('/api/admin/orders/stream');
+        let eventSource: EventSource | null = null;
+        let retryCount = 0;
+        let retryTimer: ReturnType<typeof setTimeout> | null = null;
+        let unmounted = false;
 
-        eventSource.addEventListener('order-update', (event) => {
-            console.log('[SSE] 주문 업데이트:', event.data);
-            fetchOrders(); // 변경 알림 받으면 전체 목록 새로고침
+        const connect = () => {
+            if (unmounted) return;
 
-            if (event.data === 'new-order') {
-                toast('🔔 새 주문이 들어왔습니다!', { icon: '📦' });
-            }
-        });
+            eventSource = new EventSource('/api/admin/orders/stream');
 
-        eventSource.addEventListener('connected', () => {
-            console.log('[SSE] 주문 스트림 연결됨');
-        });
+            eventSource.addEventListener('order-update', (event) => {
+                retryCount = 0; // 성공적으로 이벤트를 받으면 카운터 리셋
+                fetchOrders();
 
-        eventSource.onerror = () => {
-            console.warn('[SSE] 연결 끊김, 자동 재연결 시도...');
+                if (event.data === 'new-order') {
+                    toast('🔔 새 주문이 들어왔습니다!', { icon: '📦' });
+                }
+            });
+
+            eventSource.addEventListener('connected', () => {
+                console.log('[SSE] 주문 스트림 연결됨');
+                retryCount = 0;
+            });
+
+            eventSource.onerror = () => {
+                eventSource?.close();
+                eventSource = null;
+
+                if (unmounted) return;
+
+                // 지수 백오프: 2초, 4초, 8초, 16초, 최대 30초
+                retryCount++;
+                const delay = Math.min(2000 * Math.pow(2, retryCount - 1), 30000);
+                console.warn(`[SSE] 연결 끊김. ${delay / 1000}초 후 재연결 시도... (${retryCount}회)`);
+
+                retryTimer = setTimeout(connect, delay);
+            };
         };
 
+        connect();
+
         return () => {
-            eventSource.close();
+            unmounted = true;
+            eventSource?.close();
+            if (retryTimer) clearTimeout(retryTimer);
         };
     }, [fetchOrders]);
 
@@ -78,7 +101,6 @@ export function useAdminOrders() {
             if (!response.ok) throw new Error('상태 변경 실패');
             
             toast.success('주문 상태가 변경되었습니다! 🪄');
-            // SSE가 이벤트를 보내서 자동 갱신되므로 수동 refresh 불필요
         } catch (error) {
             console.error('Update status error:', error);
             toast.error('주문 상태 변경 중 오류가 발생했습니다.');
