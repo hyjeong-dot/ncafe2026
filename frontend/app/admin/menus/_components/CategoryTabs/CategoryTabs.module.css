@@ -59,6 +59,249 @@
     color: var(--ditto-700);
 }
 
+/* 탭 래퍼 (관리 모드) */
+.tabWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.tabActions {
+    display: flex;
+    gap: 2px;
+    margin-left: -8px;
+    margin-right: 4px;
+}
+
+.actionBtn {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--ditto-100);
+    color: var(--ditto-700);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 150ms ease;
+}
+
+.actionBtn:hover {
+    background: var(--ditto-200);
+    transform: scale(1.1);
+}
+
+.deleteBtn {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+.deleteBtn:hover {
+    background: #f8bbd0;
+}
+
+/* 관리/추가 버튼 */
+.manageBtn,
+.addBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    border: 1.5px dashed var(--color-gray-300);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.manageBtn:hover,
+.addBtn:hover {
+    border-color: var(--ditto-400);
+    color: var(--ditto-700);
+    background: var(--ditto-50, rgba(139, 92, 246, 0.05));
+}
+
+.addBtn {
+    border-color: var(--ditto-300);
+    color: var(--ditto-600);
+}
+
+/* 모달 */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 200ms ease;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 16px;
+    width: min(420px, 90vw);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: slideUp 250ms ease;
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.modalHeader h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+}
+
+.modalClose {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    border-radius: 8px;
+    transition: all 150ms;
+}
+
+.modalClose:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.modalBody {
+    padding: 20px 24px;
+}
+
+.modalLabel {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.modalInput {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 150ms;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.modalInput:focus {
+    border-color: var(--ditto-400, #a78bfa);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+}
+
+.emojiGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.emojiBtn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: #f8f8f8;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 150ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.emojiBtn:hover {
+    background: #f0e6ff;
+    border-color: #d4b8ff;
+}
+
+.emojiSelected {
+    border-color: var(--ditto-500, #8b5cf6);
+    background: #f0e6ff;
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 24px 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.cancelBtn {
+    padding: 8px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 150ms;
+}
+
+.cancelBtn:hover {
+    background: #f8f8f8;
+}
+
+.saveBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 150ms;
+}
+
+.saveBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.saveBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* 반응형 */
 @media (max-width: 768px) {
     .tabs {
