@@ -2,11 +2,110 @@
     padding: var(--space-6);
 }
 
+/* 페이지 헤더 */
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
 .title {
     font-size: var(--text-2xl);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-6);
+    font-weight: 800;
     color: var(--text-primary);
+    margin: 0;
+}
+
+.refreshBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 150ms;
+}
+
+.refreshBtn:hover {
+    border-color: #a78bfa;
+    color: #7c3aed;
+    background: #faf5ff;
+}
+
+/* 검색 + 필터 툴바 */
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+    align-items: stretch;
+}
+
+.searchBox {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border: 1.5px solid #e8e8ee;
+    border-radius: 12px;
+    background: white;
+    transition: border-color 200ms;
+}
+
+.searchBox:focus-within {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+}
+
+.searchIcon {
+    color: #b0b0b8;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 0;
+    font-size: 0.92rem;
+    color: #1a1a2e;
+    background: transparent;
+}
+
+.searchInput::placeholder {
+    color: #c0c0c8;
+}
+
+.statusSelect {
+    padding: 10px 14px;
+    border: 1.5px solid #e8e8ee;
+    border-radius: 12px;
+    background: white;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 200ms;
+    min-width: 130px;
+}
+
+.statusSelect:focus {
+    border-color: #a78bfa;
+}
+
+/* 결과 카운트 */
+.resultCount {
+    font-size: 0.82rem;
+    color: #888;
+    margin-bottom: 12px;
+    padding: 0 4px;
 }
 
 .orderList {
@@ -261,6 +360,25 @@
 
 /* ─── 반응형 ─── */
 @media (max-width: 768px) {
+    .container {
+        padding: var(--space-4);
+    }
+
+    .pageHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .statusSelect {
+        min-width: unset;
+        width: 100%;
+    }
+
     .cardBody {
         grid-template-columns: 1fr;
         gap: 16px;
