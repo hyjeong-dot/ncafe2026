@@ -122,8 +122,15 @@ export default function MenuForm({
             [name]: type === 'checkbox' ? checked : value,
         }));
 
-        // Clear error when user starts typing
-        if (errors[name]) {
+        // 실시간 입력 검증 (회원가입 방식 차용)
+        if (name === 'price') {
+            const numPrice = Number(value);
+            if (!value || numPrice < 1000 || numPrice > 50000) {
+                setErrors((prev) => ({ ...prev, price: '가격은 1,000원 이상 50,000원 이하로 설정해주세요.' }));
+            } else {
+                setErrors((prev) => ({ ...prev, price: '' }));
+            }
+        } else if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: '' }));
         }
     };
@@ -269,8 +276,9 @@ export default function MenuForm({
         if (!formData.engName.trim()) {
             newErrors.engName = '메뉴명(영문)을 입력해주세요';
         }
-        if (!formData.price || Number(formData.price) <= 0) {
-            newErrors.price = '유효한 가격을 입력해주세요';
+        const numPrice = Number(formData.price);
+        if (!formData.price || numPrice < 1000 || numPrice > 50000) {
+            newErrors.price = '가격은 1,000원 이상 50,000원 이하로 설정해주세요.';
         }
         if (!formData.categoryId) {
             newErrors.categoryId = '카테고리를 선택해주세요';

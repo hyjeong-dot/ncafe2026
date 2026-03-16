@@ -22,6 +22,10 @@ public class UpdateMenuService implements UpdateMenuUseCase {
 
     @Override
     public void updateMenu(UpdateMenuCommand command) {
+        if (command.getPrice() < 1000 || command.getPrice() > 50000) {
+            throw new IllegalArgumentException("메뉴 가격은 1,000원 이상 50,000원 이하로 설정해야 합니다.");
+        }
+
         Menu menu = loadMenuPort.findById(command.getId())
                 .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다. ID: " + command.getId()));
 

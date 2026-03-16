@@ -30,8 +30,8 @@ export default function StampCard({ stamps, completed }: StampCardProps) {
                             <Image
                                 src="/images/ditto/favicon-ditto.png"
                                 alt="메타몽 스탬프"
-                                width={28}
-                                height={28}
+                                width={40}
+                                height={40}
                                 className={styles.stampImg}
                             />
                         ) : (
