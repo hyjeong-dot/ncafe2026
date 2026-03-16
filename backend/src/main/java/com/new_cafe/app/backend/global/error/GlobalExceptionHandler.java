@@ -22,4 +22,16 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleIllegalArgumentException(IllegalArgumentException e) {
         return Map.of("success", false, "message", e.getMessage());
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleIllegalStateException(IllegalStateException e) {
+        return Map.of("success", false, "message", e.getMessage() != null ? e.getMessage() : "잘못된 상태입니다.");
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> handleRuntimeException(RuntimeException e) {
+        return Map.of("success", false, "message", e.getMessage() != null ? e.getMessage() : "서버 오류가 발생했습니다.");
+    }
 }

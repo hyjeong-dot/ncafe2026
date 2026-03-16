@@ -45,7 +45,8 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다: " + orderUid));
 
         if (order.getTotalPrice() != amount) {
-            throw new IllegalArgumentException("결제 금액이 주문 금액과 일치하지 않습니다. 예상: " + order.getTotalPrice() + ", 실제: " + amount);
+            throw new IllegalArgumentException(
+                    "결제 금액이 주문 금액과 일치하지 않습니다. 예상: " + order.getTotalPrice() + ", 실제: " + amount);
         }
 
         if (order.getStatus() != OrderStatus.PENDING) {
@@ -54,12 +55,12 @@ public class PaymentService {
 
         try {
             // 2. 토스페이먼츠 승인 API 호출
-            String authHeader = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
+            String authHeader = "Basic "
+                    + Base64.getEncoder().encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
 
             String requestBody = String.format(
                     "{\"paymentKey\":\"%s\",\"orderId\":\"%s\",\"amount\":%d}",
-                    paymentKey, orderUid, amount
-            );
+                    paymentKey, orderUid, amount);
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -82,8 +83,7 @@ public class PaymentService {
                         "success", true,
                         "orderId", orderUid,
                         "paymentKey", paymentKey,
-                        "status", "PAID"
-                );
+                        "status", "PAID");
             } else {
                 log.error("토스 결제 승인 실패: {}", response.body());
                 throw new RuntimeException("결제 승인에 실패했습니다: " + response.body());
