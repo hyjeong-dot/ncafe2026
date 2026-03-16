@@ -16,6 +16,7 @@ import {
     Coffee,
     Database,
     LucideIcon,
+    User
 } from 'lucide-react';
 import { useDashboardStats } from '../useDashboardStats';
 import toast from 'react-hot-toast';
@@ -177,6 +178,10 @@ export default function AdminSidebar() {
                     <Link href="/menus" className={styles.switchButton}>
                         <Coffee size={18} />
                         <span>메뉴 주문하기</span>
+                    </Link>
+                    <Link href="/mypage" className={styles.switchButton}>
+                        <User size={18} />
+                        <span>내 마이페이지</span>
                     </Link>
                 </div>
 

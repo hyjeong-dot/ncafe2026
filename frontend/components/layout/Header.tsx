@@ -67,7 +67,13 @@ export default function Header() {
                                         <LogOut size={16} />
                                         <span>로그아웃</span>
                                     </button>
-                                    <Link href={user.role === 'ROLE_ADMIN' ? '/admin' : '/mypage'} className={styles.adminButton} onClick={closeMobileMenu}>
+                                    {user.role === 'ROLE_ADMIN' && (
+                                        <Link href="/admin" className={styles.adminButton} onClick={closeMobileMenu} style={{ backgroundColor: '#2d3748' }}>
+                                            <Settings size={14} />
+                                            <span>관리자</span>
+                                        </Link>
+                                    )}
+                                    <Link href={'/mypage'} className={styles.adminButton} onClick={closeMobileMenu}>
                                         <User size={14} />
                                         <span>{user.username}</span>
                                     </Link>
