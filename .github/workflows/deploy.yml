@@ -47,9 +47,8 @@ jobs:
         run: |
           mkdir -p /home/hyjeong/dist/ncafe2026/backend/upload/images
           if [ -d "backend/upload/images" ] && [ "$(ls -A backend/upload/images)" ]; then
-            cp -r backend/upload/images/. /home/hyjeong/dist/ncafe2026/backend/upload/images/
+            cp -r --no-preserve=ownership backend/upload/images/. /home/hyjeong/dist/ncafe2026/backend/upload/images/
           fi
-          chmod -R 755 /home/hyjeong/dist/ncafe2026/backend/upload/images 2>/dev/null || true
 
       - name: Build Services Sequentially
         run: |
