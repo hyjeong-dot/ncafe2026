@@ -1,6 +1,5 @@
 'use client';
 
-import { RefreshCw } from 'lucide-react';
 import { useAdminOrders } from './_components/useAdminOrders';
 import { useOrderFilters } from './_components/useOrderFilters';
 import OrderToolbar from './_components/OrderToolbar';
@@ -10,19 +9,14 @@ import DashboardLoading from '../_components/DashboardLoading';
 import styles from './page.module.css';
 
 export default function AdminOrdersPage() {
-    const { orders, isLoading, updateStatus, refresh } = useAdminOrders();
+    const { orders, isLoading, updateStatus } = useAdminOrders();
     const { searchQuery, setSearchQuery, statusFilter, setStatusFilter, filteredOrders } = useOrderFilters(orders);
 
     if (isLoading) return <DashboardLoading />;
 
     return (
         <div className={styles.container}>
-            <div className={styles.pageHeader}>
-                <h1 className={styles.title}>주문 관리</h1>
-                <button className={styles.refreshBtn} onClick={refresh}>
-                    <RefreshCw size={14} /> 새로고침
-                </button>
-            </div>
+            <h1 className={styles.title}>주문 관리</h1>
 
             <OrderToolbar
                 searchQuery={searchQuery}
