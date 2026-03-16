@@ -16,9 +16,10 @@ public class ReviewResponse {
     private Integer stickerNumber; // 1~5 or null
     private String nickname;
     private boolean stickerEnded; // 선착순 종료 여부
+    private String menuNames; // 주문한 메뉴 이름 (쉼표 구분)
     private LocalDateTime createdAt;
 
-    public static ReviewResponse from(Review review, String nickname, boolean stickerEnded) {
+    public static ReviewResponse from(Review review, String nickname, boolean stickerEnded, String menuNames) {
         return ReviewResponse.builder()
                 .id(review.getId())
                 .orderId(review.getOrderId())
@@ -27,6 +28,7 @@ public class ReviewResponse {
                 .stickerNumber(review.getStickerNumber())
                 .nickname(nickname)
                 .stickerEnded(stickerEnded)
+                .menuNames(menuNames)
                 .createdAt(review.getCreatedAt())
                 .build();
     }

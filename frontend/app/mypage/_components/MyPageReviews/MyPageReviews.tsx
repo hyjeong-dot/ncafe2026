@@ -14,6 +14,7 @@ interface ReviewData {
     stickerNumber: number | null;
     nickname: string;
     stickerEnded: boolean;
+    menuNames: string | null;
     createdAt: string;
 }
 
@@ -110,7 +111,7 @@ export default function MyPageReviews() {
                             </div>
                             <p className={styles.reviewContent}>{review.content}</p>
                             <div className={styles.reviewFooter}>
-                                <span className={styles.orderTag}>주문 #{review.orderId}</span>
+                                <span className={styles.orderTag}>{review.menuNames || `주문 #${review.orderId}`}</span>
                                 {review.stickerNumber && (
                                     <div className={styles.stickerBadge}>
                                         <Image

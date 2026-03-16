@@ -2,7 +2,10 @@ package com.new_cafe.app.backend.review.application.service;
 
 import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
+import com.new_cafe.app.backend.menu.application.port.out.LoadMenuPort;
+import com.new_cafe.app.backend.menu.domain.model.Menu;
 import com.new_cafe.app.backend.order.domain.model.Order;
+import com.new_cafe.app.backend.order.domain.model.OrderLineItem;
 import com.new_cafe.app.backend.order.adapter.out.persistence.repository.OrderRepository;
 import com.new_cafe.app.backend.review.adapter.in.web.dto.ReviewRequest;
 import com.new_cafe.app.backend.review.adapter.in.web.dto.ReviewResponse;
@@ -24,8 +27,25 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final LoadMemberPort loadMemberPort;
     private final OrderRepository orderRepository;
+    private final LoadMenuPort loadMenuPort;
 
     private static final int MAX_STICKERS = 5;
+
+    /**
+     * 주문에 포함된 메뉴 이름들을 조회하여 쉼표로 결합
+     */
+    private String resolveMenuNames(Order order) {
+        if (order == null || order.getItems() == null || order.getItems().isEmpty()) {
+            return null;
+        }
+        return order.getItems().stream()
+                .map(OrderLineItem::getMenuId)
+                .distinct()
+                .map(menuId -> loadMenuPort.findAvailableById(menuId)
+                        .map(Menu::getKorName)
+                        .orElse("삭제된 메뉴"))
+                .collect(Collectors.joining(", "));
+    }
 
     /**
      * 리뷰 작성 + 스티커 지급
@@ -65,7 +85,8 @@ public class ReviewService {
         Review saved = reviewRepository.save(review);
         log.info("Review created: orderId={}, sticker={}", request.getOrderId(), stickerNumber);
 
-        return ReviewResponse.from(saved, member.getNickname(), stickerEnded);
+        String menuNames = resolveMenuNames(order);
+        return ReviewResponse.from(saved, member.getNickname(), stickerEnded, menuNames);
     }
 
     /**
@@ -80,7 +101,10 @@ public class ReviewService {
         boolean stickerEnded = reviewCount >= MAX_STICKERS;
 
         return reviewRepository.findByMemberIdOrderByCreatedAtDesc(member.getId()).stream()
-                .map(r -> ReviewResponse.from(r, member.getNickname(), stickerEnded))
+                .map(r -> {
+                    String menuNames = resolveMenuNames(r.getOrder());
+                    return ReviewResponse.from(r, member.getNickname(), stickerEnded, menuNames);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -96,7 +120,8 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
         long reviewCount = reviewRepository.countByMemberId(member.getId());
-        return ReviewResponse.from(review, member.getNickname(), reviewCount >= MAX_STICKERS);
+        String menuNames = resolveMenuNames(review.getOrder());
+        return ReviewResponse.from(review, member.getNickname(), reviewCount >= MAX_STICKERS, menuNames);
     }
 
     /**
@@ -127,7 +152,8 @@ public class ReviewService {
                     String nickname = loadMemberPort.findById(r.getMemberId())
                             .map(Member::getNickname)
                             .orElse("익명");
-                    return ReviewResponse.from(r, nickname, false);
+                    String menuNames = resolveMenuNames(r.getOrder());
+                    return ReviewResponse.from(r, nickname, false, menuNames);
                 })
                 .collect(Collectors.toList());
     }
