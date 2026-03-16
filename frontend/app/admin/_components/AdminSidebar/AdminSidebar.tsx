@@ -17,7 +17,8 @@ import {
     Database,
     LucideIcon,
     User,
-    Tags
+    Tags,
+    BarChart3
 } from 'lucide-react';
 import { useDashboardStats } from '../useDashboardStats';
 import toast from 'react-hot-toast';
@@ -47,6 +48,7 @@ export default function AdminSidebar() {
             group: '메인',
             items: [
                 { href: '/admin', label: '대시보드', icon: LayoutDashboard },
+                { href: '/admin/analytics', label: '매출 분석', icon: BarChart3 },
             ],
         },
         {
