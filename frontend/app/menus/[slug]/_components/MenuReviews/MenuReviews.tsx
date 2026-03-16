@@ -24,7 +24,7 @@ export default function MenuReviews({ menuId }: MenuReviewsProps) {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/menu/${menuId}`);
+                const res = await fetch(`/api/reviews/menu/${menuId}`);
                 if (res.ok) {
                     const data = await res.json();
                     setReviews(data || []);
