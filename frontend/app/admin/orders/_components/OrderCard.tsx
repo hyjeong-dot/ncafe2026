@@ -17,7 +17,7 @@ export default function OrderCard({ order, onUpdateStatus }: OrderCardProps) {
         <>
             <div className={styles.orderCard}>
                 <div className={styles.cardHeader}>
-                    <span className={styles.orderId}># {order.id}</span>
+                    <span className={styles.orderId}>#{order.orderUid || order.id}</span>
                     <span className={styles.orderTime}>
                         {new Date(order.createdAt).toLocaleString('ko-KR')}
                     </span>

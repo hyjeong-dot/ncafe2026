@@ -87,6 +87,7 @@ public class AdminOrderService implements GetAdminOrderListUseCase, UpdateOrderS
 
         return AdminOrderResult.builder()
                 .id(order.getId())
+                .orderUid(order.getOrderUid())
                 .memberId(order.getMemberId())
                 .nickname(nickname)
                 .totalPrice(order.getTotalPrice())
