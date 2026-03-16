@@ -5,7 +5,9 @@ import MenuDetailHeader from './_components/MenuDetailHeader';
 import MenuDetailImage from './_components/MenuDetailImage';
 import MenuDetailInfo from './_components/MenuDetailInfo';
 import MenuDetailOptions from './_components/MenuDetailOptions/MenuDetailOptions';
+import MenuReviews from './_components/MenuReviews/MenuReviews';
 import { useMenuDetailPage } from './_components/useMenuDetailPage';
+import { useMenuDetail } from './_components/MenuDetailInfo/useMenuDetail';
 import styles from './page.module.css';
 
 export default function MenuDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -17,6 +19,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ slug: str
         allRequiredSelected,
         handleOptionChange,
     } = useMenuDetailPage();
+
+    const { menu } = useMenuDetail(slug);
 
     return (
         <div className={styles.page}>
@@ -38,6 +42,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ slug: str
                             slug={slug}
                             onSelectionChange={handleOptionChange}
                         />
+                        {menu && <MenuReviews menuId={menu.id} />}
                     </div>
                 </div>
             </main>

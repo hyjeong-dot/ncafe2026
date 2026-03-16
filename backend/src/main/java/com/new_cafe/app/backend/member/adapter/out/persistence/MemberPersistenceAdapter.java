@@ -7,7 +7,7 @@ import com.new_cafe.app.backend.member.domain.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
-
+import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort, DeleteMemberPort {
@@ -22,6 +22,11 @@ public class MemberPersistenceAdapter implements LoadMemberPort, SaveMemberPort,
     @Override
     public Optional<Member> findByUsername(String username) {
         return memberJpaRepository.findByUsername(username);
+    }
+
+    @Override
+    public Optional<Member> findById(UUID memberId) {
+        return memberJpaRepository.findById(memberId);
     }
 
     @Override

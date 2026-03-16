@@ -1,0 +1,94 @@
+.section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.avgRating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.avgNumber {
+    color: var(--text-primary);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.card {
+    padding: 1rem 1.25rem;
+    background: var(--bg-secondary, #f9fafb);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: box-shadow 200ms;
+}
+
+.card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.reviewer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nickname {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.stars {
+    display: flex;
+    gap: 1px;
+}
+
+.starFilled {
+    color: #f59e0b;
+    font-size: 0.95rem;
+}
+
+.starEmpty {
+    color: #d1d5db;
+    font-size: 0.95rem;
+}
+
+.date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary, #4b5563);
+    margin: 0;
+}

@@ -110,4 +110,19 @@ public class ReviewService {
                 .stickerEnded(reviewCount >= MAX_STICKERS)
                 .build();
     }
+
+    /**
+     * 특정 메뉴의 리뷰 목록 (공개 API)
+     */
+    @Transactional(readOnly = true)
+    public List<ReviewResponse> getReviewsByMenuId(Long menuId) {
+        return reviewRepository.findByMenuId(menuId).stream()
+                .map(r -> {
+                    String nickname = loadMemberPort.findById(r.getMemberId())
+                            .map(Member::getNickname)
+                            .orElse("익명");
+                    return ReviewResponse.from(r, nickname, false);
+                })
+                .collect(Collectors.toList());
+    }
 }

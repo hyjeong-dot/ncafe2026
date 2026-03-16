@@ -48,4 +48,12 @@ public class ReviewController {
     public StickerStatusResponse getStickerStatus(Authentication auth) {
         return reviewService.getStickerStatus(auth.getName());
     }
+
+    /**
+     * 특정 메뉴의 리뷰 목록 (공개 API - 로그인 불필요)
+     */
+    @GetMapping("/menu/{menuId}")
+    public List<ReviewResponse> getReviewsByMenu(@PathVariable Long menuId) {
+        return reviewService.getReviewsByMenuId(menuId);
+    }
 }
