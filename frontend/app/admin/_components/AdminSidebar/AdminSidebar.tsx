@@ -16,7 +16,8 @@ import {
     Coffee,
     Database,
     LucideIcon,
-    User
+    User,
+    Tags
 } from 'lucide-react';
 import { useDashboardStats } from '../useDashboardStats';
 import toast from 'react-hot-toast';
@@ -52,6 +53,7 @@ export default function AdminSidebar() {
             group: '메뉴 관리',
             items: [
                 { href: '/admin/menus', label: '메뉴 목록', icon: UtensilsCrossed },
+                { href: '/admin/categories', label: '카테고리 관리', icon: Tags },
             ],
         },
         {

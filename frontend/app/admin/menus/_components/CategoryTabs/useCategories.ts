@@ -66,5 +66,31 @@ export function useCategories() {
         await fetchCategories();
     };
 
-    return { categories, fetchCategories, createCategory, updateCategory, deleteCategory };
+    const reorderCategories = async (order: { id: number; sortOrder: number }[]) => {
+        // 낙관적 업데이트: UI에 바로 반영
+        setCategories(prev => {
+            const map = new Map(order.map(o => [o.id, o.sortOrder]));
+            return [...prev].sort((a, b) => (map.get(a.id) ?? a.sortOrder) - (map.get(b.id) ?? b.sortOrder));
+        });
+
+        // 개별 PUT으로 sortOrder 업데이트
+        try {
+            await Promise.all(
+                order.map(({ id, sortOrder }) =>
+                    fetch(`/api/admin/categories/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sortOrder }),
+                    })
+                )
+            );
+            toast.success('순서가 변경되었어요! ✨');
+            await fetchCategories();
+        } catch (e) {
+            toast.error('순서 변경에 실패했어요.');
+            await fetchCategories(); // 롤백
+        }
+    };
+
+    return { categories, fetchCategories, createCategory, updateCategory, deleteCategory, reorderCategories };
 }
