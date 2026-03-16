@@ -125,10 +125,14 @@
     display: flex;
     align-items: flex-end;
     gap: 2px;
-    height: 160px;
+    height: 180px;
+    padding-bottom: 24px;
+}
+
+.chartScroll {
     overflow-x: auto;
     scrollbar-width: thin;
-    padding-bottom: 4px;
+    scrollbar-color: #ddd transparent;
 }
 
 .barGroup {
@@ -142,7 +146,7 @@
 
 .barWrapper {
     width: 100%;
-    height: 130px;
+    height: 140px;
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -160,7 +164,20 @@
 }
 
 .bar:hover {
-    opacity: 0.8;
+    opacity: 0.85;
+    filter: brightness(1.1);
+}
+
+.barTooltip {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #555;
+    white-space: nowrap;
+    pointer-events: none;
 }
 
 .barGreen {
@@ -172,11 +189,13 @@
 }
 
 .barLabel {
-    font-size: 0.65rem;
-    color: #999;
+    font-size: 0.68rem;
+    color: #888;
     white-space: nowrap;
-    transform: rotate(-45deg);
-    transform-origin: center;
+}
+
+.barLabelHidden {
+    visibility: hidden;
 }
 
 /* 인기 메뉴 랭킹 */
@@ -263,10 +282,26 @@
     color: #999;
 }
 
-/* ─── 반응형 ─── */
+/* ─── 반응형 (태블릿) ─── */
+@media (max-width: 1024px) {
+    .container {
+        max-width: none;
+    }
+
+    .summaryGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .twoCol {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ─── 반응형 (모바일) ─── */
 @media (max-width: 768px) {
     .container {
         padding: var(--space-4);
+        max-width: none;
     }
 
     .pageHeader {
@@ -280,14 +315,25 @@
     .periodTab {
         flex: 1;
         text-align: center;
+        padding: 8px 10px;
+        font-size: 0.82rem;
     }
 
     .summaryGrid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
-    .twoCol {
-        grid-template-columns: 1fr;
+    .summaryCard {
+        padding: 14px;
+    }
+
+    .cardValue {
+        font-size: 1.1rem;
+    }
+
+    .chartSection {
+        padding: 14px;
     }
 
     .chartContainer {
@@ -295,6 +341,38 @@
     }
 
     .barLabel {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
+    }
+
+    .rankItem {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .rankName {
+        font-size: 0.88rem;
+    }
+
+    .rankStats {
+        min-width: 60px;
+    }
+
+    .rankQty {
+        font-size: 0.82rem;
+    }
+
+    .rankRev {
+        font-size: 0.72rem;
+    }
+}
+
+/* ─── 반응형 (작은 모바일) ─── */
+@media (max-width: 480px) {
+    .summaryGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .barGroup {
+        min-width: 20px;
     }
 }
