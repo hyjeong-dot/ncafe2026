@@ -7,5 +7,7 @@ import java.util.List;
 public interface MenuOptionPort {
     List<MenuOption> findAllByMenuId(Long menuId);
     List<OptionItem> findAllByOptionId(Long optionId);
+    MenuOption saveOption(MenuOption option);
+    OptionItem saveItem(OptionItem item);
     void deleteByMenuId(Long menuId);
 }

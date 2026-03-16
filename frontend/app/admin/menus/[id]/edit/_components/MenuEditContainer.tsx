@@ -72,9 +72,9 @@ export default function MenuEditContainer({ menuId }: MenuEditContainerProps) {
         }
     }, [menu, categories, isInitialized]);
 
-    const handleSubmit = async (formData: MenuFormData, images: ImageItem[]) => {
+    const handleSubmit = async (formData: MenuFormData, images: ImageItem[], options: OptionFormData[]) => {
         try {
-            await updateMenu(menuId, formData, images, initialImages);
+            await updateMenu(menuId, formData, images, initialImages, options);
             router.push(`/admin/menus/${menuId}`);
         } catch (error) {
             console.error('Update failed:', error);

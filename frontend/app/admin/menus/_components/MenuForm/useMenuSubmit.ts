@@ -5,6 +5,35 @@ import { MenuFormData, ImageItem, OptionFormData } from './MenuForm';
 export function useMenuSubmit() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const saveOptions = async (menuId: number, options: OptionFormData[]) => {
+        const payload = {
+            options: options.map(opt => ({
+                name: opt.name,
+                type: opt.type,
+                required: opt.required,
+                items: opt.items.map(item => ({
+                    name: item.name,
+                    priceDelta: Number(item.priceDelta) || 0
+                }))
+            }))
+        };
+
+        const res = await fetch(`/api/admin/menus/${menuId}/options`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.status === 401 && typeof window !== 'undefined') {
+            window.location.href = '/login';
+            return;
+        }
+
+        if (!res.ok) {
+            console.error('Failed to save options');
+        }
+    };
+
     const uploadImages = async (menuId: number, images: ImageItem[]) => {
         let primaryImageId: number | null = null;
 
@@ -96,6 +125,11 @@ export function useMenuSubmit() {
 
             await uploadImages(menuId, images);
 
+            // 옵션 저장
+            if (options.length > 0) {
+                await saveOptions(menuId, options);
+            }
+
             toast.success('새 메뉴가 등록되었습니다! 💜');
             return menuId;
         } catch (error) {
@@ -106,7 +140,7 @@ export function useMenuSubmit() {
         }
     };
 
-    const updateMenu = async (menuId: number, formData: MenuFormData, images: ImageItem[], initialImages: ImageItem[]) => {
+    const updateMenu = async (menuId: number, formData: MenuFormData, images: ImageItem[], initialImages: ImageItem[], options?: OptionFormData[]) => {
         setIsSubmitting(true);
         try {
             const response = await fetch(`/api/admin/menus/${menuId}`, {
@@ -149,6 +183,11 @@ export function useMenuSubmit() {
             }
 
             await uploadImages(menuId, images);
+
+            // 옵션 저장
+            if (options) {
+                await saveOptions(menuId, options);
+            }
 
             toast.success('메뉴 정보가 수정되었습니다! 💜');
             return true;

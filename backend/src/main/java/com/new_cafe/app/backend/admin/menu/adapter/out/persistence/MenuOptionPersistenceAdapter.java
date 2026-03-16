@@ -5,6 +5,7 @@ import com.new_cafe.app.backend.admin.menu.domain.model.MenuOption;
 import com.new_cafe.app.backend.admin.menu.domain.model.OptionItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component("adminMenuOptionPersistenceAdapter")
@@ -25,6 +26,17 @@ public class MenuOptionPersistenceAdapter implements MenuOptionPort {
     }
 
     @Override
+    public MenuOption saveOption(MenuOption option) {
+        return menuOptionRepository.save(option);
+    }
+
+    @Override
+    public OptionItem saveItem(OptionItem item) {
+        return optionItemRepository.save(item);
+    }
+
+    @Override
+    @Transactional
     public void deleteByMenuId(Long menuId) {
         List<MenuOption> options = menuOptionRepository.findAllByMenuIdOrderBySortOrderAsc(menuId);
         for (MenuOption option : options) {
