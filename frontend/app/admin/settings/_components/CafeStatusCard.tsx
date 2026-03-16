@@ -35,9 +35,12 @@ export default function CafeStatusCard({ settings, isSaving, onUpdateSettings }:
             <button 
                 className={`${styles.toggleBtn} ${settings?.manualClosed ? styles.btnOpen : styles.btnClose}`}
                 onClick={handleToggleManualClose}
-                disabled={isSaving}
+                disabled={isSaving || (!settings?.open && !settings?.manualClosed)}
+                style={(!settings?.open && !settings?.manualClosed) ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#ccc', boxShadow: 'none' } : {}}
             >
-                {settings?.manualClosed ? '지금 영업 시작하기 🪄' : '지금 강제 마감하기 ❌'}
+                {settings?.manualClosed 
+                    ? '마감 상태 해제하기 🪄' 
+                    : (!settings?.open ? '영업 준비 중 (시간 마감) 💤' : '지금 강제 마감하기 ❌')}
             </button>
             
             {settings?.manualClosed && (
