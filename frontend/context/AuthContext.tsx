@@ -63,7 +63,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             await fetch('/api/auth/logout', { method: 'POST' });
             setUser(null);
             toast.success("로그아웃 되었습니다. 다음에 또 오세요! 💜", { id: 'logout-toast' });
-            router.push('/');
+            // 하드 리다이렉트로 모든 캐시/상태 초기화
+            window.location.href = '/';
         } catch (error) {
             console.error('Logout failed:', error);
             toast.error("로그아웃 중 오류가 발생했습니다.");
