@@ -29,21 +29,19 @@ export default function AnalyticsPage() {
                 formatValue={(v) => `₩${v.toLocaleString()}`}
             />
 
-            <div className={styles.twoCol}>
-                <BarChart
-                    title="📋 일별 주문 건수"
-                    data={toDailyOrderData(data.dailyData)}
-                    colorClass={styles.barGreen}
-                    labelInterval={interval}
-                    formatValue={(v) => `${v}건`}
-                />
-                <BarChart
-                    title="🕐 시간대별 주문 분포"
-                    data={toHourlyData(data.hourlyDistribution)}
-                    colorClass={styles.barOrange}
-                    formatValue={(v) => `${v}건`}
-                />
-            </div>
+            <BarChart
+                title="📋 일별 주문 건수"
+                data={toDailyOrderData(data.dailyData)}
+                colorClass={styles.barGreen}
+                labelInterval={interval}
+                formatValue={(v) => `${v}건`}
+            />
+            <BarChart
+                title="🕐 시간대별 주문 분포"
+                data={toHourlyData(data.hourlyDistribution)}
+                colorClass={styles.barOrange}
+                formatValue={(v) => `${v}건`}
+            />
 
             <PopularMenuRank menus={data.popularMenus} />
         </main>
