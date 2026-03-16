@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import type { SelectedOptions } from '../MenuDetailOptions/MenuDetailOptions';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Heart, Share2, Info, Clock, Sparkles, ShoppingBag } from 'lucide-react';
+import { Heart, Share2, Info, ShoppingBag } from 'lucide-react';
 import styles from './MenuDetailInfo.module.css';
 import { useMenuDetail } from './useMenuDetail';
 import { useAuth } from '@/context/AuthContext';
@@ -139,17 +139,6 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
             <div className={styles.descSection}>
                 <h3 className={styles.sectionTitle}><Info size={16} /> 메뉴 설명</h3>
                 <p className={styles.description}>{menu.description || '준비된 설명이 없습니다.'}</p>
-            </div>
-
-            <div className={styles.extraInfo}>
-                <div className={styles.infoItem}>
-                    <Clock size={16} />
-                    <span>평균 준비 시간: 10분</span>
-                </div>
-                <div className={styles.infoItem}>
-                    <Sparkles size={16} />
-                    <span>메타몽의 추천 당도: 70%</span>
-                </div>
             </div>
 
             <div className={styles.ctaRow}>
