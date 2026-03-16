@@ -9,7 +9,8 @@ import {
     CreditCard,
     UserMinus,
     Ticket,
-    MessageSquare
+    MessageSquare,
+    MessageSquarePlus
 } from "lucide-react";
 import styles from "./MyPageSidebar.module.css";
 
@@ -86,6 +87,13 @@ export default function MyPageSidebar({
                 >
                     <MessageSquare size={18} />
                     내 리뷰
+                </button>
+                <button
+                    className={`${styles.menuItem} ${activeTab === "inquiries" ? styles.active : ""}`}
+                    onClick={() => onTabChange("inquiries")}
+                >
+                    <MessageSquarePlus size={18} />
+                    1:1 문의
                 </button>
                 <button
                     className={`${styles.menuItem} ${activeTab === "payment" ? styles.active : ""}`}
