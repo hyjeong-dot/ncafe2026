@@ -63,11 +63,11 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
                 method: 'POST',
                 body: JSON.stringify({ menuId: menu?.id })
             });
-            
+
             // 결과값 체크 (isFavorite 필드 혹은 불리언)
             const newLikedState = typeof result === 'boolean' ? result : !!result.isFavorite;
             setIsLiked(newLikedState);
-            
+
             if (newLikedState) {
                 toast.success("찜 목록에 담았어요! 마이페이지에서 확인해 보세요 🍮", {
                     icon: '💜',
@@ -109,14 +109,14 @@ export default function MenuDetailInfo({ slug, selectedOptions = {}, extraPrice 
             <div className={styles.titleRow}>
                 <h1 className={styles.title}>{menu.korName}</h1>
                 <div className={styles.actionIcons}>
-                    <button 
+                    <button
                         className={`${styles.iconBtn} ${isLiked ? styles.liked : ''}`}
                         onClick={handleLike}
                         aria-label="좋아요"
                     >
                         <Heart size={22} fill={isLiked ? "currentColor" : "none"} />
                     </button>
-                    <button 
+                    <button
                         className={styles.iconBtn}
                         onClick={handleShare}
                         aria-label="공유하기"

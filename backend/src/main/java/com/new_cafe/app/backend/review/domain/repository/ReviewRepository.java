@@ -11,9 +11,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByMemberIdOrderByCreatedAtDesc(UUID memberId);
 
-    Optional<Review> findByOrderId(Long orderId);
+    Optional<Review> findByOrder_Id(Long orderId);
 
-    boolean existsByOrderId(Long orderId);
+    boolean existsByOrder_Id(Long orderId);
 
     /** 사용자의 리뷰 수 (스티커 지급 판단용) */
     long countByMemberId(UUID memberId);

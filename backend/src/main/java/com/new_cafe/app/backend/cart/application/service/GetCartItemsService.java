@@ -31,6 +31,7 @@ public class GetCartItemsService implements GetCartItemsUseCase {
     private final LoadMenuImagePort loadMenuImagePort;
 
     @Override
+    @Transactional
     public List<CartItemResult> getCartItems(UUID memberId) {
         Cart cart = cartPersistencePort.findByMemberId(memberId)
                 .orElseGet(() -> {

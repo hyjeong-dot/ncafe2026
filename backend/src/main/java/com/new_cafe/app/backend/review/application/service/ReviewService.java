@@ -36,7 +36,7 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         // 이미 리뷰를 작성한 주문인지 확인
-        if (reviewRepository.existsByOrderId(request.getOrderId())) {
+        if (reviewRepository.existsByOrder_Id(request.getOrderId())) {
             throw new IllegalStateException("이미 리뷰를 작성한 주문입니다.");
         }
 
@@ -92,7 +92,7 @@ public class ReviewService {
         Member member = loadMemberPort.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
-        Review review = reviewRepository.findByOrderId(orderId)
+        Review review = reviewRepository.findByOrder_Id(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
         long reviewCount = reviewRepository.countByMemberId(member.getId());

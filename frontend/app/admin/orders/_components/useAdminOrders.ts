@@ -99,7 +99,7 @@ export function useAdminOrders() {
                 method: 'PATCH'
             });
             if (!response.ok) throw new Error('상태 변경 실패');
-            
+
             toast.success('주문 상태가 변경되었습니다! 🪄');
         } catch (error) {
             console.error('Update status error:', error);
