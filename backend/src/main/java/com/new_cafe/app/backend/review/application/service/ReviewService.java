@@ -2,6 +2,8 @@ package com.new_cafe.app.backend.review.application.service;
 
 import com.new_cafe.app.backend.member.application.port.out.LoadMemberPort;
 import com.new_cafe.app.backend.member.domain.model.Member;
+import com.new_cafe.app.backend.order.domain.model.Order;
+import com.new_cafe.app.backend.order.adapter.out.persistence.repository.OrderRepository;
 import com.new_cafe.app.backend.review.adapter.in.web.dto.ReviewRequest;
 import com.new_cafe.app.backend.review.adapter.in.web.dto.ReviewResponse;
 import com.new_cafe.app.backend.review.domain.model.Review;
@@ -21,6 +23,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final LoadMemberPort loadMemberPort;
+    private final OrderRepository orderRepository;
 
     private static final int MAX_STICKERS = 5;
 
@@ -37,20 +40,23 @@ public class ReviewService {
             throw new IllegalStateException("이미 리뷰를 작성한 주문입니다.");
         }
 
+        Order order = orderRepository.findById(request.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+
         // 스티커 번호 결정 (1~5번째 리뷰까지만 스티커 지급)
         long reviewCount = reviewRepository.countByMemberId(member.getId());
         Integer stickerNumber = null;
         boolean stickerEnded = false;
 
         if (reviewCount < MAX_STICKERS) {
-            stickerNumber = (int) (reviewCount + 1); // 1, 2, 3, 4, 5
+            stickerNumber = (int) (reviewCount + 1);
         } else {
             stickerEnded = true;
         }
 
         Review review = Review.builder()
                 .memberId(member.getId())
-                .orderId(request.getOrderId())
+                .order(order)
                 .content(request.getContent())
                 .rating(request.getRating())
                 .stickerNumber(stickerNumber)
@@ -116,7 +122,7 @@ public class ReviewService {
      */
     @Transactional(readOnly = true)
     public List<ReviewResponse> getReviewsByMenuId(Long menuId) {
-        return reviewRepository.findByMenuId(menuId).stream()
+        return reviewRepository.findByOrder_Items_MenuIdOrderByCreatedAtDesc(menuId).stream()
                 .map(r -> {
                     String nickname = loadMemberPort.findById(r.getMemberId())
                             .map(Member::getNickname)

@@ -1,5 +1,6 @@
 package com.new_cafe.app.backend.review.domain.model;
 
+import com.new_cafe.app.backend.order.domain.model.Order;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -20,8 +21,10 @@ public class Review {
     @Column(name = "member_id", nullable = false)
     private UUID memberId;
 
-    @Column(name = "order_id", nullable = false)
-    private Long orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    @ToString.Exclude
+    private Order order;
 
     @Column(nullable = false, length = 500)
     private String content;
@@ -40,4 +43,10 @@ public class Review {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    /** 하위 호환용 */
+    public Long getOrderId() {
+        return order != null ? order.getId() : null;
+    }
 }
+
