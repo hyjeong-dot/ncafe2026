@@ -28,6 +28,7 @@ public class CreateOrderRequest {
                         .map(item -> OrderLineItemCommand.builder()
                                 .menuId(item.getMenuId())
                                 .quantity(item.getQuantity())
+                                .unitPrice(item.getUnitPrice())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

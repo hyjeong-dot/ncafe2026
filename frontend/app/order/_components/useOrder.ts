@@ -160,7 +160,8 @@ export function useOrder() {
             // 1. 백엔드에 주문 생성 (PENDING 상태)
             const formattedItems = items.map(item => ({
                 menuId: item.menuId || parseInt(item.id),
-                quantity: item.quantity
+                quantity: item.quantity,
+                unitPrice: item.price  // 옵션 포함 단가
             }));
 
             // 옵션 정보를 메모에 자동 포함

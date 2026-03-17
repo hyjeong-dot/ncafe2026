@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -16,4 +17,7 @@ public class OrderResult {
     private final OrderType orderType;
     private final OrderStatus status;
     private final LocalDateTime createdAt;
+    private final List<OrderLineItemResult> items;
+    private final String requestMemo;
 }
+

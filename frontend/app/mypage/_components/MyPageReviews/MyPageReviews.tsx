@@ -67,7 +67,7 @@ export default function MyPageReviews() {
                         <div key={num} className={`${styles.stickerSlot} ${collected ? styles.collected : styles.locked}`}>
                             {collected ? (
                                 <Image
-                                    src={`/stickers/sticker-${num}.png`}
+                                    src={`/stickers/sticker-${num}.png?v=2`}
                                     alt={`메타몽 스티커 #${num}`}
                                     width={100}
                                     height={100}
@@ -115,7 +115,7 @@ export default function MyPageReviews() {
                                 {review.stickerNumber && (
                                     <div className={styles.stickerBadge}>
                                         <Image
-                                            src={`/stickers/sticker-${review.stickerNumber}.png`}
+                                            src={`/stickers/sticker-${review.stickerNumber}.png?v=2`}
                                             alt={`스티커 #${review.stickerNumber}`}
                                             width={32}
                                             height={32}

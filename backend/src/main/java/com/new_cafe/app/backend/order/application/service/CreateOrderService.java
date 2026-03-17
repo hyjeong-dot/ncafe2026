@@ -53,9 +53,15 @@ public class CreateOrderService implements CreateOrderUseCase {
             Menu menu = loadMenuPort.findAvailableById(itemCmd.getMenuId())
                     .orElseThrow(() -> new IllegalArgumentException("Menu not found or not available: " + itemCmd.getMenuId()));
 
+            // 옵션 포함 단가가 전달되면 사용, 없으면 메뉴 기본가
+            int price = menu.getPrice();
+            if (itemCmd.getUnitPrice() != null && itemCmd.getUnitPrice() >= menu.getPrice()) {
+                price = itemCmd.getUnitPrice();
+            }
+
             OrderLineItem lineItem = OrderLineItem.builder()
                     .menuId(menu.getId())
-                    .price(menu.getPrice())
+                    .price(price)
                     .quantity(itemCmd.getQuantity())
                     .build();
 

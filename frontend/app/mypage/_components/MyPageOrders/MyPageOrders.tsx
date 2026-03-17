@@ -9,6 +9,13 @@ import LoadingDitto from "@/components/common/LoadingDitto/LoadingDitto";
 import Modal from "@/components/common/Modal/Modal";
 import toast from 'react-hot-toast';
 
+interface OrderLineItem {
+    menuId: number;
+    menuName: string;
+    price: number;
+    quantity: number;
+}
+
 interface OrderResult {
     orderId: number;
     orderUid: string;
@@ -16,6 +23,8 @@ interface OrderResult {
     orderType: string;
     status: string;
     createdAt: string;
+    items?: OrderLineItem[];
+    requestMemo?: string;
 }
 
 const TOSS_CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY || '';
@@ -52,18 +61,27 @@ export default function MyPageOrders() {
     const [lastStickerResult, setLastStickerResult] = useState<{ stickerNumber: number | null; stickerEnded: boolean } | null>(null);
 
     useEffect(() => {
-        const fetchOrders = async () => {
+        const fetchData = async () => {
             try {
-                const data = await fetchAPI('/orders');
-                setOrders(data || []);
+                const [ordersData, reviewsData] = await Promise.all([
+                    fetchAPI('/orders'),
+                    fetchAPI('/reviews')
+                ]);
+                setOrders(ordersData || []);
+
+                // 이미 리뷰 작성된 주문 ID를 세팅
+                if (reviewsData && Array.isArray(reviewsData)) {
+                    const reviewedIds = new Set<number>(reviewsData.map((r: any) => r.orderId));
+                    setReviewedOrders(reviewedIds);
+                }
             } catch (error) {
-                console.error("Failed to load orders", error);
+                console.error("Failed to load data", error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchOrders();
+        fetchData();
     }, []);
 
     const handleCancelOrderClick = (orderId: number) => {
@@ -145,12 +163,25 @@ export default function MyPageOrders() {
                             justifyContent: 'space-between',
                             alignItems: 'center'
                         }}>
-                            <div>
+                            <div style={{ flex: 1 }}>
                                 <div style={{ fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '0.5rem' }}>
                                     {new Date(order.createdAt).toLocaleDateString()} {new Date(order.createdAt).toLocaleTimeString()}
                                     &nbsp;|&nbsp;
                                     {order.orderType === 'DINE_IN' ? '매장' : '포장'}
                                 </div>
+                                {/* 메뉴 항목 목록 */}
+                                {order.items && order.items.length > 0 && (
+                                    <div style={{ margin: '0.5rem 0', fontSize: '0.95rem' }}>
+                                        {order.items.map((item, idx) => (
+                                            <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '2px 0' }}>
+                                                <span>{item.menuName} × {item.quantity}</span>
+                                                <span style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', marginLeft: '1rem' }}>
+                                                    {(item.price * item.quantity).toLocaleString()}원
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
                                     총 {order.totalPrice.toLocaleString()}원
                                 </div>
@@ -295,7 +326,7 @@ export default function MyPageOrders() {
                             }}>
                                 {lastStickerResult.stickerNumber ? (
                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                                        <Image src={`/stickers/sticker-${lastStickerResult.stickerNumber}.png`} 
+                                        <Image src={`/stickers/sticker-${lastStickerResult.stickerNumber}.png?v=2`} 
                                             alt="스티커" width={80} height={80} />
                                         <span style={{ fontWeight: 600 }}>🎉 메타몽 스티커 #{lastStickerResult.stickerNumber} 획득!</span>
                                     </div>

@@ -8,4 +8,5 @@ import lombok.Getter;
 public class OrderLineItemCommand {
     private final Long menuId;
     private final int quantity;
+    private final Integer unitPrice; // 옵션 포함 단가 (null이면 메뉴 기본가 사용)
 }
