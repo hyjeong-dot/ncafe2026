@@ -170,3 +170,7 @@
     font-weight: 600;
     color: var(--ditto-600);
 }
+
+.stickerBadge img {
+    border-radius: 50%;
+}
