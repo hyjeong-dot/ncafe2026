@@ -71,8 +71,7 @@ services:
       POSTGRES_DB: ${DB_NAME:-ncafedb}
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME:-ncafe}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
+    # ports 제거: 외부에서 DB 접근 불가 (보안 강화)
     volumes:
       - db-data:/var/lib/postgresql/data
     restart: unless-stopped
